@@ -48,4 +48,10 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitValue(expressionParser.ValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#id}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitId(expressionParser.IdContext ctx);
 }

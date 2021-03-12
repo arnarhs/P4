@@ -1,22 +1,22 @@
 grammar expression;
 
 @header {
-	package: antlr;
+	package antlr;
 }
 
 prog: (decl | expr)+ EOF
 	;
 
 decl: KEYWORD ID ':' expr
-	| KEYWORD ID '(' parameters ')'		
+	| KEYWORD ID '(' parameters ')' '{' (decl | expr)+ '}'		
 	;
 	
 expr: expr '=>' expr '(' value ')'
 	| expr '=>' expr
 	| expr '+' expr
-	| ID '(' expr ')'
+	| (ID | KEYWORD) '(' expr ')'
 	| ID '(' parameters ')'
-	| ID
+	| value '*' value
 	| value
 	;
 
@@ -29,10 +29,15 @@ parameter: KEYWORD ID
 	;
 	
 value: NUM
-	| ID
+	| id
 	;
+	
+id: KEYWORD
+	| ID 
+	;
+	
 
-KEYWORD : 'Species' | 'Constant' | 'Solution' | 'Reaction' | 'Print';
+KEYWORD : 'species' | 'int' | 'solution' | 'reaction' | 'print';
 ID : [a-z][a-zA-Z0-9_]*;
 NUM : '0' | '-'?[1-9][0-9]*;
 COMMENT : '//' ~[\r\n]* -> skip;

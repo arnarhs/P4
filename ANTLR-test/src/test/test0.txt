@@ -2,18 +2,22 @@
 
 Species x: 10
 
-Species b: 10 
+Species b: 10
 
 //Define your solution object. 
 
-Solution test(Species a, Species b) 
+Solution test(Species a, Species b) {
 
-	Reaction one: a + b => 2c (k) 
+	Reaction one: a + b => 2*c (k)
 
-	Reaction two: c => a + b (k) 
+	Reaction two: c => a + b (k)
 
-	Reaction three: a + b => c + d (k) 
+	Reaction three: a + b => c + d (k) }
 
 
 
 Print(test( x,2,2))
+
+solution var = test(a, 2, 2)
+
+print(var.reaction())
