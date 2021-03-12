@@ -1,0 +1,21 @@
+//Chaining reaction declarations     |||ACCEPTED|||
+c => f => a+b => ab
+
+//Chaining reaction declarations with ID'('expr')'    |||ACCEPTED|||
+c => f => x(c => f => a+b => ab) => ab 
+
+//Chaining reaction declarations with ID'('expr')'     |||ACCEPTED|||
+c => f => test(c => f => a+b => ab) => ab
+
+//mult withouth assignment |||ACCEPTED|||
+5 * 6
+
+//addition without assignment |||ACCEPTED|||
+6 + 6
+
+//Id w. keyword as parameter |||ACCEPTED|||
+iD(reaction)
+
+//Reaction with id's that start with a big letter |||DECLINED|||
+
+reaction one: NaOH + H2O = Na + OH + H3O + H2O
