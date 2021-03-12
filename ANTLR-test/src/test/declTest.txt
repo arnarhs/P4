@@ -1,0 +1,44 @@
+//declaration of species and concentration |||ACCEPTED|||
+species a: 10
+
+//declaration of species without concentration |||ACCEPTED|||
+species b
+
+//declaration of species with reactions |||ACCEPTED|||
+species c: c => b + a
+ 
+//declaration of species with addition |||ACCEPTED|||
+species d: 10 + 5
+
+//declaration of species with concentration combined with a reaction
+species x: 10 => 2 * 2
+
+//declaration of species with id and addition
+species d: 10+n+6
+
+//declaration of species with mult |||ACCEPTED|||
+species e: 10*5
+
+//declaration of species with method and literal parameters |||ACCEPTED|||
+species f: test(5+5)
+
+//declaration of a species with method and a keyword as parameters
+species b: lala(species a)
+
+//declaration of species w. concentration and followed by a method
+species b: 10 print(test(x,2,2))
+
+//declaration of species with method and variables as parameters |||ACCEPTED|||
+species g: test(i)
+
+//declaraation of species with method and declaration as parameter |||NOT ACCEPTED|||
+species h: test(int n: 2) 
+
+//declaration without type |||NOT ACCEPTED|||
+declWithoutType: 5
+
+//declaration with type |||NOT ACCEPTED|||
+int declWithType: 20
+
+//declaration of species with keywords multiplication
+species bib: species * species

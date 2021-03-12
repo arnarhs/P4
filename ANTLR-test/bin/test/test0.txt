@@ -1,19 +1,17 @@
 //Define your species with its molarity. 
 
-Species x: 10
+species a
 
-Species b: 10 
+species b
 
 //Define your solution object. 
 
-Solution test(Species a, Species b) 
+solution test(species a, species b) {
 
-	Reaction one: a + b => 2c (k) 
+	reaction one: a + b => 2*c (k)
 
-	Reaction two: c => a + b (k) 
+	reaction two: c => a + b (k)
 
-	Reaction three: a + b => c + d (k) 
+	reaction three: a + b => c + d (k) }
 
-
-
-Print(test( x,2,2))
+print(test( x,2,2))
