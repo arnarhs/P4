@@ -1,21 +1,5 @@
-//Test case that doesn't work
-
-species a: 10
-
-species b: 10
-
-//Define your solution object. 
-
-solution test(species a, species b) {
-
-	//TODO: Maybe consider whether we want this behavior, and if we want it, what that will mean for our "Reaction" type
-	reaction one: a + b => c + d (k) => a * b (k) => 2*c (k)
-	//TODO: FIX
-	reaction two: 2 => 2
-
-	reaction three: a + b => c + d (k) }
-
-
-
-
-
+i: INT = 5
+ i: INT = 7
+i + 23
+24 * k
+   i: INT = 9
