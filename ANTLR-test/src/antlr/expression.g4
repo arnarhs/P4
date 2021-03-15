@@ -8,34 +8,61 @@ prog: (decl | expr)+ EOF
 	;
 
 decl: KEYWORD ID ':' expr
-	| KEYWORD ID '(' parameters ')' '{' (decl | expr)+ '}'		
+	| expr
+	| KEYWORD ID
+	| KEYWORD ID '(' parameters ')' '{' (decl | expr)+ '}'
+	;
+
+expr: value exprList
+	| reactionExpr
+	| parameterExpr
+	;
+
+parameterExpr: ID '(' exprParameters ')'
+	;
+
+exprParameters: value (',' value)*
+	| value
 	;
 	
-expr: expr '=>' expr '(' value ')'
-	| expr '=>' expr
-	| expr '+' expr
-	| (ID | KEYWORD) '(' expr ')'
-	| ID '(' parameters ')'
-	| value '*' value
+reactionExpr: value reactionExprList
+	| value multiplyExpr
+	| value addExpr
+	| value reactionExprList '(' value ')'
+	| (ID|KEYWORD) '(' expr ')'
+	;
+
+reactionExprList: reactionOperator reactionExpr
+	| reactionOperator value 
+	| WS
+	;
+
+reactionOperator: '=>' | '<=>' | '<='
+	;
+
+exprList: multiplyExpr
+	| addExpr 
+	| WS
+	;
+
+multiplyExpr: '*' reactionExpr
+	| '*' value
+	;
+
+addExpr: '+' reactionExpr
+	| '+' value
+	;
+
+parameters: KEYWORD ID ',' parameter
+	| parameter
+	;
+parameter: 	KEYWORD ID
 	| value
 	;
 
-parameters: parameters ',' parameter
-	| parameter
-	;
-	
-parameter: KEYWORD ID
-	| value
-	;
-	
 value: NUM
-	| id
+	| ID
 	;
-	
-id: KEYWORD
-	| ID 
-	;
-	
 
 KEYWORD : 'species' | 'int' | 'solution' | 'reaction' | 'print';
 ID : [a-z][a-zA-Z0-9_]*;

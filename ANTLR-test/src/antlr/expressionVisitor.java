@@ -31,6 +31,54 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpr(expressionParser.ExprContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link expressionParser#parameterExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameterExpr(expressionParser.ParameterExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#exprParameters}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprParameters(expressionParser.ExprParametersContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#reactionExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReactionExpr(expressionParser.ReactionExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#reactionExprList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReactionExprList(expressionParser.ReactionExprListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#reactionOperator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReactionOperator(expressionParser.ReactionOperatorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#exprList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprList(expressionParser.ExprListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#multiplyExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiplyExpr(expressionParser.MultiplyExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#addExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddExpr(expressionParser.AddExprContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link expressionParser#parameters}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -48,10 +96,4 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitValue(expressionParser.ValueContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link expressionParser#id}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitId(expressionParser.IdContext ctx);
 }

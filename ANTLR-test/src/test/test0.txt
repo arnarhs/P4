@@ -6,12 +6,19 @@ species b
 
 //Define your solution object. 
 
+a + b
+
+a => b
+a <= b
+a <=> b
+
+species b: b => a
+
+a * b
+a(a , a ,a)
+a => b (2)
+
 solution test(species a, species b) {
 
-	reaction one: a + b => 2*c (k)
-
-	reaction two: c => a + b (k)
-
-	reaction three: a + b => c + d (k) }
-
-print(test( x,2,2))
+	reaction one: a + b => 2+c (k) }
+//print(test( x,2,2))
