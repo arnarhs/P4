@@ -1,5 +1,7 @@
 grammar expression;
 
+//tid -> hvor lang tid skal simulation kore.
+
 @header {
     package antlr;
 }
@@ -11,7 +13,13 @@ prog
 decl
     : KEYWORD ID ':' expr
     | KEYWORD ID
+    | intDecl
     | KEYWORD ID '(' declParameters ')' '{' (decl | expr)+ '}'
+    | ssaModelFunctional
+    | listDeclarationFunctional
+    | ssaModelOO
+    | simDecl
+    |listDeclarationOO
     ;
 
 expr
@@ -37,6 +45,7 @@ reactionExpr
 reactionExprList
     : reactionOperator reactionExpr
     | reactionOperator value 
+    | value
     | WS
     ;
 
@@ -50,6 +59,9 @@ addExpr
     | ADD value
     ;
     
+intDecl: INT ID ':' value
+    | INT ID 
+    ;
 parameterExpr
     : ID '(' exprParameters ')'
     ;
@@ -64,16 +76,57 @@ declParameters
     | WS
     ;
 
+//Functional
+//ssaModel({a, b, c}, Rset)
+ssaModelFunctional: SSA ssaParameters
+    ;
+ssaParameters
+    : '(''{'ID (',' ID)* '}' ',' ID ')'
+    ;
+
+//list<reactions> rSet: {a => b 2, a => c+d 3, c => b 7}
+listDeclarationFunctional: declareList '{' listParameters '}'
+    ;
+
+declareList: LIST'<'ID'>' ID ':'
+    ;
+listParameters: reactionExpr (',' reactionExpr)*
+    ;
+
+//OO
+ssaModelOO: modelDecl ssaParameters
+    ;
+
+modelDecl: SSAOO SSA ':'
+    ;
+
+simDecl: simulation simulationParameters
+    ;
+simulation: SIMULATION ID ':'
+    ; 
+simulationParameters: SSA'.'SIMULATE'('value (',' value)*')'
+    ;
+
+listDeclarationOO: declareList simulationParameters
+    ;
+
+
 value
     : NUM
     | ID
     ;
 
 reactionOperator: '=>' | '<=>' | '<=' ;
-ADD: "+" ;
-MULT: "*" ;
+ADD: '+' ;
+MULT: '*' ;
 
-KEYWORD: 'species' | 'int' | 'solution' | 'reaction' | 'print' ;
+KEYWORD: 'species' | 'solution' | 'reaction' | 'print' ;
+INT: 'int';
+SSA: 'ssaModel';
+SIMULATION: 'simulation' ;
+SIMULATE: 'simulate';
+SSAOO: 'ssa';
+LIST: 'list' ;
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
 COMMENT: '//' ~[\r\n]* -> skip ;
