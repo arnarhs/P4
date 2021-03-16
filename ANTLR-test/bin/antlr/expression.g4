@@ -56,10 +56,12 @@ parameterExpr
 
 exprParameters
     : value (',' value)*
+    | WS
     ;
 
 declParameters
     : KEYWORD ID (',' KEYWORD ID)*
+    | WS
     ;
 
 value
