@@ -10,7 +10,6 @@ prog
 
 decl
     : KEYWORD ID ':' expr
-    | expr
     | KEYWORD ID
     | KEYWORD ID '(' parameters ')' '{' (decl | expr)+ '}'
     ;
@@ -20,16 +19,13 @@ expr
     | reactionExpr
     | parameterExpr
     ;
-
-parameterExpr
-    : ID '(' exprParameters ')'
+    
+exprList
+    : multiplyExpr
+    | addExpr 
+    | WS
     ;
 
-exprParameters
-    : value (',' value)*
-    | value
-    ;
-	
 reactionExpr
     : value reactionExprList
     | value multiplyExpr
@@ -44,22 +40,23 @@ reactionExprList
     | WS
     ;
 
-
-
-exprList
-    : multiplyExpr
-    | addExpr 
-    | WS
-    ;
-
 multiplyExpr
-    : '*' reactionExpr
-    | '*' value
+    : MULT reactionExpr
+    | MULT value
     ;
 
 addExpr
-    : '+' reactionExpr
-    | '+' value
+    : ADD reactionExpr
+    | ADD value
+    ;
+    
+parameterExpr
+    : ID '(' exprParameters ')'
+    ;
+
+exprParameters
+    : value (',' value)*
+    | value
     ;
 
 parameters
