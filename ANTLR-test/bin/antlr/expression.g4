@@ -11,7 +11,7 @@ prog
 decl
     : KEYWORD ID ':' expr
     | KEYWORD ID
-    | KEYWORD ID '(' parameters ')' '{' (decl | expr)+ '}'
+    | KEYWORD ID '(' declParameters ')' '{' (decl | expr)+ '}'
     ;
 
 expr
@@ -31,7 +31,7 @@ reactionExpr
     | value multiplyExpr
     | value addExpr
     | value reactionExprList '(' value ')'
-    | (ID|KEYWORD) '(' expr ')'
+    | (ID | KEYWORD) '(' expr ')'
     ;
 
 reactionExprList
@@ -56,17 +56,10 @@ parameterExpr
 
 exprParameters
     : value (',' value)*
-    | value
     ;
 
-parameters
-    : KEYWORD ID ',' parameter
-    | parameter
-    ;
-    
-parameter
-    : KEYWORD ID
-    | value
+declParameters
+    : KEYWORD ID (',' KEYWORD ID)*
     ;
 
 value
