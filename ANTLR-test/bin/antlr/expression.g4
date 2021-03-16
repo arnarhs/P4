@@ -1,71 +1,88 @@
 grammar expression;
 
 @header {
-	package antlr;
+    package antlr;
 }
 
-prog: (decl | expr)+ EOF
-	;
+prog
+    : (decl | expr)+ EOF
+    ;
 
-decl: KEYWORD ID ':' expr
-	| expr
-	| KEYWORD ID
-	| KEYWORD ID '(' parameters ')' '{' (decl | expr)+ '}'
-	;
+decl
+    : KEYWORD ID ':' expr
+    | expr
+    | KEYWORD ID
+    | KEYWORD ID '(' parameters ')' '{' (decl | expr)+ '}'
+    ;
 
-expr: value exprList
-	| reactionExpr
-	| parameterExpr
-	;
+expr
+    : value exprList
+    | reactionExpr
+    | parameterExpr
+    ;
 
-parameterExpr: ID '(' exprParameters ')'
-	;
+parameterExpr
+    : ID '(' exprParameters ')'
+    ;
 
-exprParameters: value (',' value)*
-	| value
-	;
+exprParameters
+    : value (',' value)*
+    | value
+    ;
 	
-reactionExpr: value reactionExprList
-	| value multiplyExpr
-	| value addExpr
-	| value reactionExprList '(' value ')'
-	| (ID|KEYWORD) '(' expr ')'
-	;
+reactionExpr
+    : value reactionExprList
+    | value multiplyExpr
+    | value addExpr
+    | value reactionExprList '(' value ')'
+    | (ID|KEYWORD) '(' expr ')'
+    ;
 
-reactionExprList: reactionOperator reactionExpr
-	| reactionOperator value 
-	| WS
-	;
+reactionExprList
+    : reactionOperator reactionExpr
+    | reactionOperator value 
+    | WS
+    ;
 
-reactionOperator: '=>' | '<=>' | '<='
-	;
 
-exprList: multiplyExpr
-	| addExpr 
-	| WS
-	;
 
-multiplyExpr: '*' reactionExpr
-	| '*' value
-	;
+exprList
+    : multiplyExpr
+    | addExpr 
+    | WS
+    ;
 
-addExpr: '+' reactionExpr
-	| '+' value
-	;
+multiplyExpr
+    : '*' reactionExpr
+    | '*' value
+    ;
 
-parameters: KEYWORD ID ',' parameter
-	| parameter
-	;
-parameter: 	KEYWORD ID
-	| value
-	;
+addExpr
+    : '+' reactionExpr
+    | '+' value
+    ;
 
-value: NUM
-	| ID
-	;
+parameters
+    : KEYWORD ID ',' parameter
+    | parameter
+    ;
+    
+parameter
+    : KEYWORD ID
+    | value
+    ;
 
-KEYWORD : 'species' | 'int' | 'solution' | 'reaction' | 'print';
-ID : [a-z][a-zA-Z0-9_]*;
-NUM : '0' | '-'?[1-9][0-9]*;
-COMMENT : '//' ~[\r\n]* -> skip;
-WS : [ \r\t\n]+ -> skip;
+value
+    : NUM
+    | ID
+    ;
+
+reactionOperator: '=>' | '<=>' | '<=' ;
+ADD: "+" ;
+MULT: "*" ;
+
+KEYWORD: 'species' | 'int' | 'solution' | 'reaction' | 'print' ;
+ID: [a-z][a-zA-Z0-9_]* ;
+NUM: '0' | '-'?[1-9][0-9]* ;  
+COMMENT: '//' ~[\r\n]* -> skip ;
+WS: [ \r\t\n]+ -> skip ;
