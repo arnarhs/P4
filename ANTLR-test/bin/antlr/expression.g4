@@ -1,7 +1,5 @@
 grammar expression;
 
-//tid -> hvor lang tid skal simulation kore.
-
 @header {
     package antlr;
 }
@@ -19,7 +17,7 @@ decl
     | listDeclarationFunctional
     | ssaModelOO
     | simDecl
-    |listDeclarationOO
+    | listDeclarationOO
     ;
 
 expr
