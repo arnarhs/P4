@@ -5,19 +5,15 @@ grammar expression;
 }
 
 prog
-    : (decl | expr)+ EOF
+    : (decl | expr | func)+ EOF
     ;
-
+ 
 decl
     : KEYWORD ID ':' expr
     | KEYWORD ID
-    | intDecl
-    | KEYWORD ID '(' declParameters ')' '{' (decl | expr)+ '}'
-    | ssaModelFunctional
-    | listDeclarationFunctional
-    | ssaModelOO
-    | simDecl
-    | listDeclarationOO
+    | INT ID ':' (NUM|ID)
+    | INT ID
+    | KEYWORD ID declParameters  
     ;
 
 expr
@@ -36,78 +32,123 @@ reactionExpr
     : value reactionExprList
     | value multiplyExpr
     | value addExpr
-    | value reactionExprList '(' value ')'
-    | (ID | KEYWORD) '(' expr ')'
+    | value reactionExprList reactionParameter
+    | (ID | KEYWORD) exprParenthesis
+    | value
+    ;
+
+exprParenthesis: '(' expr ')'
     ;
 
 reactionExprList
     : reactionOperator reactionExpr
-    | reactionOperator value 
-    | value
+    | reactionOperator reactionExpr
+    | WS
+    ;
+
+reactionParameter: '(' value ')'
     | WS
     ;
 
 multiplyExpr
-    : MULT reactionExpr
-    | MULT value
+    : mult reactionExpr
+    | mult value
     ;
 
 addExpr
-    : ADD reactionExpr
-    | ADD value
+    : add reactionExpr
+    | add value
     ;
     
-intDecl: INT ID ':' value
-    | INT ID 
-    ;
 parameterExpr
-    : ID '(' exprParameters ')'
+    : parameterID paraExpr
     ;
 
-exprParameters
-    : value (',' value)*
+parameterID: ID
+    ;
+
+paraExpr: '(' exprParameters ')'
+    ;
+
+exprParameters: value valueParameter
+    | ',' value valueParameter
+    | valueParameter
+    | value
+    ;
+
+valueParameter: ',' exprParameters
+    ;
+
+declParameters: '(' declStatement ')' '{' (decl | expr)+ '}'
     | WS
     ;
 
-declParameters
-    : KEYWORD ID (',' KEYWORD ID)*
+declStatement : KEYWORD ID multipleStmt
+    | ',' KEYWORD ID multipleStmt
+    | KEYWORD ID
     | WS
     ;
 
-//Functional
-//ssaModel({a, b, c}, Rset)
-ssaModelFunctional: SSA ssaParameters
-    ;
-ssaParameters
-    : '(''{'ID (',' ID)* '}' ',' ID ')'
+multipleStmt: ',' declStatement
     ;
 
-//list<reactions> rSet: {a => b 2, a => c+d 3, c => b 7}
-listDeclarationFunctional: declareList '{' listParameters '}'
+
+
+
+func: setList
+    | runSSA
     ;
 
-declareList: LIST'<'ID'>' ID ':'
-    ;
-listParameters: reactionExpr (',' reactionExpr)*
-    ;
-
-//OO
-ssaModelOO: modelDecl ssaParameters
+//set reactions: {a => b (2), a => c+d (3), c => b (7)}
+setList: LIST ID ':' listParameters
     ;
 
-modelDecl: SSAOO SSA ':'
+listParameters: '{' listExpr '}'
     ;
 
-simDecl: simulation simulationParameters
-    ;
-simulation: SIMULATION ID ':'
-    ; 
-simulationParameters: SSA'.'SIMULATE'('value (',' value)*')'
-    ;
-
-listDeclarationOO: declareList simulationParameters
+listExpr: value listExprList
+    | value multiplyListExpr
+    | value addListExpr
+    | value listParameter
+    | value
     ;
 
+listExprList: reactionOperator listExpr
+    ;
+listParameter: '(' value ')' multiValues
+    | '(' value ')'
+    ;
+multiValues: ',' listExpr
+    ;
+
+multiplyListExpr
+    : mult listExpr
+    | mult value
+    ;
+
+addListExpr
+    : add listExpr
+    | add value
+    ;
+
+//ssaModel({a, b, c}, reactions)
+//ssaModel(reactions)
+
+runSSA: SSA ssaMethod
+    ;
+ssaMethod: '(' ssaParameter')'
+    ;
+ssaParameter: ssaParameters
+    ;
+ssaParameters: '{' ssaMethodParameters'}' ',' ID
+    | ID
+    ;
+
+ssaMethodParameters: value methodParameters
+    | value
+    ;
+methodParameters: ',' ssaMethodParameters 
+    ;
 
 value
     : NUM
@@ -115,16 +156,13 @@ value
     ;
 
 reactionOperator: '=>' | '<=>' | '<=' ;
-ADD: '+' ;
-MULT: '*' ;
+add: '+' ;
+mult: '*' ;
 
 KEYWORD: 'species' | 'solution' | 'reaction' | 'print' ;
 INT: 'int';
 SSA: 'ssaModel';
-SIMULATION: 'simulation' ;
-SIMULATE: 'simulate';
-SSAOO: 'ssa';
-LIST: 'list' ;
+LIST: 'set' ;
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
 COMMENT: '//' ~[\r\n]* -> skip ;

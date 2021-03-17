@@ -60,6 +60,16 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitReactionExpr(expressionParser.ReactionExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link expressionParser#exprParenthesis}.
+	 * @param ctx the parse tree
+	 */
+	void enterExprParenthesis(expressionParser.ExprParenthesisContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#exprParenthesis}.
+	 * @param ctx the parse tree
+	 */
+	void exitExprParenthesis(expressionParser.ExprParenthesisContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link expressionParser#reactionExprList}.
 	 * @param ctx the parse tree
 	 */
@@ -69,6 +79,16 @@ public interface expressionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReactionExprList(expressionParser.ReactionExprListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#reactionParameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterReactionParameter(expressionParser.ReactionParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#reactionParameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitReactionParameter(expressionParser.ReactionParameterContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#multiplyExpr}.
 	 * @param ctx the parse tree
@@ -90,16 +110,6 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitAddExpr(expressionParser.AddExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#intDecl}.
-	 * @param ctx the parse tree
-	 */
-	void enterIntDecl(expressionParser.IntDeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#intDecl}.
-	 * @param ctx the parse tree
-	 */
-	void exitIntDecl(expressionParser.IntDeclContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link expressionParser#parameterExpr}.
 	 * @param ctx the parse tree
 	 */
@@ -109,6 +119,26 @@ public interface expressionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParameterExpr(expressionParser.ParameterExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#parameterID}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameterID(expressionParser.ParameterIDContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#parameterID}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameterID(expressionParser.ParameterIDContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#paraExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterParaExpr(expressionParser.ParaExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#paraExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitParaExpr(expressionParser.ParaExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#exprParameters}.
 	 * @param ctx the parse tree
@@ -120,6 +150,16 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitExprParameters(expressionParser.ExprParametersContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link expressionParser#valueParameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterValueParameter(expressionParser.ValueParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#valueParameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitValueParameter(expressionParser.ValueParameterContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link expressionParser#declParameters}.
 	 * @param ctx the parse tree
 	 */
@@ -130,45 +170,45 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitDeclParameters(expressionParser.DeclParametersContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#ssaModelFunctional}.
+	 * Enter a parse tree produced by {@link expressionParser#declStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterSsaModelFunctional(expressionParser.SsaModelFunctionalContext ctx);
+	void enterDeclStatement(expressionParser.DeclStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#ssaModelFunctional}.
+	 * Exit a parse tree produced by {@link expressionParser#declStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitSsaModelFunctional(expressionParser.SsaModelFunctionalContext ctx);
+	void exitDeclStatement(expressionParser.DeclStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#ssaParameters}.
+	 * Enter a parse tree produced by {@link expressionParser#multipleStmt}.
 	 * @param ctx the parse tree
 	 */
-	void enterSsaParameters(expressionParser.SsaParametersContext ctx);
+	void enterMultipleStmt(expressionParser.MultipleStmtContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#ssaParameters}.
+	 * Exit a parse tree produced by {@link expressionParser#multipleStmt}.
 	 * @param ctx the parse tree
 	 */
-	void exitSsaParameters(expressionParser.SsaParametersContext ctx);
+	void exitMultipleStmt(expressionParser.MultipleStmtContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#listDeclarationFunctional}.
+	 * Enter a parse tree produced by {@link expressionParser#func}.
 	 * @param ctx the parse tree
 	 */
-	void enterListDeclarationFunctional(expressionParser.ListDeclarationFunctionalContext ctx);
+	void enterFunc(expressionParser.FuncContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#listDeclarationFunctional}.
+	 * Exit a parse tree produced by {@link expressionParser#func}.
 	 * @param ctx the parse tree
 	 */
-	void exitListDeclarationFunctional(expressionParser.ListDeclarationFunctionalContext ctx);
+	void exitFunc(expressionParser.FuncContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#declareList}.
+	 * Enter a parse tree produced by {@link expressionParser#setList}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclareList(expressionParser.DeclareListContext ctx);
+	void enterSetList(expressionParser.SetListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#declareList}.
+	 * Exit a parse tree produced by {@link expressionParser#setList}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclareList(expressionParser.DeclareListContext ctx);
+	void exitSetList(expressionParser.SetListContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#listParameters}.
 	 * @param ctx the parse tree
@@ -180,65 +220,125 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitListParameters(expressionParser.ListParametersContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#ssaModelOO}.
+	 * Enter a parse tree produced by {@link expressionParser#listExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterSsaModelOO(expressionParser.SsaModelOOContext ctx);
+	void enterListExpr(expressionParser.ListExprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#ssaModelOO}.
+	 * Exit a parse tree produced by {@link expressionParser#listExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitSsaModelOO(expressionParser.SsaModelOOContext ctx);
+	void exitListExpr(expressionParser.ListExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#modelDecl}.
+	 * Enter a parse tree produced by {@link expressionParser#listExprList}.
 	 * @param ctx the parse tree
 	 */
-	void enterModelDecl(expressionParser.ModelDeclContext ctx);
+	void enterListExprList(expressionParser.ListExprListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#modelDecl}.
+	 * Exit a parse tree produced by {@link expressionParser#listExprList}.
 	 * @param ctx the parse tree
 	 */
-	void exitModelDecl(expressionParser.ModelDeclContext ctx);
+	void exitListExprList(expressionParser.ListExprListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#simDecl}.
+	 * Enter a parse tree produced by {@link expressionParser#listParameter}.
 	 * @param ctx the parse tree
 	 */
-	void enterSimDecl(expressionParser.SimDeclContext ctx);
+	void enterListParameter(expressionParser.ListParameterContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#simDecl}.
+	 * Exit a parse tree produced by {@link expressionParser#listParameter}.
 	 * @param ctx the parse tree
 	 */
-	void exitSimDecl(expressionParser.SimDeclContext ctx);
+	void exitListParameter(expressionParser.ListParameterContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#simulation}.
+	 * Enter a parse tree produced by {@link expressionParser#multiValues}.
 	 * @param ctx the parse tree
 	 */
-	void enterSimulation(expressionParser.SimulationContext ctx);
+	void enterMultiValues(expressionParser.MultiValuesContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#simulation}.
+	 * Exit a parse tree produced by {@link expressionParser#multiValues}.
 	 * @param ctx the parse tree
 	 */
-	void exitSimulation(expressionParser.SimulationContext ctx);
+	void exitMultiValues(expressionParser.MultiValuesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#simulationParameters}.
+	 * Enter a parse tree produced by {@link expressionParser#multiplyListExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterSimulationParameters(expressionParser.SimulationParametersContext ctx);
+	void enterMultiplyListExpr(expressionParser.MultiplyListExprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#simulationParameters}.
+	 * Exit a parse tree produced by {@link expressionParser#multiplyListExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitSimulationParameters(expressionParser.SimulationParametersContext ctx);
+	void exitMultiplyListExpr(expressionParser.MultiplyListExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#listDeclarationOO}.
+	 * Enter a parse tree produced by {@link expressionParser#addListExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterListDeclarationOO(expressionParser.ListDeclarationOOContext ctx);
+	void enterAddListExpr(expressionParser.AddListExprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#listDeclarationOO}.
+	 * Exit a parse tree produced by {@link expressionParser#addListExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitListDeclarationOO(expressionParser.ListDeclarationOOContext ctx);
+	void exitAddListExpr(expressionParser.AddListExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#runSSA}.
+	 * @param ctx the parse tree
+	 */
+	void enterRunSSA(expressionParser.RunSSAContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#runSSA}.
+	 * @param ctx the parse tree
+	 */
+	void exitRunSSA(expressionParser.RunSSAContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#ssaMethod}.
+	 * @param ctx the parse tree
+	 */
+	void enterSsaMethod(expressionParser.SsaMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#ssaMethod}.
+	 * @param ctx the parse tree
+	 */
+	void exitSsaMethod(expressionParser.SsaMethodContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#ssaParameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterSsaParameter(expressionParser.SsaParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#ssaParameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitSsaParameter(expressionParser.SsaParameterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#ssaParameters}.
+	 * @param ctx the parse tree
+	 */
+	void enterSsaParameters(expressionParser.SsaParametersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#ssaParameters}.
+	 * @param ctx the parse tree
+	 */
+	void exitSsaParameters(expressionParser.SsaParametersContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#ssaMethodParameters}.
+	 * @param ctx the parse tree
+	 */
+	void enterSsaMethodParameters(expressionParser.SsaMethodParametersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#ssaMethodParameters}.
+	 * @param ctx the parse tree
+	 */
+	void exitSsaMethodParameters(expressionParser.SsaMethodParametersContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#methodParameters}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodParameters(expressionParser.MethodParametersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#methodParameters}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodParameters(expressionParser.MethodParametersContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#value}.
 	 * @param ctx the parse tree
@@ -259,4 +359,24 @@ public interface expressionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReactionOperator(expressionParser.ReactionOperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#add}.
+	 * @param ctx the parse tree
+	 */
+	void enterAdd(expressionParser.AddContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#add}.
+	 * @param ctx the parse tree
+	 */
+	void exitAdd(expressionParser.AddContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#mult}.
+	 * @param ctx the parse tree
+	 */
+	void enterMult(expressionParser.MultContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#mult}.
+	 * @param ctx the parse tree
+	 */
+	void exitMult(expressionParser.MultContext ctx);
 }

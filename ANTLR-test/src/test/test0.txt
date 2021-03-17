@@ -1,6 +1,7 @@
 //Define your species with its molarity. 
 species a
 species b
+species c
 
 //Define your time and trajectories
 int d:10
@@ -25,10 +26,7 @@ solution test(species a, species b) {
 
 print(test( x,2,2))
 
-list<reactions> rSet: {a => b 2, a => c+d 3, c => b 7}
+set reactions: {a => b (2), a => c+d (3), c => b (7)}
 
-ssaModel({a, b, c}, rSet)
-
-ssa ssaModel: ({a, b, c}, rSet)
-simulation sim: ssaModel.simulate(generations)
-list<simulations> sim: ssaModel.simulate(generations, trajectories)
+ssaModel({a, b, c}, reactions)
+ssaModel(reactions)

@@ -15,7 +15,7 @@ solution test(species a, species b) {
 
 	reaction three: a + b => c + d (k) }
 
-
-
-
+//ssa ssaModel: ({a, b, c}, rSet)
+//simulation sim: ssaModel.simulate(generations)
+//list<simulations> sim: ssaModel.simulate(generations, trajectories)
 
