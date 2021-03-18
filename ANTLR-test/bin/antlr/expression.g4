@@ -9,7 +9,7 @@ prog
     ;
  
 decl
-    : KEYWORD ID ':' expr
+    : KEYWORD ID ':' (NUM|ID)
     | KEYWORD ID
     | INT ID ':' (NUM|ID)
     | INT ID

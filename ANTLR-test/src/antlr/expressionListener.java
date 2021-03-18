@@ -260,26 +260,6 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitMultiValues(expressionParser.MultiValuesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#multiplyListExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterMultiplyListExpr(expressionParser.MultiplyListExprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#multiplyListExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitMultiplyListExpr(expressionParser.MultiplyListExprContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#addListExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterAddListExpr(expressionParser.AddListExprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#addListExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitAddListExpr(expressionParser.AddListExprContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link expressionParser#runSSA}.
 	 * @param ctx the parse tree
 	 */

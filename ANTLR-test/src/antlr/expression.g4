@@ -9,7 +9,7 @@ prog
     ;
  
 decl
-    : KEYWORD ID ':' expr
+    : KEYWORD ID ':' (NUM|ID)
     | KEYWORD ID
     | INT ID ':' (NUM|ID)
     | INT ID
@@ -34,6 +34,7 @@ reactionExpr
     | value addExpr
     | value reactionExprList reactionParameter
     | (ID | KEYWORD) exprParenthesis
+    | KEYWORD ID ':' expr
     | value
     ;
 

@@ -1,32 +1,21 @@
 //Define your species with its molarity. 
-species a
-species b
-species c
+species a : 10
+species b: a
 
 //Define your time and trajectories
 int d:10
-int e
 
-//Define your solution object. 
+//Define your reactions object. 
 
-a + b
+reaction chemical: a + b
+a * b
 a => b
 a <= b
 a <=> b
 
-species b: b => a
-
-a * b
-a(a , a ,a)
 a => b (2)
 
-solution test(species a, species b) {
+//list reactions: {a => b (2), a => c+d (3), c => b (7)}
 
-	reaction one: a + b => 2+c (k)}
-
-print(test( x,2,2))
-
-list reactions: {a => b (2), a => c+d (3), c => b (7)}
-
-ssaModel({a, b, c}, reactions)
-ssaModel(reactions)
+//ssaModel({a, b, c}, reactions)
+//ssaModel(reactions)

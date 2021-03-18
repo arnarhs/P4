@@ -163,18 +163,6 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultiValues(expressionParser.MultiValuesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#multiplyListExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMultiplyListExpr(expressionParser.MultiplyListExprContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link expressionParser#addListExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAddListExpr(expressionParser.AddListExprContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link expressionParser#runSSA}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
