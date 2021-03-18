@@ -34,6 +34,7 @@ reactionExpr
     | value addExpr
     | value reactionExprList reactionParameter
     | (ID | KEYWORD) exprParenthesis
+    | KEYWORD ID ':' expr
     | value
     ;
 

@@ -18,4 +18,4 @@ solution test(species a, species b) {
 //ssa ssaModel: ({a, b, c}, rSet)
 //simulation sim: ssaModel.simulate(generations)
 //list<simulations> sim: ssaModel.simulate(generations, trajectories)
-
+a(a , a ,a)
