@@ -50,13 +50,13 @@ reactionParameter: '(' value ')'
     | WS
     ;
 
-multiplyExpr
-    : mult reactionExpr
+multiplyExpr: mult reactionExpr
+    | mult listExpr
     | mult value
     ;
 
-addExpr
-    : add reactionExpr
+addExpr: add reactionExpr
+    | add listExpr
     | add value
     ;
     
@@ -92,9 +92,6 @@ declStatement : KEYWORD ID multipleStmt
 multipleStmt: ',' declStatement
     ;
 
-
-
-
 func: setList
     | runSSA
     ;
@@ -107,8 +104,8 @@ listParameters: '{' listExpr '}'
     ;
 
 listExpr: value listExprList
-    | value multiplyListExpr
-    | value addListExpr
+    | value multiplyExpr
+    | value addExpr
     | value listParameter
     | value
     ;
@@ -120,17 +117,7 @@ listParameter: '(' value ')' multiValues
     ;
 multiValues: ',' listExpr
     ;
-
-multiplyListExpr
-    : mult listExpr
-    | mult value
-    ;
-
-addListExpr
-    : add listExpr
-    | add value
-    ;
-
+    
 //ssaModel({a, b, c}, reactions)
 //ssaModel(reactions)
 
