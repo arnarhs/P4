@@ -117,7 +117,7 @@ listParameter: '(' value ')' multiValues
     ;
 multiValues: ',' listExpr
     ;
-    
+
 //ssaModel({a, b, c}, reactions)
 //ssaModel(reactions)
 
@@ -149,7 +149,7 @@ mult: '*' ;
 KEYWORD: 'species' | 'solution' | 'reaction' | 'print' ;
 INT: 'int';
 SSA: 'ssaModel';
-LIST: 'set' ;
+LIST: 'list' ;
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
 COMMENT: '//' ~[\r\n]* -> skip ;

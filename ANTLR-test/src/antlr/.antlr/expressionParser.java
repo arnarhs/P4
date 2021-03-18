@@ -49,7 +49,7 @@ public class expressionParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "':'", "'('", "')'", "','", "'{'", "'}'", "'=>'", "'<=>'", "'<='", 
-			"'+'", "'*'", null, "'int'", "'ssaModel'", "'set'"
+			"'+'", "'*'", null, "'int'", "'ssaModel'", "'list'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
