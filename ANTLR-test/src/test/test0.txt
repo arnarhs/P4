@@ -26,7 +26,7 @@ solution test(species a, species b) {
 
 print(test( x,2,2))
 
-set reactions: {a => b (2), a => c+d (3), c => b (7)}
+list reactions: {a => b (2), a => c+d (3), c => b (7)}
 
 ssaModel({a, b, c}, reactions)
 ssaModel(reactions)
