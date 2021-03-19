@@ -1,4 +1,4 @@
-// Generated from expression.g4 by ANTLR 4.7.2
+// Generated from expression.g4 by ANTLR 4.9.1
 
     package antlr;
 
@@ -19,14 +19,28 @@ public class expressionBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProg(expressionParser.ProgContext ctx) { return visitChildren(ctx); }
+	@Override public T visitProgram(expressionParser.ProgramContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDecl(expressionParser.DeclContext ctx) { return visitChildren(ctx); }
+	@Override public T visitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIntDeclaration(expressionParser.IntDeclarationContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitDeclaringReactioObject(expressionParser.DeclaringReactioObjectContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -34,6 +48,20 @@ public class expressionBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitExpr(expressionParser.ExprContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitDeclaringReaction(expressionParser.DeclaringReactionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitDeclaringInt(expressionParser.DeclaringIntContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

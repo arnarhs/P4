@@ -1,4 +1,4 @@
-package expressions;
+package models.expressions;
 
 public class Addition extends Expression{
 	Expression leftside;

@@ -1,4 +1,4 @@
-package expressions;
+package models.expressions;
 
 public class Number extends Expression {
     public int num;

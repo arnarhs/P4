@@ -1,4 +1,4 @@
-// Generated from expression.g4 by ANTLR 4.7.2
+// Generated from expression.g4 by ANTLR 4.9.1
 
     package antlr;
 
@@ -18,25 +18,49 @@ public class expressionBaseListener implements expressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProg(expressionParser.ProgContext ctx) { }
+	@Override public void enterProgram(expressionParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProg(expressionParser.ProgContext ctx) { }
+	@Override public void exitProgram(expressionParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDecl(expressionParser.DeclContext ctx) { }
+	@Override public void enterReactionDeclaration(expressionParser.ReactionDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDecl(expressionParser.DeclContext ctx) { }
+	@Override public void exitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntDeclaration(expressionParser.IntDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntDeclaration(expressionParser.IntDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclaringReactioObject(expressionParser.DeclaringReactioObjectContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclaringReactioObject(expressionParser.DeclaringReactioObjectContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -49,6 +73,30 @@ public class expressionBaseListener implements expressionListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpr(expressionParser.ExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclaringReaction(expressionParser.DeclaringReactionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclaringReaction(expressionParser.DeclaringReactionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclaringInt(expressionParser.DeclaringIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclaringInt(expressionParser.DeclaringIntContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

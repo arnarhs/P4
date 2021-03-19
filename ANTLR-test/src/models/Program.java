@@ -1,7 +1,9 @@
-package expressions;
+package models;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import models.expressions.Expression;
 
 public class Program {
 	public List<Expression> expressions;

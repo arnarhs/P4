@@ -1,4 +1,4 @@
-package expressions;
+package models.expressions;
 
 public class Variable extends Expression{
 	String ID;

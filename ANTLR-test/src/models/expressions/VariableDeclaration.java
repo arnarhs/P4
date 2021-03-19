@@ -1,4 +1,4 @@
-package expressions;
+package models.expressions;
 
 public class VariableDeclaration extends Expression {
 	public String id;

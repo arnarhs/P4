@@ -1,21 +1,21 @@
 //Define your species with its molarity. 
-species a : 10
-species b: a
+//species a : 10
+//species b: a
 
 //Define your time and trajectories
-int d:10
+//int d:10
 
 //Define your reactions object. 
 
-reaction chemical: a + b
-a * b
-a => b
-a <= b
-a <=> b
+//reaction chemical: a + b
+//a * b
+//a => b
+//a <= b
+//a <=> b
 
-a => b (2)
+//a => b (2)
 
-//list reactions: {a => b (2), a => c+d (3), c => b (7)}
+//list reactions: {a => b (2)} //, a => c+d (3), c => b (7)
 
-//ssaModel({a, b, c}, reactions)
-//ssaModel(reactions)
+ssaModel({a, b, c}, reactions)
+ssaModel(reactions)

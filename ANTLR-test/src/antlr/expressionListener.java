@@ -1,4 +1,4 @@
-// Generated from expression.g4 by ANTLR 4.7.2
+// Generated from expression.g4 by ANTLR 4.9.1
 
     package antlr;
 
@@ -10,25 +10,53 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface expressionListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#prog}.
+	 * Enter a parse tree produced by the {@code Program}
+	 * labeled alternative in {@link expressionParser#prog}.
 	 * @param ctx the parse tree
 	 */
-	void enterProg(expressionParser.ProgContext ctx);
+	void enterProgram(expressionParser.ProgramContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#prog}.
+	 * Exit a parse tree produced by the {@code Program}
+	 * labeled alternative in {@link expressionParser#prog}.
 	 * @param ctx the parse tree
 	 */
-	void exitProg(expressionParser.ProgContext ctx);
+	void exitProgram(expressionParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#decl}.
+	 * Enter a parse tree produced by the {@code ReactionDeclaration}
+	 * labeled alternative in {@link expressionParser#decl}.
 	 * @param ctx the parse tree
 	 */
-	void enterDecl(expressionParser.DeclContext ctx);
+	void enterReactionDeclaration(expressionParser.ReactionDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#decl}.
+	 * Exit a parse tree produced by the {@code ReactionDeclaration}
+	 * labeled alternative in {@link expressionParser#decl}.
 	 * @param ctx the parse tree
 	 */
-	void exitDecl(expressionParser.DeclContext ctx);
+	void exitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IntDeclaration}
+	 * labeled alternative in {@link expressionParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntDeclaration(expressionParser.IntDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IntDeclaration}
+	 * labeled alternative in {@link expressionParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntDeclaration(expressionParser.IntDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DeclaringReactioObject}
+	 * labeled alternative in {@link expressionParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclaringReactioObject(expressionParser.DeclaringReactioObjectContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DeclaringReactioObject}
+	 * labeled alternative in {@link expressionParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclaringReactioObject(expressionParser.DeclaringReactioObjectContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#expr}.
 	 * @param ctx the parse tree
@@ -39,6 +67,26 @@ public interface expressionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpr(expressionParser.ExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#declaringReaction}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclaringReaction(expressionParser.DeclaringReactionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#declaringReaction}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclaringReaction(expressionParser.DeclaringReactionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link expressionParser#declaringInt}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclaringInt(expressionParser.DeclaringIntContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link expressionParser#declaringInt}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclaringInt(expressionParser.DeclaringIntContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#exprList}.
 	 * @param ctx the parse tree

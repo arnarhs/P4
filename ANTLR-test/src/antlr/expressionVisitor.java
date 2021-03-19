@@ -1,4 +1,4 @@
-// Generated from expression.g4 by ANTLR 4.7.2
+// Generated from expression.g4 by ANTLR 4.9.1
 
     package antlr;
 
@@ -13,23 +13,51 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#prog}.
+	 * Visit a parse tree produced by the {@code Program}
+	 * labeled alternative in {@link expressionParser#prog}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProg(expressionParser.ProgContext ctx);
+	T visitProgram(expressionParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#decl}.
+	 * Visit a parse tree produced by the {@code ReactionDeclaration}
+	 * labeled alternative in {@link expressionParser#decl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDecl(expressionParser.DeclContext ctx);
+	T visitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IntDeclaration}
+	 * labeled alternative in {@link expressionParser#decl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntDeclaration(expressionParser.IntDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code DeclaringReactioObject}
+	 * labeled alternative in {@link expressionParser#decl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaringReactioObject(expressionParser.DeclaringReactioObjectContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expressionParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExpr(expressionParser.ExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#declaringReaction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaringReaction(expressionParser.DeclaringReactionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#declaringInt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaringInt(expressionParser.DeclaringIntContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expressionParser#exprList}.
 	 * @param ctx the parse tree
