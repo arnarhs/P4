@@ -65,11 +65,54 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExprList(expressionParser.ExprListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#reactionExpr}.
+	 * Visit a parse tree produced by the {@code ReactingSpecies}
+	 * labeled alternative in {@link expressionParser#reactionExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitReactionExpr(expressionParser.ReactionExprContext ctx);
+	T visitReactingSpecies(expressionParser.ReactingSpeciesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code MultiplyExpression}
+	 * labeled alternative in {@link expressionParser#reactionExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiplyExpression(expressionParser.MultiplyExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AddExpression}
+	 * labeled alternative in {@link expressionParser#reactionExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddExpression(expressionParser.AddExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ReactionOperatorWithPara}
+	 * labeled alternative in {@link expressionParser#reactionExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReactionOperatorWithPara(expressionParser.ReactionOperatorWithParaContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code MethodCall}
+	 * labeled alternative in {@link expressionParser#reactionExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMethodCall(expressionParser.MethodCallContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ReactionInitialization}
+	 * labeled alternative in {@link expressionParser#reactionExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReactionInitialization(expressionParser.ReactionInitializationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NumOrId}
+	 * labeled alternative in {@link expressionParser#reactionExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumOrId(expressionParser.NumOrIdContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expressionParser#exprParenthesis}.
 	 * @param ctx the parse tree
@@ -227,11 +270,19 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMethodParameters(expressionParser.MethodParametersContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#value}.
+	 * Visit a parse tree produced by the {@code Number}
+	 * labeled alternative in {@link expressionParser#value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitValue(expressionParser.ValueContext ctx);
+	T visitNumber(expressionParser.NumberContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Identification}
+	 * labeled alternative in {@link expressionParser#value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentification(expressionParser.IdentificationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expressionParser#reactionOperator}.
 	 * @param ctx the parse tree

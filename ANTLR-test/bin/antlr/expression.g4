@@ -36,13 +36,13 @@ exprList
     ;
 
 reactionExpr
-    : value reactionExprList                    //# ReactionOperator
-    | value multiplyExpr                        //# MultiplyExpression
-    | value addExpr                             //# AddExpression
-    | value reactionExprList reactionParameter  
-    | (ID | KEYWORD) exprParenthesis
-    | KEYWORD ID ':' expr
-    | value
+    : value reactionExprList                    # ReactingSpecies
+    | value multiplyExpr                        # MultiplyExpression
+    | value addExpr                             # AddExpression
+    | value reactionExprList reactionParameter  # ReactionOperatorWithPara
+    | (ID | KEYWORD) exprParenthesis            # MethodCall
+    | KEYWORD ID ':' expr                       # ReactionInitialization
+    | value                                     # NumOrId
     ;
 
 exprParenthesis: '(' expr ')'
@@ -145,8 +145,8 @@ methodParameters: ',' ssaMethodParameters
     ;
 
 value
-    : NUM
-    | ID
+    : NUM                                           # Number
+    | ID                                            # Identification
     ;
 
 reactionOperator: '=>' | '<=>' | '<=' ;
