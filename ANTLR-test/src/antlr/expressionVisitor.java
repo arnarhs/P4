@@ -277,12 +277,12 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNumber(expressionParser.NumberContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Identification}
+	 * Visit a parse tree produced by the {@code Variable}
 	 * labeled alternative in {@link expressionParser#value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIdentification(expressionParser.IdentificationContext ctx);
+	T visitVariable(expressionParser.VariableContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expressionParser#reactionOperator}.
 	 * @param ctx the parse tree
