@@ -1,6 +1,7 @@
-package models.expressions;
+package models.declarations;
+import models.Declarations;
 
-public class VariableDeclaration extends Expression {
+public class VariableDeclaration extends Declarations {
 	public String id;
 	public String type;
 	public Integer value;

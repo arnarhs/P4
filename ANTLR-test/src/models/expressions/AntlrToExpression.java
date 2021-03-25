@@ -1,5 +1,9 @@
 package models.expressions;
 
+import java.util.List;
+
+import org.antlr.v4.runtime.Token;
+
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AddExpressionContext;
 import antlr.expressionParser.DeclaringIntContext;
@@ -24,8 +28,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	}
 
 	//DECLARATION
-	@Override
-	public Expression visitDeclaringInt(DeclaringIntContext ctx) {
+	//@Override
+	/*public Expression visitDeclaringInt(DeclaringIntContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
 		int line = idToken.getLine();
 		int column = idToken.getCharPositionInLine() + 1;
@@ -41,7 +45,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		int value = Integer.parseInt(ctx.NUM().getText());
 		
 		return new VariableDeclaration(id, type, value);
-	}
+	}*/
 	
 	//REACTION OPERATOR
 	@Override
@@ -73,7 +77,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	}
 
 	//Variable
-	@Override
+	/*@Override
 	public Expression visitVariable(VariableContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
 		int line = idToken.getLine();
@@ -85,7 +89,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		}
 		
 		return new Variable(id);
-	}
+	}*/
 	
 	/*@Override
 	public Expression visitReactionOperatorWithPara(ReactionOperatorWithParaContext ctx) {

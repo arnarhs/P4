@@ -1,5 +1,14 @@
 package models.expressions;
 
-public abstract class Expression {
+import models.Statement;
+
+public abstract class Expression extends Statement {
 
 }
+
+
+//Statement
+//// decl | Expr
+
+//Scope
+////sæt af Statement
