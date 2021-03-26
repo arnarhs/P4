@@ -1,19 +1,20 @@
 package models.declarations;
 import models.Declarations;
+import models.expressions.ID;
+import models.expressions.Type;
 
 public class VariableDeclaration extends Declarations {
-	public String id;
-	public String type;
-	public Integer value;
+	public ID id;
+	public Type type;
 	
-	public VariableDeclaration(String id, String type, int value) {
+	public VariableDeclaration(ID id, Type type) {
 		this.id = id;
 		this.type = type;
-		this.value = value;
 	}
 	
 	@Override
 	public String toString() {
-		return type + " " + id + " : " + value.toString();
+		
+		return "Decl: " + type.toString() + " " + id.toString();
 	}
 }
