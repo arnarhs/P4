@@ -1,14 +1,14 @@
 package models.expressions;
 
 public class Reaction extends Expression{
-	Expression leftside; //prey
-	Expression rightside; //predator
-	int propensity; 
+	ReactionExpr leftside; //prey
+	ReactionExpr rightside; //predator
+	Variable constant; 
 	
-	public Reaction(SpeciesComplex leftside, SpeciesComplex rightside, int propensity) {
+	public Reaction(ReactionExpr leftside, ReactionExpr rightside, Variable constant) {
 		this.leftside = leftside;
 		this.rightside = rightside;
-		this.propensity = propensity;
+		this.constant = constant;
 	}
 	
 	
