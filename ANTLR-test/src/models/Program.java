@@ -3,15 +3,17 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.expressions.Expression;
+
 public class Program {
-	public List<Statement> statements;
+	public List<Expression> expressions;
 	
 	public Program() {
-		this.statements = new ArrayList<>();
+		this.expressions = new ArrayList<>();
 	}
 	
-	public void AddExpression(Statement stmt) {
-		statements.add(stmt);
+	public void AddExpression(Expression expr) {
+		expressions.add(expr);
 	}
 
 }
