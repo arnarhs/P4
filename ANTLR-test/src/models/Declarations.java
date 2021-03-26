@@ -1,5 +1,5 @@
 package models;
 
-public class Declarations extends Statement {
+public abstract class Declarations extends Statement {
 
 }
