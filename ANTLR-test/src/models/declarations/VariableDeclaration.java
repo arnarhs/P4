@@ -6,7 +6,6 @@ import models.expressions.Type;
 public class VariableDeclaration extends Declarations {
 	public ID id;
 	public Type type;
-	public Integer value;
 	
 	public VariableDeclaration(ID id, Type type) {
 		this.id = id;
