@@ -4,6 +4,7 @@ grammar expression;
     package antlr;
 }
 
+
 prog
     : (decl | expr)+ EOF          # Program
     ;
@@ -11,13 +12,13 @@ prog
 decl
     : declReaction                # ReactionDeclaration
     | declInt                     # IntDeclaration
-    | declList
+    | declList                    # DeclaringListblababab
     | declStatement               # DeclaringReactioObject
     ;
 
 declReaction
-    : KEYWORD ID ':' (NUM | ID | reactionExpr)        # ReactionInitialization
-    | KEYWORD ID
+    : KEYWORD ID ':' (NUM | ID | expr)        # ReactionInitialization
+    | KEYWORD ID                                      # asdfasdfasdf
     ;
 
 declInt
@@ -34,6 +35,7 @@ declStatement
     : KEYWORD ID '(' (formalParameters | WS) ')' '{' (decl | expr)+ '}'
     ;
 
+
 formalParameters
     : formalParameters ',' KEYWORD ID
     | KEYWORD ID
@@ -45,25 +47,26 @@ exprParameters
     ;
 
 ssaParameters
-    : ssaParameters ',' ID
+    : '{' ssaList '}' ',' ID
+    | ID
+    ;
+
+ssaList
+    : ssaList ',' ID
     | ID
     ;
 
 expr
-    : ID '(' (exprParameters | WS) ')'           # MethodCall
-    | SSA '(' ('{' ssaParameters '}' ',' | WS) ID ')'
-    | value exprList
-    | reactionExpr
+    : ID '(' (exprParameters | WS) ')'                      # MethodCall
+    | SSA '(' ssaParameters ')'                      # SSACallsdf
+    | value exprList                                        # Arithmeticsdf
     ;
 
 exprList
-    : MULT expr 
-    | ADD expr 
-    | WS
-    ;
-
-reactionExpr
-    : expr REAC expr ('(' value ')' | WS)      # ReactingSpecies
+    : REAC expr ('(' expr ')' | WS)      # asdfasdf
+    | MULT expr                          # asdfasdfss
+    | ADD expr                           # asdfasdfasds
+    | WS                                 # asdfasdfasdasd
     ;
 
 value
@@ -71,14 +74,16 @@ value
     | ID                    # Variable
     ;
 
+
 REAC: '=>' | '<=>' | '<=' ;
 ADD: '+' ;
 MULT: '*' ;
 
 KEYWORD: 'species' | 'solution' | 'reaction' | 'print' ;
 INT: 'int' ;
-SSA: 'ssaModel' ;
+SSA: 'ssa' ;
 LIST: 'list' ;
+
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
 COMMENT: '//' ~[\r\n]* -> skip ;
