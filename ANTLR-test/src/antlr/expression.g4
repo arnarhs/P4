@@ -4,49 +4,47 @@ grammar expression;
     package antlr;
 }
 
-
 prog
-    : (decl | expr)+ EOF          # Program
+    : (decl | expr)+ EOF                         # Program
     ;
  
 decl
-    : declReaction                # ReactionDeclaration
-    | declInt                     # IntDeclaration
-    | declList                    # DeclaringListblababab
-    | declStatement               # DeclaringReactioObject
+    : declReaction                      
+    | declInt                             
+    | declList                               
+    | declStatement                            
     ;
 
 declReaction
-    : KEYWORD ID ':' (NUM | ID | expr)        # ReactionInitialization
-    | KEYWORD ID                                      # asdfasdfasdf
+    : KEYWORD ID ':' expr          
+    | KEYWORD ID                               
     ;
 
 declInt
-    : INT ID ':' (NUM | ID)
+    : INT ID ':' value
     | INT ID
     ;
 
 declList
-    : LIST ID ':' '{' exprParameters '}'
+    : LIST ID ':' '{' exprParams '}'
     | LIST ID 
     ;
 
 declStatement
-    : KEYWORD ID '(' (formalParameters | WS) ')' '{' (decl | expr)+ '}'
+    : KEYWORD ID '(' formalParams* ')' '{' (decl | expr)+ '}'
     ;
 
-
-formalParameters
-    : formalParameters ',' KEYWORD ID
+formalParams
+    : formalParams ',' KEYWORD ID
     | KEYWORD ID
     ;
 
-exprParameters
-    : exprParameters ',' expr
+exprParams
+    : exprParams ',' expr
     | expr
     ;
 
-ssaParameters
+ssaParams
     : '{' ssaList '}' ',' ID
     | ID
     ;
@@ -57,23 +55,22 @@ ssaList
     ;
 
 expr
-    : ID '(' (exprParameters | WS) ')'                      # MethodCall
-    | SSA '(' ssaParameters ')'                      # SSACallsdf
-    | value exprList                                        # Arithmeticsdf
+    : expr REAC expr reactionConst*
+    | expr MULT expr                              
+    | expr ADD expr     
+    | ID '(' exprParams* ')'       
+    | SSA '(' ssaParams ')'   
+    | value               
     ;
 
-exprList
-    : REAC expr ('(' expr ')' | WS)      # asdfasdf
-    | MULT expr                          # asdfasdfss
-    | ADD expr                           # asdfasdfasds
-    | WS                                 # asdfasdfasdasd
+reactionConst
+    : '(' expr ')'
     ;
 
 value
-    : NUM                   # Number
-    | ID                    # Variable
+    : NUM                                        # Number
+    | ID                                         # Variable
     ;
-
 
 REAC: '=>' | '<=>' | '<=' ;
 ADD: '+' ;
@@ -87,4 +84,4 @@ LIST: 'list' ;
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
 COMMENT: '//' ~[\r\n]* -> skip ;
-WS: [ \r\t\n]+ -> skip ;
+WS: [ \t\r\n]+ -> skip ;

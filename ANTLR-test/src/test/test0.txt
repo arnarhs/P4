@@ -17,5 +17,5 @@
 
 //list reactions: {a => b (2)} //, a => c+d (3), c => b (7)
 
-ssaModel({a, b, c}, reactions)
-ssaModel(reactions)
+ssa({a, b, c}, reactions)
+ssa(reactions)

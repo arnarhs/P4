@@ -30,73 +30,25 @@ public class expressionBaseListener implements expressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReactionDeclaration(expressionParser.ReactionDeclarationContext ctx) { }
+	@Override public void enterDecl(expressionParser.DeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx) { }
+	@Override public void exitDecl(expressionParser.DeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntDeclaration(expressionParser.IntDeclarationContext ctx) { }
+	@Override public void enterDeclReaction(expressionParser.DeclReactionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntDeclaration(expressionParser.IntDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclaringListblababab(expressionParser.DeclaringListblabababContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclaringListblababab(expressionParser.DeclaringListblabababContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclaringReactioObject(expressionParser.DeclaringReactioObjectContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclaringReactioObject(expressionParser.DeclaringReactioObjectContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterReactionInitialization(expressionParser.ReactionInitializationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitReactionInitialization(expressionParser.ReactionInitializationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAsdfasdfasdf(expressionParser.AsdfasdfasdfContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAsdfasdfasdf(expressionParser.AsdfasdfasdfContext ctx) { }
+	@Override public void exitDeclReaction(expressionParser.DeclReactionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -138,37 +90,37 @@ public class expressionBaseListener implements expressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFormalParameters(expressionParser.FormalParametersContext ctx) { }
+	@Override public void enterFormalParams(expressionParser.FormalParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFormalParameters(expressionParser.FormalParametersContext ctx) { }
+	@Override public void exitFormalParams(expressionParser.FormalParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprParameters(expressionParser.ExprParametersContext ctx) { }
+	@Override public void enterExprParams(expressionParser.ExprParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExprParameters(expressionParser.ExprParametersContext ctx) { }
+	@Override public void exitExprParams(expressionParser.ExprParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSsaParameters(expressionParser.SsaParametersContext ctx) { }
+	@Override public void enterSsaParams(expressionParser.SsaParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSsaParameters(expressionParser.SsaParametersContext ctx) { }
+	@Override public void exitSsaParams(expressionParser.SsaParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -186,85 +138,25 @@ public class expressionBaseListener implements expressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethodCall(expressionParser.MethodCallContext ctx) { }
+	@Override public void enterExpr(expressionParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethodCall(expressionParser.MethodCallContext ctx) { }
+	@Override public void exitExpr(expressionParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSSACallsdf(expressionParser.SSACallsdfContext ctx) { }
+	@Override public void enterReactionConst(expressionParser.ReactionConstContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSSACallsdf(expressionParser.SSACallsdfContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArithmeticsdf(expressionParser.ArithmeticsdfContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArithmeticsdf(expressionParser.ArithmeticsdfContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAsdfasdf(expressionParser.AsdfasdfContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAsdfasdf(expressionParser.AsdfasdfContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAsdfasdfss(expressionParser.AsdfasdfssContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAsdfasdfss(expressionParser.AsdfasdfssContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAsdfasdfasds(expressionParser.AsdfasdfasdsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAsdfasdfasds(expressionParser.AsdfasdfasdsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAsdfasdfasdasd(expressionParser.AsdfasdfasdasdContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAsdfasdfasdasd(expressionParser.AsdfasdfasdasdContext ctx) { }
+	@Override public void exitReactionConst(expressionParser.ReactionConstContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -20,47 +20,17 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(expressionParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ReactionDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
+	 * Visit a parse tree produced by {@link expressionParser#decl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx);
+	T visitDecl(expressionParser.DeclContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code IntDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
+	 * Visit a parse tree produced by {@link expressionParser#declReaction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIntDeclaration(expressionParser.IntDeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code DeclaringListblababab}
-	 * labeled alternative in {@link expressionParser#decl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclaringListblababab(expressionParser.DeclaringListblabababContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code DeclaringReactioObject}
-	 * labeled alternative in {@link expressionParser#decl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclaringReactioObject(expressionParser.DeclaringReactioObjectContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ReactionInitialization}
-	 * labeled alternative in {@link expressionParser#declReaction}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitReactionInitialization(expressionParser.ReactionInitializationContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code asdfasdfasdf}
-	 * labeled alternative in {@link expressionParser#declReaction}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAsdfasdfasdf(expressionParser.AsdfasdfasdfContext ctx);
+	T visitDeclReaction(expressionParser.DeclReactionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expressionParser#declInt}.
 	 * @param ctx the parse tree
@@ -80,23 +50,23 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclStatement(expressionParser.DeclStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#formalParameters}.
+	 * Visit a parse tree produced by {@link expressionParser#formalParams}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFormalParameters(expressionParser.FormalParametersContext ctx);
+	T visitFormalParams(expressionParser.FormalParamsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#exprParameters}.
+	 * Visit a parse tree produced by {@link expressionParser#exprParams}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExprParameters(expressionParser.ExprParametersContext ctx);
+	T visitExprParams(expressionParser.ExprParamsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#ssaParameters}.
+	 * Visit a parse tree produced by {@link expressionParser#ssaParams}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSsaParameters(expressionParser.SsaParametersContext ctx);
+	T visitSsaParams(expressionParser.SsaParamsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expressionParser#ssaList}.
 	 * @param ctx the parse tree
@@ -104,54 +74,17 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSsaList(expressionParser.SsaListContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code MethodCall}
-	 * labeled alternative in {@link expressionParser#expr}.
+	 * Visit a parse tree produced by {@link expressionParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMethodCall(expressionParser.MethodCallContext ctx);
+	T visitExpr(expressionParser.ExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code SSACallsdf}
-	 * labeled alternative in {@link expressionParser#expr}.
+	 * Visit a parse tree produced by {@link expressionParser#reactionConst}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSSACallsdf(expressionParser.SSACallsdfContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code Arithmeticsdf}
-	 * labeled alternative in {@link expressionParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArithmeticsdf(expressionParser.ArithmeticsdfContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code asdfasdf}
-	 * labeled alternative in {@link expressionParser#exprList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAsdfasdf(expressionParser.AsdfasdfContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code asdfasdfss}
-	 * labeled alternative in {@link expressionParser#exprList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAsdfasdfss(expressionParser.AsdfasdfssContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code asdfasdfasds}
-	 * labeled alternative in {@link expressionParser#exprList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAsdfasdfasds(expressionParser.AsdfasdfasdsContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code asdfasdfasdasd}
-	 * labeled alternative in {@link expressionParser#exprList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAsdfasdfasdasd(expressionParser.AsdfasdfasdasdContext ctx);
+	T visitReactionConst(expressionParser.ReactionConstContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Number}
 	 * labeled alternative in {@link expressionParser#value}.
