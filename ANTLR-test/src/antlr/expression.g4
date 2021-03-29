@@ -5,47 +5,64 @@ grammar expression;
 }
 
 prog
-    : (decl | expr | func)+ EOF                 # Program
+    : (decl | expr)+ EOF                 # Program
     ;
  
 decl
-    : declaringReaction                         # ReactionDeclaration
-    | declaringInt                              # IntDeclaration
-    | KEYWORD ID declParameters                 # DeclaringReactioObject
+    : declReaction                         # ReactionDeclaration
+    | declInt                              # IntDeclaration
+    | declList
+    | declStatement                        # DeclaringReactioObject
     ;
 
-expr
-    : value exprList
-    | reactionExpr
-    | parameterExpr
-    | setList
-    ;
-
-declaringReaction: KEYWORD ID ':' (NUM|ID)
+declReaction
+    : KEYWORD ID ':' (NUM|ID)
     | KEYWORD ID
     ;
 
-declaringInt: INT ID ':' (NUM|ID)
+declInt
+    : INT ID ':' (NUM|ID)
     | INT ID
     ;
 
-exprList
-    : multiplyExpr
-    | addExpr 
+//set reactions: {a => b (2), a => c+d (3), c => b (7)}
+
+declList
+    : LIST ID ':' '{' listExpr '}'
+    | LIST ID 
+    ;
+
+declStatement
+    : KEYWORD ID '(' declParameters ')' '{' (decl | expr)+ '}'
+    : KEYWORD ID '(' ')' '{' (decl | expr)+ '}'
     | WS
+    ;
+
+declParameters
+    : parameters ',' KEYWORD ID
+    | KEYWORD ID
+    ;
+
+expr
+    | expr mult expr
+    | expr add expr
+    | ID '(' exprParameters ')'
+    | SSA '(' ssaParameters ')'
+    | reactionExpr
+    | setList
+    | value
     ;
 
 reactionExpr
     : value reactionExprList                    # ReactingSpecies
-    | value multiplyExpr                        # MultiplyExpression
-    | value addExpr                             # AddExpression
     | value reactionExprList reactionParameter  # ReactionOperatorWithPara
     | (ID | KEYWORD) exprParenthesis            # MethodCall
     | KEYWORD ID ':' expr                       # ReactionInitialization
     | value                                     # NumOrId
     ;
 
-exprParenthesis: '(' expr ')'
+exprParenthesis
+    : '(' expr ')'
     ;
 
 reactionExprList
@@ -54,94 +71,43 @@ reactionExprList
     | WS
     ;
 
-reactionParameter: '(' value ')'
+reactionParameter
+    : '(' value ')'
     | WS
     ;
 
-multiplyExpr: mult reactionExpr                    
-    | mult listExpr                                
-    | mult value                                   
-    ;
-
-addExpr: add reactionExpr                           
-    | add listExpr                                 
-    | add value                                    
-    ;
-    
-parameterExpr
-    : parameterID paraExpr
-    ;
-
-parameterID: ID
-    ;
-
-paraExpr: '(' exprParameters ')'
-    ;
-
-exprParameters: value valueParameter
-    | ',' value valueParameter
-    | valueParameter
+exprParameters
+    : exprParameters ',' value
     | value
     ;
 
-valueParameter: ',' exprParameters
-    ;
-
-declParameters: '(' declStatement ')' '{' (decl | expr)+ '}'
-    | WS
-    ;
-
-declStatement : KEYWORD ID multipleStmt
-    | ',' KEYWORD ID multipleStmt
-    | KEYWORD ID
-    | WS
-    ;
-
-multipleStmt: ',' declStatement
-    ;
-
-func: runSSA
-    ;
-
-//set reactions: {a => b (2), a => c+d (3), c => b (7)}
-setList: LIST ID ':' listParameters
-    ;
-
-listParameters: '{' listExpr '}'
-    ;
-
-listExpr: value listExprList
+listExpr
+    : value listExprList
     | value multiplyExpr
     | value addExpr
     | value listParameter
     | value
     ;
 
-listExprList: reactionOperator listExpr
+listExprList
+    : reactionOperator listExpr
     ;
-listParameter: '(' value ')' multiValues
+
+listParameter
+    : '(' value ')' multiValues
     | '(' value ')'
     ;
-multiValues: ',' listExpr
+
+multiValues
+    : ',' listExpr
     ;
 
 //ssaModel({a, b, c}, reactions)
 //ssaModel(reactions)
 
-runSSA: SSA ssaMethod
-    ;
-ssaMethod: '(' ssaParameter')'
-    ;
-ssaParameter: ssaParameters
-    ;
-ssaParameters: '{' ssaMethodParameters'}' ',' ID
+ssaParameters
+    : '{' exprParameters '}' ',' ID
     | ID
-    ;
-
-ssaMethodParameters: value methodParameters
-    | value
-    ;
-methodParameters: ',' ssaMethodParameters 
     ;
 
 value
