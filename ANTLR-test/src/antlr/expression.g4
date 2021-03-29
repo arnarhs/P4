@@ -33,13 +33,13 @@ declList
     ;
 
 declStatement
-    : KEYWORD ID '(' declParameters ')' '{' (decl | expr)+ '}'
+    : KEYWORD ID '(' formalParameters ')' '{' (decl | expr)+ '}'
     : KEYWORD ID '(' ')' '{' (decl | expr)+ '}'
     | WS
     ;
 
-declParameters
-    : parameters ',' KEYWORD ID
+formalParameters
+    : formalParameters ',' KEYWORD ID
     | KEYWORD ID
     ;
 
@@ -76,8 +76,8 @@ reactionParameter
     | WS
     ;
 
-exprParameters
-    : exprParameters ',' value
+actualParameters
+    : actualParameters ',' value
     | value
     ;
 
@@ -106,7 +106,7 @@ multiValues
 //ssaModel(reactions)
 
 ssaParameters
-    : '{' exprParameters '}' ',' ID
+    : '{' actualParameters '}' ',' ID
     | ID
     ;
 
