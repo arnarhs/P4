@@ -31,7 +31,7 @@ declList
     ;
 
 declStatement
-    : KEYWORD ID '(' formalParams* ')' '{' (decl | expr)+ '}'
+    : KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'
     ;
 
 formalParams
@@ -55,16 +55,16 @@ ssaList
     ;
 
 expr
-    : expr REAC expr reactionConst*
+    : expr REAC expr (reactionConst | WS*)
     | expr MULT expr                              
     | expr ADD expr     
-    | ID '(' exprParams* ')'       
+    | ID '(' (exprParams | WS*) ')'       
     | SSA '(' ssaParams ')'   
     | value               
     ;
 
 reactionConst
-    : '(' expr ')'
+    : '(' value ')'
     ;
 
 value
@@ -84,4 +84,4 @@ LIST: 'list' ;
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
 COMMENT: '//' ~[\r\n]* -> skip ;
-WS: [ \t\r\n]+ -> skip ;
+WS: [ \r\t\n]+ -> channel(HIDDEN) ;
