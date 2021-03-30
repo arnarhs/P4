@@ -12,7 +12,7 @@ decl
     : declReaction                      
     | declInt                             
     | declList                               
-    | declStatement                            
+    | declMethod                            
     ;
 
 declReaction
@@ -30,7 +30,7 @@ declList
     | LIST ID 
     ;
 
-declStatement
+declMethod
     : KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'
     ;
 
