@@ -80,6 +80,12 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpr(expressionParser.ExprContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link expressionParser#valueExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValueExpr(expressionParser.ValueExprContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link expressionParser#reactionConst}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

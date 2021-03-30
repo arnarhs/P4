@@ -40,8 +40,8 @@ formalParams
     ;
 
 exprParams
-    : exprParams ',' expr
-    | expr
+    : exprParams ',' valueExpr
+    | valueExpr
     ;
 
 ssaParams
@@ -55,16 +55,19 @@ ssaList
     ;
 
 expr
-    : expr REAC expr (reactionConst | WS*)
-    | expr MULT expr                              
-    | expr ADD expr     
+    : valueExpr   
     | ID '(' (exprParams | WS*) ')'       
     | SSA '(' ssaParams ')'   
-    | value               
     ;
 
+valueExpr
+    : valueExpr REAC valueExpr (reactionConst | WS*)
+    | valueExpr MULT valueExpr                              
+    | valueExpr ADD valueExpr 
+    | value;
+
 reactionConst
-    : '(' value ')'
+    : '(' valueExpr ')'
     ;
 
 value
