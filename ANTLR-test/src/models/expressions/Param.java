@@ -19,7 +19,7 @@ public class Param extends Expression {
 		String str = "Param: ";
 		
 		for(Statement elem : parameters) {
-			str = str + parameters.toString() + " ";
+			str = str + elem.toString() + ", ";
 		}
 		
 		return str;
