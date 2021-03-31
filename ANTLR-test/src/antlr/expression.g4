@@ -4,19 +4,28 @@ grammar expression;
     package antlr;
 }
 
+/*
+
+  TODO:
+	- If statements
+	- while loops
+	- check if valueExpr is ambiguous
+
+*/
+
 prog
     : (decl | expr)+ EOF                         # Program
     ;
  
 decl
-    : declReaction                      
-    | declInt                             
-    | declList                               
-    | declMethod                            
+    : declReaction                      		# ReactionDeclaration
+    | declInt                           		# VariableDeclaration   		 
+    | declList                               	# ListDeclaration
+    | declMethod                            	# MethodDeclaration
     ;
 
 declReaction
-    : KEYWORD ID ':' valueExpr          
+    : KEYWORD ID ':' valueExpr          		
     | KEYWORD ID                               
     ;
 
@@ -34,13 +43,13 @@ declMethod
     : KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'
     ;
 
-formalParams
-    : formalParams ',' KEYWORD ID
-    | KEYWORD ID
+formalParams                                   
+    : KEYWORD ID ',' formalParams   			# ParamList
+    | KEYWORD ID                                # Param
     ;
 
 exprParams
-    : exprParams ',' valueExpr
+    : valueExpr ',' exprParams 
     | valueExpr
     ;
 
@@ -50,21 +59,22 @@ ssaParams
     ;
 
 ssaList
-    : ssaList ',' ID
+    : ID ',' ssaList  
     | ID
     ;
 
 expr
-    : valueExpr   
-    | ID '(' (exprParams | WS*) ')'       
-    | SSA '(' ssaParams ')'   
+    : valueExpr   										# ValueExpression
+    | ID '(' (exprParams | WS*) ')'       				# MethodCall
+    | SSA '(' ssaParams ')'   							# GillespieCall
     ;
 
 valueExpr
-    : valueExpr REAC valueExpr (reactionConst | WS*)
-    | valueExpr MULT valueExpr                              
-    | valueExpr ADD valueExpr 
-    | value;
+    : valueExpr REAC valueExpr (reactionConst | WS*)	# ReactionExpression
+    | valueExpr MULT valueExpr                          # MultiplyExpression   
+    | valueExpr ADD valueExpr 							# AdditionExpression
+    | value 										    # NumOrID
+    ;											
 
 reactionConst
     : '(' valueExpr ')'
@@ -88,3 +98,4 @@ ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
 COMMENT: '//' ~[\r\n]* -> skip ;
 WS: [ \r\t\n]+ -> channel(HIDDEN) ;
+
