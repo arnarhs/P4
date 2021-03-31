@@ -10,6 +10,7 @@ grammar expression;
 	- If statements
 	- while loops
 	- check if valueExpr is ambiguous
+	- allow more than two species on either side of reaction
 
 */
 
