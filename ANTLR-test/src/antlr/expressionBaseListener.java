@@ -78,13 +78,13 @@ public class expressionBaseListener implements expressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclStatement(expressionParser.DeclStatementContext ctx) { }
+	@Override public void enterDeclMethod(expressionParser.DeclMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclStatement(expressionParser.DeclStatementContext ctx) { }
+	@Override public void exitDeclMethod(expressionParser.DeclMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

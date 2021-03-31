@@ -54,7 +54,7 @@ public class expressionBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDeclStatement(expressionParser.DeclStatementContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDeclMethod(expressionParser.DeclMethodContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

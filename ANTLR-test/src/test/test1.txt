@@ -1,6 +1,10 @@
 species a: 10
-
 species b: 10
+list listName : {
+	2 => 2, 
+	3 => 5 + 2 (b), 
+	2 + 2 => 3 + 7 (b + k)
+}
 
 //Define your solution object. 
 solution test() {
@@ -9,3 +13,4 @@ solution test() {
 }
 
 a(a, a, a)
+ssa({a,s,b}, reactions) 

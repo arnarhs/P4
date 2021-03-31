@@ -16,12 +16,12 @@ decl
     ;
 
 declReaction
-    : KEYWORD ID ':' expr          
+    : KEYWORD ID ':' valueExpr          
     | KEYWORD ID                               
     ;
 
 declInt
-    : INT ID ':' value
+    : INT ID ':' valueExpr
     | INT ID
     ;
 

@@ -23,12 +23,12 @@ public class expressionParser extends Parser {
 		KEYWORD=10, INT=11, SSA=12, LIST=13, ID=14, NUM=15, COMMENT=16, WS=17;
 	public static final int
 		RULE_prog = 0, RULE_decl = 1, RULE_declReaction = 2, RULE_declInt = 3, 
-		RULE_declList = 4, RULE_declStatement = 5, RULE_formalParams = 6, RULE_exprParams = 7, 
+		RULE_declList = 4, RULE_declMethod = 5, RULE_formalParams = 6, RULE_exprParams = 7, 
 		RULE_ssaParams = 8, RULE_ssaList = 9, RULE_expr = 10, RULE_valueExpr = 11, 
 		RULE_reactionConst = 12, RULE_value = 13;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"prog", "decl", "declReaction", "declInt", "declList", "declStatement", 
+			"prog", "decl", "declReaction", "declInt", "declList", "declMethod", 
 			"formalParams", "exprParams", "ssaParams", "ssaList", "expr", "valueExpr", 
 			"reactionConst", "value"
 		};
@@ -205,8 +205,8 @@ public class expressionParser extends Parser {
 		public DeclListContext declList() {
 			return getRuleContext(DeclListContext.class,0);
 		}
-		public DeclStatementContext declStatement() {
-			return getRuleContext(DeclStatementContext.class,0);
+		public DeclMethodContext declMethod() {
+			return getRuleContext(DeclMethodContext.class,0);
 		}
 		public DeclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -259,7 +259,7 @@ public class expressionParser extends Parser {
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(39);
-				declStatement();
+				declMethod();
 				}
 				break;
 			}
@@ -278,8 +278,8 @@ public class expressionParser extends Parser {
 	public static class DeclReactionContext extends ParserRuleContext {
 		public TerminalNode KEYWORD() { return getToken(expressionParser.KEYWORD, 0); }
 		public TerminalNode ID() { return getToken(expressionParser.ID, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public ValueExprContext valueExpr() {
+			return getRuleContext(ValueExprContext.class,0);
 		}
 		public DeclReactionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -317,7 +317,7 @@ public class expressionParser extends Parser {
 				setState(44);
 				match(T__0);
 				setState(45);
-				expr();
+				valueExpr(0);
 				}
 				break;
 			case 2:
@@ -345,8 +345,8 @@ public class expressionParser extends Parser {
 	public static class DeclIntContext extends ParserRuleContext {
 		public TerminalNode INT() { return getToken(expressionParser.INT, 0); }
 		public TerminalNode ID() { return getToken(expressionParser.ID, 0); }
-		public ValueContext value() {
-			return getRuleContext(ValueContext.class,0);
+		public ValueExprContext valueExpr() {
+			return getRuleContext(ValueExprContext.class,0);
 		}
 		public DeclIntContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -384,7 +384,7 @@ public class expressionParser extends Parser {
 				setState(52);
 				match(T__0);
 				setState(53);
-				value();
+				valueExpr(0);
 				}
 				break;
 			case 2:
@@ -480,7 +480,7 @@ public class expressionParser extends Parser {
 		return _localctx;
 	}
 
-	public static class DeclStatementContext extends ParserRuleContext {
+	public static class DeclMethodContext extends ParserRuleContext {
 		public TerminalNode KEYWORD() { return getToken(expressionParser.KEYWORD, 0); }
 		public TerminalNode ID() { return getToken(expressionParser.ID, 0); }
 		public FormalParamsContext formalParams() {
@@ -502,28 +502,28 @@ public class expressionParser extends Parser {
 		public TerminalNode WS(int i) {
 			return getToken(expressionParser.WS, i);
 		}
-		public DeclStatementContext(ParserRuleContext parent, int invokingState) {
+		public DeclMethodContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_declStatement; }
+		@Override public int getRuleIndex() { return RULE_declMethod; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterDeclStatement(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterDeclMethod(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitDeclStatement(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitDeclMethod(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitDeclStatement(this);
+			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitDeclMethod(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final DeclStatementContext declStatement() throws RecognitionException {
-		DeclStatementContext _localctx = new DeclStatementContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_declStatement);
+	public final DeclMethodContext declMethod() throws RecognitionException {
+		DeclMethodContext _localctx = new DeclMethodContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_declMethod);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1408,9 +1408,9 @@ public class expressionParser extends Parser {
 		"\3\2\2\2\34\u00be\3\2\2\2\36!\5\4\3\2\37!\5\26\f\2 \36\3\2\2\2 \37\3\2"+
 		"\2\2!\"\3\2\2\2\" \3\2\2\2\"#\3\2\2\2#$\3\2\2\2$%\7\2\2\3%\3\3\2\2\2&"+
 		"+\5\6\4\2\'+\5\b\5\2(+\5\n\6\2)+\5\f\7\2*&\3\2\2\2*\'\3\2\2\2*(\3\2\2"+
-		"\2*)\3\2\2\2+\5\3\2\2\2,-\7\f\2\2-.\7\20\2\2./\7\3\2\2/\63\5\26\f\2\60"+
+		"\2*)\3\2\2\2+\5\3\2\2\2,-\7\f\2\2-.\7\20\2\2./\7\3\2\2/\63\5\30\r\2\60"+
 		"\61\7\f\2\2\61\63\7\20\2\2\62,\3\2\2\2\62\60\3\2\2\2\63\7\3\2\2\2\64\65"+
-		"\7\r\2\2\65\66\7\20\2\2\66\67\7\3\2\2\67;\5\34\17\289\7\r\2\29;\7\20\2"+
+		"\7\r\2\2\65\66\7\20\2\2\66\67\7\3\2\2\67;\5\30\r\289\7\r\2\29;\7\20\2"+
 		"\2:\64\3\2\2\2:8\3\2\2\2;\t\3\2\2\2<=\7\17\2\2=>\7\20\2\2>?\7\3\2\2?@"+
 		"\7\4\2\2@A\5\20\t\2AB\7\5\2\2BF\3\2\2\2CD\7\17\2\2DF\7\20\2\2E<\3\2\2"+
 		"\2EC\3\2\2\2F\13\3\2\2\2GH\7\f\2\2HI\7\20\2\2IQ\7\6\2\2JR\5\16\b\2KM\7"+

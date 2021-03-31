@@ -62,15 +62,15 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitDeclList(expressionParser.DeclListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#declStatement}.
+	 * Enter a parse tree produced by {@link expressionParser#declMethod}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclStatement(expressionParser.DeclStatementContext ctx);
+	void enterDeclMethod(expressionParser.DeclMethodContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#declStatement}.
+	 * Exit a parse tree produced by {@link expressionParser#declMethod}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclStatement(expressionParser.DeclStatementContext ctx);
+	void exitDeclMethod(expressionParser.DeclMethodContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#formalParams}.
 	 * @param ctx the parse tree
