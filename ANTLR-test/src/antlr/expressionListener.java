@@ -22,49 +22,63 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitProgram(expressionParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ReactionDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
+	 * Enter a parse tree produced by {@link expressionParser#decl}.
 	 * @param ctx the parse tree
 	 */
-	void enterReactionDeclaration(expressionParser.ReactionDeclarationContext ctx);
+	void enterDecl(expressionParser.DeclContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ReactionDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
+	 * Exit a parse tree produced by {@link expressionParser#decl}.
 	 * @param ctx the parse tree
 	 */
-	void exitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx);
+	void exitDecl(expressionParser.DeclContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code IntDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
+	 * Enter a parse tree produced by the {@code ReacDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declReaction}.
 	 * @param ctx the parse tree
 	 */
-	void enterIntDeclaration(expressionParser.IntDeclarationContext ctx);
+	void enterReacDeclAssignment(expressionParser.ReacDeclAssignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code IntDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
+	 * Exit a parse tree produced by the {@code ReacDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declReaction}.
 	 * @param ctx the parse tree
 	 */
-	void exitIntDeclaration(expressionParser.IntDeclarationContext ctx);
+	void exitReacDeclAssignment(expressionParser.ReacDeclAssignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#declReaction}.
+	 * Enter a parse tree produced by the {@code ReacDecl}
+	 * labeled alternative in {@link expressionParser#declReaction}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclReaction(expressionParser.DeclReactionContext ctx);
+	void enterReacDecl(expressionParser.ReacDeclContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#declReaction}.
+	 * Exit a parse tree produced by the {@code ReacDecl}
+	 * labeled alternative in {@link expressionParser#declReaction}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclReaction(expressionParser.DeclReactionContext ctx);
+	void exitReacDecl(expressionParser.ReacDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#declInt}.
+	 * Enter a parse tree produced by the {@code IntDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declInt}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclInt(expressionParser.DeclIntContext ctx);
+	void enterIntDeclAssignment(expressionParser.IntDeclAssignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#declInt}.
+	 * Exit a parse tree produced by the {@code IntDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declInt}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclInt(expressionParser.DeclIntContext ctx);
+	void exitIntDeclAssignment(expressionParser.IntDeclAssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IntDecl}
+	 * labeled alternative in {@link expressionParser#declInt}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntDecl(expressionParser.IntDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IntDecl}
+	 * labeled alternative in {@link expressionParser#declInt}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntDecl(expressionParser.IntDeclContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ValueExpression}
 	 * labeled alternative in {@link expressionParser#expr}.

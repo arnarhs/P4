@@ -26,28 +26,35 @@ public class expressionBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDecl(expressionParser.DeclContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIntDeclaration(expressionParser.IntDeclarationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitReacDeclAssignment(expressionParser.ReacDeclAssignmentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDeclReaction(expressionParser.DeclReactionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitReacDecl(expressionParser.ReacDeclContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDeclInt(expressionParser.DeclIntContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIntDeclAssignment(expressionParser.IntDeclAssignmentContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIntDecl(expressionParser.IntDeclContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

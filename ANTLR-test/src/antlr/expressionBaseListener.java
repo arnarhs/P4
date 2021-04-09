@@ -30,49 +30,61 @@ public class expressionBaseListener implements expressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReactionDeclaration(expressionParser.ReactionDeclarationContext ctx) { }
+	@Override public void enterDecl(expressionParser.DeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx) { }
+	@Override public void exitDecl(expressionParser.DeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntDeclaration(expressionParser.IntDeclarationContext ctx) { }
+	@Override public void enterReacDeclAssignment(expressionParser.ReacDeclAssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntDeclaration(expressionParser.IntDeclarationContext ctx) { }
+	@Override public void exitReacDeclAssignment(expressionParser.ReacDeclAssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclReaction(expressionParser.DeclReactionContext ctx) { }
+	@Override public void enterReacDecl(expressionParser.ReacDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclReaction(expressionParser.DeclReactionContext ctx) { }
+	@Override public void exitReacDecl(expressionParser.ReacDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclInt(expressionParser.DeclIntContext ctx) { }
+	@Override public void enterIntDeclAssignment(expressionParser.IntDeclAssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclInt(expressionParser.DeclIntContext ctx) { }
+	@Override public void exitIntDeclAssignment(expressionParser.IntDeclAssignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntDecl(expressionParser.IntDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntDecl(expressionParser.IntDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

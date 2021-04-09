@@ -19,20 +19,20 @@ prog
     ;
  
 decl
-    : declReaction                              # ReactionDeclaration
-    | declInt                                   # IntDeclaration            
+    : declReaction                              
+    | declInt                                               
     //| declList                                  # ListDeclaration
     //| declMethod                                # MethodDeclaration
     ;
 
 declReaction
-    : KEYWORD ID ':' valueExpr                  
-    | KEYWORD ID                               
+    : KEYWORD ID ':' valueExpr                  # ReacDeclAssignment                  
+    | KEYWORD ID                                # ReacDecl
     ;
 
 declInt
-    : INT ID ':' valueExpr
-    | INT ID
+    : INT ID ':' valueExpr                      # IntDeclAssignment
+    | INT ID                                    # IntDecl
     ;
 
 /*declList

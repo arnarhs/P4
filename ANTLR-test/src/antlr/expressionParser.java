@@ -191,51 +191,27 @@ public class expressionParser extends Parser {
 	}
 
 	public static class DeclContext extends ParserRuleContext {
+		public DeclReactionContext declReaction() {
+			return getRuleContext(DeclReactionContext.class,0);
+		}
+		public DeclIntContext declInt() {
+			return getRuleContext(DeclIntContext.class,0);
+		}
 		public DeclContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_decl; }
-	 
-		public DeclContext() { }
-		public void copyFrom(DeclContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class ReactionDeclarationContext extends DeclContext {
-		public DeclReactionContext declReaction() {
-			return getRuleContext(DeclReactionContext.class,0);
-		}
-		public ReactionDeclarationContext(DeclContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterReactionDeclaration(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitReactionDeclaration(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitDecl(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitReactionDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class IntDeclarationContext extends DeclContext {
-		public DeclIntContext declInt() {
-			return getRuleContext(DeclIntContext.class,0);
-		}
-		public IntDeclarationContext(DeclContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterIntDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitIntDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitIntDeclaration(this);
+			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitDecl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -248,7 +224,6 @@ public class expressionParser extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case KEYWORD:
-				_localctx = new ReactionDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(24);
@@ -256,7 +231,6 @@ public class expressionParser extends Parser {
 				}
 				break;
 			case INT:
-				_localctx = new IntDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(25);
@@ -279,26 +253,52 @@ public class expressionParser extends Parser {
 	}
 
 	public static class DeclReactionContext extends ParserRuleContext {
+		public DeclReactionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_declReaction; }
+	 
+		public DeclReactionContext() { }
+		public void copyFrom(DeclReactionContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ReacDeclContext extends DeclReactionContext {
+		public TerminalNode KEYWORD() { return getToken(expressionParser.KEYWORD, 0); }
+		public TerminalNode ID() { return getToken(expressionParser.ID, 0); }
+		public ReacDeclContext(DeclReactionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterReacDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitReacDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitReacDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ReacDeclAssignmentContext extends DeclReactionContext {
 		public TerminalNode KEYWORD() { return getToken(expressionParser.KEYWORD, 0); }
 		public TerminalNode ID() { return getToken(expressionParser.ID, 0); }
 		public ValueExprContext valueExpr() {
 			return getRuleContext(ValueExprContext.class,0);
 		}
-		public DeclReactionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_declReaction; }
+		public ReacDeclAssignmentContext(DeclReactionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterDeclReaction(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterReacDeclAssignment(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitDeclReaction(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitReacDeclAssignment(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitDeclReaction(this);
+			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitReacDeclAssignment(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -311,6 +311,7 @@ public class expressionParser extends Parser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
+				_localctx = new ReacDeclAssignmentContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(28);
@@ -324,6 +325,7 @@ public class expressionParser extends Parser {
 				}
 				break;
 			case 2:
+				_localctx = new ReacDeclContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(32);
@@ -346,26 +348,52 @@ public class expressionParser extends Parser {
 	}
 
 	public static class DeclIntContext extends ParserRuleContext {
+		public DeclIntContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_declInt; }
+	 
+		public DeclIntContext() { }
+		public void copyFrom(DeclIntContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class IntDeclAssignmentContext extends DeclIntContext {
 		public TerminalNode INT() { return getToken(expressionParser.INT, 0); }
 		public TerminalNode ID() { return getToken(expressionParser.ID, 0); }
 		public ValueExprContext valueExpr() {
 			return getRuleContext(ValueExprContext.class,0);
 		}
-		public DeclIntContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_declInt; }
+		public IntDeclAssignmentContext(DeclIntContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterDeclInt(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterIntDeclAssignment(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitDeclInt(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitIntDeclAssignment(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitDeclInt(this);
+			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitIntDeclAssignment(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class IntDeclContext extends DeclIntContext {
+		public TerminalNode INT() { return getToken(expressionParser.INT, 0); }
+		public TerminalNode ID() { return getToken(expressionParser.ID, 0); }
+		public IntDeclContext(DeclIntContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterIntDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitIntDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitIntDecl(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -378,6 +406,7 @@ public class expressionParser extends Parser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
+				_localctx = new IntDeclAssignmentContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(36);
@@ -391,6 +420,7 @@ public class expressionParser extends Parser {
 				}
 				break;
 			case 2:
+				_localctx = new IntDeclContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(40);

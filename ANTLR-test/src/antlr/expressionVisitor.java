@@ -20,31 +20,39 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(expressionParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ReactionDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
+	 * Visit a parse tree produced by {@link expressionParser#decl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx);
+	T visitDecl(expressionParser.DeclContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code IntDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
+	 * Visit a parse tree produced by the {@code ReacDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declReaction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIntDeclaration(expressionParser.IntDeclarationContext ctx);
+	T visitReacDeclAssignment(expressionParser.ReacDeclAssignmentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#declReaction}.
+	 * Visit a parse tree produced by the {@code ReacDecl}
+	 * labeled alternative in {@link expressionParser#declReaction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclReaction(expressionParser.DeclReactionContext ctx);
+	T visitReacDecl(expressionParser.ReacDeclContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#declInt}.
+	 * Visit a parse tree produced by the {@code IntDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declInt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclInt(expressionParser.DeclIntContext ctx);
+	T visitIntDeclAssignment(expressionParser.IntDeclAssignmentContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IntDecl}
+	 * labeled alternative in {@link expressionParser#declInt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntDecl(expressionParser.IntDeclContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ValueExpression}
 	 * labeled alternative in {@link expressionParser#expr}.
