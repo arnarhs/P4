@@ -11,5 +11,4 @@ public class Number extends Expression {
     public String toString(){
         return String.valueOf(num);
     }
-
 }

@@ -114,6 +114,18 @@ public class expressionBaseListener implements expressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterReactionExpressionConst(expressionParser.ReactionExpressionConstContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReactionExpressionConst(expressionParser.ReactionExpressionConstContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterReactionExpression(expressionParser.ReactionExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -145,18 +157,6 @@ public class expressionBaseListener implements expressionListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMultiplyExpression(expressionParser.MultiplyExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterReactionConst(expressionParser.ReactionConstContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitReactionConst(expressionParser.ReactionConstContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

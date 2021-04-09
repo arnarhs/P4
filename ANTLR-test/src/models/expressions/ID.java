@@ -1,6 +1,6 @@
 package models.expressions;
 
-public class ID extends Expression{
+public class ID extends Expression {
 	public String name; 
 	
 	public ID (String name) {

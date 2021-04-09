@@ -68,6 +68,13 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAdditionExpression(expressionParser.AdditionExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ReactionExpressionConst}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReactionExpressionConst(expressionParser.ReactionExpressionConstContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ReactionExpression}
 	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
@@ -88,12 +95,6 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMultiplyExpression(expressionParser.MultiplyExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link expressionParser#reactionConst}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitReactionConst(expressionParser.ReactionConstContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Number}
 	 * labeled alternative in {@link expressionParser#value}.

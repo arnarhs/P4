@@ -104,6 +104,18 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitAdditionExpression(expressionParser.AdditionExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ReactionExpressionConst}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterReactionExpressionConst(expressionParser.ReactionExpressionConstContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ReactionExpressionConst}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitReactionExpressionConst(expressionParser.ReactionExpressionConstContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ReactionExpression}
 	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
@@ -139,16 +151,6 @@ public interface expressionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultiplyExpression(expressionParser.MultiplyExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#reactionConst}.
-	 * @param ctx the parse tree
-	 */
-	void enterReactionConst(expressionParser.ReactionConstContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#reactionConst}.
-	 * @param ctx the parse tree
-	 */
-	void exitReactionConst(expressionParser.ReactionConstContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Number}
 	 * labeled alternative in {@link expressionParser#value}.

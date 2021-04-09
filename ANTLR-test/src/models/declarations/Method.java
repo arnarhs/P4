@@ -1,17 +1,15 @@
 package models.declarations;
 import models.Declarations;
-import models.expressions.Type;
-import models.expressions.ID;
 import models.expressions.Param;
 import models.Scope;
 
 public class Method extends Declarations {
-	Type type;
-	ID id;
+	String type;
+	String id;
 	Param parameters; 
 	Scope scope;
 	
-	public Method(Type type, ID id, Param parameters, Scope scope ) {
+	public Method(String type, String id, Param parameters, Scope scope ) {
 		this.type = type;
 		this.id = id; 
 		this.parameters = parameters;
