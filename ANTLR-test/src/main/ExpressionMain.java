@@ -4,14 +4,28 @@ import java.io.IOException;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 
+import antlr.expressionLexer;
 import antlr.expressionParser;
+import models.Program;
+import models.expressions.AntlrToProgram;
 
 public class ExpressionMain {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		if(args.length != 1) {
+			System.err.print("Usage: file name");
+		}
+		else {
+			String fileName = args[0];
+			expressionParser parser = getParser(fileName);
+			ParseTree antlrAST = parser.prog();
+			AntlrToProgram progVisitor = new AntlrToProgram();
+			Program prog = progVisitor.visit(antlrAST);
+		}
 	}
 	
 	private static expressionParser getParser(String filename) {
@@ -20,7 +34,9 @@ public class ExpressionMain {
 		
 		try {
 			CharStream input = CharStreams.fromFileName(filename);
-			
+			expressionLexer lexer = new expressionLexer(input);
+			CommonTokenStream tokens = new CommonTokenStream(lexer);
+			parser = new expressionParser(tokens);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
