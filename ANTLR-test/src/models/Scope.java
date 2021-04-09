@@ -16,9 +16,9 @@ public class Scope extends Statement{
 	public String toString() 
 	{
 		String str = "";
-		for (Statement var : stmts) 
+		for (Statement s : stmts) 
 		{
-			str = str + var.toString() + " ";
+			str = str + s.toString() + " ";
 		}
 		
 		return str;
