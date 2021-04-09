@@ -7,10 +7,10 @@ grammar expression;
 /*
 
   TODO:
-	- If statements
-	- while loops
-	- check if valueExpr is ambiguous
-	- allow more than two species on either side of reaction
+    - If statements
+    - while loops
+    - check if valueExpr is ambiguous
+    - allow more than two species on either side of reaction
 
 */
 
@@ -19,14 +19,14 @@ prog
     ;
  
 decl
-    : declReaction                      		# ReactionDeclaration
-    | declInt                           		# VariableDeclaration   		 
-    | declList                               	# ListDeclaration
-    | declMethod                            	# MethodDeclaration
+    : declReaction                              # ReactionDeclaration
+    | declInt                                   # VariableDeclaration            
+    | declList                                  # ListDeclaration
+    | declMethod                                # MethodDeclaration
     ;
 
 declReaction
-    : KEYWORD ID ':' valueExpr          		
+    : KEYWORD ID ':' valueExpr                  
     | KEYWORD ID                               
     ;
 
@@ -45,7 +45,7 @@ declMethod
     ;
 
 formalParams                                   
-    : KEYWORD ID ',' formalParams   			# ParamList
+    : KEYWORD ID ',' formalParams               # ParamList
     | KEYWORD ID                                # Param
     ;
 
@@ -65,17 +65,17 @@ ssaList
     ;
 
 expr
-    : valueExpr   										# ValueExpression
-    | ID '(' (exprParams | WS*) ')'       				# MethodCall
-    | SSA '(' ssaParams ')'   							# GillespieCall
+    : valueExpr                                         # ValueExpression
+    | ID '(' (exprParams | WS*) ')'                     # MethodCall
+    | SSA '(' ssaParams ')'                             # GillespieCall
     ;
 
 valueExpr
-    : valueExpr REAC valueExpr (reactionConst | WS*)	# ReactionExpression
+    : valueExpr REAC valueExpr (reactionConst | WS*)    # ReactionExpression
     | valueExpr MULT valueExpr                          # MultiplyExpression   
-    | valueExpr ADD valueExpr 							# AdditionExpression
-    | value 										    # NumOrID
-    ;											
+    | valueExpr ADD valueExpr                           # AdditionExpression
+    | value                                             # NumOrID
+    ;                                           
 
 reactionConst
     : '(' valueExpr ')'
