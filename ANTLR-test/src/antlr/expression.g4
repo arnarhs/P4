@@ -15,14 +15,14 @@ grammar expression;
 */
 
 prog
-    : (decl | expr)+ EOF                         # Program
+    : (decl | expr)+ EOF                        # Program
     ;
  
 decl
     : declReaction                              # ReactionDeclaration
-    | declInt                                   # VariableDeclaration            
-    | declList                                  # ListDeclaration
-    | declMethod                                # MethodDeclaration
+    | declInt                                   # IntDeclaration            
+    //| declList                                  # ListDeclaration
+    //| declMethod                                # MethodDeclaration
     ;
 
 declReaction
@@ -35,7 +35,7 @@ declInt
     | INT ID
     ;
 
-declList
+/*declList
     : LIST ID ':' '{' exprParams '}'
     | LIST ID 
     ;
@@ -45,29 +45,29 @@ declMethod
     ;
 
 formalParams                                   
-    : KEYWORD ID ',' formalParams               # ParamList
-    | KEYWORD ID                                # Param
+    : KEYWORD ID ',' formalParams               //# ParamList
+    | KEYWORD ID                                //# Param
     ;
-
-exprParams
+*/
+/*exprParams
     : valueExpr ',' exprParams 
     | valueExpr
     ;
-
-ssaParams
+*/
+/*ssaParams
     : '{' ssaList '}' ',' ID
     | ID
     ;
-
-ssaList
+*/
+/*ssaList
     : ID ',' ssaList  
     | ID
-    ;
+    ;*/
 
 expr
     : valueExpr                                         # ValueExpression
-    | ID '(' (exprParams | WS*) ')'                     # MethodCall
-    | SSA '(' ssaParams ')'                             # GillespieCall
+    //| ID '(' (exprParams | WS*) ')'                     # MethodCall
+    //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
 
 valueExpr

@@ -34,41 +34,17 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitReactionDeclaration(expressionParser.ReactionDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code VariableDeclaration}
+	 * Enter a parse tree produced by the {@code IntDeclaration}
 	 * labeled alternative in {@link expressionParser#decl}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariableDeclaration(expressionParser.VariableDeclarationContext ctx);
+	void enterIntDeclaration(expressionParser.IntDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code VariableDeclaration}
+	 * Exit a parse tree produced by the {@code IntDeclaration}
 	 * labeled alternative in {@link expressionParser#decl}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariableDeclaration(expressionParser.VariableDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ListDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void enterListDeclaration(expressionParser.ListDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ListDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void exitListDeclaration(expressionParser.ListDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MethodDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodDeclaration(expressionParser.MethodDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MethodDeclaration}
-	 * labeled alternative in {@link expressionParser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodDeclaration(expressionParser.MethodDeclarationContext ctx);
+	void exitIntDeclaration(expressionParser.IntDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#declReaction}.
 	 * @param ctx the parse tree
@@ -90,80 +66,6 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitDeclInt(expressionParser.DeclIntContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#declList}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclList(expressionParser.DeclListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#declList}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclList(expressionParser.DeclListContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#declMethod}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclMethod(expressionParser.DeclMethodContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#declMethod}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclMethod(expressionParser.DeclMethodContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ParamList}
-	 * labeled alternative in {@link expressionParser#formalParams}.
-	 * @param ctx the parse tree
-	 */
-	void enterParamList(expressionParser.ParamListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ParamList}
-	 * labeled alternative in {@link expressionParser#formalParams}.
-	 * @param ctx the parse tree
-	 */
-	void exitParamList(expressionParser.ParamListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code Param}
-	 * labeled alternative in {@link expressionParser#formalParams}.
-	 * @param ctx the parse tree
-	 */
-	void enterParam(expressionParser.ParamContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code Param}
-	 * labeled alternative in {@link expressionParser#formalParams}.
-	 * @param ctx the parse tree
-	 */
-	void exitParam(expressionParser.ParamContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#exprParams}.
-	 * @param ctx the parse tree
-	 */
-	void enterExprParams(expressionParser.ExprParamsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#exprParams}.
-	 * @param ctx the parse tree
-	 */
-	void exitExprParams(expressionParser.ExprParamsContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#ssaParams}.
-	 * @param ctx the parse tree
-	 */
-	void enterSsaParams(expressionParser.SsaParamsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#ssaParams}.
-	 * @param ctx the parse tree
-	 */
-	void exitSsaParams(expressionParser.SsaParamsContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#ssaList}.
-	 * @param ctx the parse tree
-	 */
-	void enterSsaList(expressionParser.SsaListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#ssaList}.
-	 * @param ctx the parse tree
-	 */
-	void exitSsaList(expressionParser.SsaListContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code ValueExpression}
 	 * labeled alternative in {@link expressionParser#expr}.
 	 * @param ctx the parse tree
@@ -175,30 +77,6 @@ public interface expressionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitValueExpression(expressionParser.ValueExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MethodCall}
-	 * labeled alternative in {@link expressionParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodCall(expressionParser.MethodCallContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MethodCall}
-	 * labeled alternative in {@link expressionParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodCall(expressionParser.MethodCallContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code GillespieCall}
-	 * labeled alternative in {@link expressionParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterGillespieCall(expressionParser.GillespieCallContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code GillespieCall}
-	 * labeled alternative in {@link expressionParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitGillespieCall(expressionParser.GillespieCallContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AdditionExpression}
 	 * labeled alternative in {@link expressionParser#valueExpr}.

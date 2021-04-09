@@ -1,0 +1,6 @@
+species a: 10
+int b: 20
+
+a + b
+
+reaction one: a + b => c + d
