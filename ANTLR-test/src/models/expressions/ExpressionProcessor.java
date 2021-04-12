@@ -5,14 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.Statement;
 import models.declarations.VariableDeclaration;
 
-/*visitor pattern is a better choice to evalutae our data*/
+/*visitor pattern is a better choice to evaluate our data*/
 public class ExpressionProcessor {
-	List<Expression> list;
+	List<Statement> list;
 	public Map<String, String> values;
 	
-	public ExpressionProcessor(List<Expression> list) {
+	public ExpressionProcessor(List<Statement> list) {
 		this.list = list;
 		values = new HashMap<>();
 	}
@@ -20,7 +21,7 @@ public class ExpressionProcessor {
 	public List<String> getEvaluationResults() {
 		List<String> evaluations = new ArrayList<>();
 		
-		for(Expression e : list) {
+		for(Statement e : list) {
 			if(e instanceof VariableDeclaration) {
 				VariableDeclaration decl = (VariableDeclaration) e;
 				values.put(decl.id, decl.value);
@@ -28,16 +29,54 @@ public class ExpressionProcessor {
 			else {
 				String input = e.toString();
 				int result = getEvalResult(e);
-				evaluations.add(input + " is " + result);
+				evaluations.add(input + " = " + result);
 			}
 		}
 		
 		return evaluations;
 	}
-
-	/*Part 5 30 min to fix it*/
-	private int getEvalResult(Expression e) {
-		// TODO Auto-generated method stub
-		return 0;
+	
+	private int getEvalResult(Statement e) {
+		int result = 0;
+		
+		if(e instanceof Number) {
+			Number num = (Number) e;
+			result = num.num;
+		} 
+		else if (e instanceof Variable) {
+			Variable var = (Variable) e;
+			
+			String strValue = null;
+			Integer intValue = null;
+			
+			while (intValue == null) {
+				strValue = values.get(var.ID);
+				intValue = parseIntOrNull(strValue);
+			}
+							
+			result = intValue;
+		}
+		else if (e instanceof Addition) {
+			Addition add = (Addition) e;
+			int left = getEvalResult(add.left);
+			int right = getEvalResult(add.right);
+			result = left + right;
+		}
+		else if (e instanceof Multiplication) {
+			Multiplication add = (Multiplication) e;
+			int left = getEvalResult(add.left);
+			int right = getEvalResult(add.right);
+			result = left * right;
+		}
+		
+		return result;
+	}
+	
+	public Integer parseIntOrNull(String value) {
+	    try {
+	        return Integer.parseInt(value);
+	    } catch (NumberFormatException e) {
+	        return null;
+	    }
 	}
 }

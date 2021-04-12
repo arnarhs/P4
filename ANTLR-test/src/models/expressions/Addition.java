@@ -1,16 +1,16 @@
 package models.expressions;
 
 public class Addition extends Expression{
-	Expression leftside;
-	Expression rightside;
+	Expression left;
+	Expression right;
 	
-	public Addition(Expression leftside, Expression rightside) {
-		this.leftside = leftside;
-		this.rightside = rightside;
+	public Addition(Expression left, Expression right) {
+		this.left = left;
+		this.right = right;
 	}
 	
 	@Override
 	public String toString() {
-		return leftside.toString() + "+" + rightside.toString();
+		return left.toString() + " + " + right.toString();
 	}
 }

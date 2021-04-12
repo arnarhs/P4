@@ -4,16 +4,6 @@ grammar expression;
     package antlr;
 }
 
-/*
-
-  TODO:
-    - If statements
-    - while loops
-    - check if valueExpr is ambiguous
-    - allow more than two species on either side of reaction
-
-*/
-
 prog
     : (decl | expr)+ EOF                        # Program
     ;
@@ -96,4 +86,3 @@ ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
 COMMENT: '//' ~[\r\n]* -> skip ;
 WS: [ \r\t\n]+ -> channel(HIDDEN) ;
-
