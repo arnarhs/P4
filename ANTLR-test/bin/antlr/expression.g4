@@ -5,153 +5,88 @@ grammar expression;
 }
 
 prog
-    : (decl | expr | func)+ EOF
+    : (decl | expr)+ EOF                        # Program
     ;
  
 decl
-    : KEYWORD ID ':' (NUM|ID)
-    | KEYWORD ID
-    | INT ID ':' (NUM|ID)
-    | INT ID
-    | KEYWORD ID declParameters  
+    : declReaction                              
+    | declInt                                               
+    //| declList                                  # ListDeclaration
+    //| declMethod                                # MethodDeclaration
     ;
+
+declReaction
+    : KEYWORD ID ':' valueExpr                  # ReacDeclAssignment                  
+    | KEYWORD ID                                # ReacDecl
+    ;
+
+declInt
+    : INT ID ':' valueExpr                      # IntDeclAssignment
+    | INT ID                                    # IntDecl
+    ;
+
+/*declList
+    : LIST ID ':' '{' exprParams '}'
+    | LIST ID 
+    ;
+
+declMethod
+    : KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'
+    ;
+
+formalParams                                   
+    : KEYWORD ID ',' formalParams               //# ParamList
+    | KEYWORD ID                                //# Param
+    ;
+*/
+/*exprParams
+    : valueExpr ',' exprParams 
+    | valueExpr
+    ;
+*/
+/*ssaParams
+    : '{' ssaList '}' ',' ID
+    | ID
+    ;
+*/
+/*ssaList
+    : ID ',' ssaList  
+    | ID
+    ;*/
 
 expr
-    : value exprList
-    | reactionExpr
-    | parameterExpr
-    ;
-    
-exprList
-    : multiplyExpr
-    | addExpr 
-    | WS
+    : valueExpr                                        
+    //| ID '(' (exprParams | WS*) ')'                     # MethodCall
+    //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
 
-reactionExpr
-    : value reactionExprList
-    | value multiplyExpr
-    | value addExpr
-    | value reactionExprList reactionParameter
-    | (ID | KEYWORD) exprParenthesis
-    | KEYWORD ID ':' expr
-    | value
+valueExpr
+    : opExpr REAC opExpr '(' opExpr ')'           # ReactionExpressionConst
+    | opExpr REAC opExpr                          # ReactionExpression
+    | opExpr                                      # OperationExpression
     ;
 
-exprParenthesis: '(' expr ')'
-    ;
-
-reactionExprList
-    : reactionOperator reactionExpr
-    | reactionOperator reactionExpr
-    | WS
-    ;
-
-reactionParameter: '(' value ')'
-    | WS
-    ;
-
-multiplyExpr: mult reactionExpr
-    | mult listExpr
-    | mult value
-    ;
-
-addExpr: add reactionExpr
-    | add listExpr
-    | add value
-    ;
-    
-parameterExpr
-    : parameterID paraExpr
-    ;
-
-parameterID: ID
-    ;
-
-paraExpr: '(' exprParameters ')'
-    ;
-
-exprParameters: value valueParameter
-    | ',' value valueParameter
-    | valueParameter
-    | value
-    ;
-
-valueParameter: ',' exprParameters
-    ;
-
-declParameters: '(' declStatement ')' '{' (decl | expr)+ '}'
-    | WS
-    ;
-
-declStatement : KEYWORD ID multipleStmt
-    | ',' KEYWORD ID multipleStmt
-    | KEYWORD ID
-    | WS
-    ;
-
-multipleStmt: ',' declStatement
-    ;
-
-func: setList
-    | runSSA
-    ;
-
-//set reactions: {a => b (2), a => c+d (3), c => b (7)}
-setList: LIST ID ':' listParameters
-    ;
-
-listParameters: '{' listExpr '}'
-    ;
-
-listExpr: value listExprList
-    | value multiplyExpr
-    | value addExpr
-    | value listParameter
-    | value
-    ;
-
-listExprList: reactionOperator listExpr
-    ;
-listParameter: '(' value ')' multiValues
-    | '(' value ')'
-    ;
-multiValues: ',' listExpr
-    ;
-
-//ssaModel({a, b, c}, reactions)
-//ssaModel(reactions)
-
-runSSA: SSA ssaMethod
-    ;
-ssaMethod: '(' ssaParameter')'
-    ;
-ssaParameter: ssaParameters
-    ;
-ssaParameters: '{' ssaMethodParameters'}' ',' ID
-    | ID
-    ;
-
-ssaMethodParameters: value methodParameters
-    | value
-    ;
-methodParameters: ',' ssaMethodParameters 
-    ;
+opExpr
+    : opExpr MULT opExpr                          # MultiplyExpression   
+    | opExpr ADD opExpr                           # AdditionExpression
+    | value                                       # NumOrID
+    ;       
 
 value
-    : NUM
-    | ID
+    : NUM                                        # Number
+    | ID                                         # Variable
     ;
 
-reactionOperator: '=>' | '<=>' | '<=' ;
-add: '+' ;
-mult: '*' ;
+REAC: '=>' ;
+ADD: '+' ;
+MULT: '*' ;
 
 KEYWORD: 'species' | 'solution' | 'reaction' | 'print' ;
-INT: 'int';
-SSA: 'ssaModel';
+INT: 'int' ;
+SSA: 'ssa' ;
 LIST: 'list' ;
-ID: [a-z][a-zA-Z0-9_]* ;									# Variable
+
+ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
 COMMENT: '//' ~[\r\n]* -> skip ;
-WS: [ \r\t\n]+ -> skip ;
+WS: [ \r\t\n]+ -> channel(HIDDEN) ;

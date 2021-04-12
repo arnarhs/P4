@@ -1,4 +1,4 @@
-// Generated from expression.g4 by ANTLR 4.7.2
+// Generated from expression.g4 by ANTLR 4.9.1
 
     package antlr;
 
@@ -10,15 +10,17 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface expressionListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#prog}.
+	 * Enter a parse tree produced by the {@code Program}
+	 * labeled alternative in {@link expressionParser#prog}.
 	 * @param ctx the parse tree
 	 */
-	void enterProg(expressionParser.ProgContext ctx);
+	void enterProgram(expressionParser.ProgramContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#prog}.
+	 * Exit a parse tree produced by the {@code Program}
+	 * labeled alternative in {@link expressionParser#prog}.
 	 * @param ctx the parse tree
 	 */
-	void exitProg(expressionParser.ProgContext ctx);
+	void exitProgram(expressionParser.ProgramContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#decl}.
 	 * @param ctx the parse tree
@@ -30,6 +32,54 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitDecl(expressionParser.DeclContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ReacDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declReaction}.
+	 * @param ctx the parse tree
+	 */
+	void enterReacDeclAssignment(expressionParser.ReacDeclAssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ReacDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declReaction}.
+	 * @param ctx the parse tree
+	 */
+	void exitReacDeclAssignment(expressionParser.ReacDeclAssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ReacDecl}
+	 * labeled alternative in {@link expressionParser#declReaction}.
+	 * @param ctx the parse tree
+	 */
+	void enterReacDecl(expressionParser.ReacDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ReacDecl}
+	 * labeled alternative in {@link expressionParser#declReaction}.
+	 * @param ctx the parse tree
+	 */
+	void exitReacDecl(expressionParser.ReacDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IntDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declInt}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntDeclAssignment(expressionParser.IntDeclAssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IntDeclAssignment}
+	 * labeled alternative in {@link expressionParser#declInt}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntDeclAssignment(expressionParser.IntDeclAssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IntDecl}
+	 * labeled alternative in {@link expressionParser#declInt}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntDecl(expressionParser.IntDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IntDecl}
+	 * labeled alternative in {@link expressionParser#declInt}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntDecl(expressionParser.IntDeclContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link expressionParser#expr}.
 	 * @param ctx the parse tree
 	 */
@@ -40,323 +90,99 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitExpr(expressionParser.ExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#exprList}.
+	 * Enter a parse tree produced by the {@code ReactionExpressionConst}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExprList(expressionParser.ExprListContext ctx);
+	void enterReactionExpressionConst(expressionParser.ReactionExpressionConstContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#exprList}.
+	 * Exit a parse tree produced by the {@code ReactionExpressionConst}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExprList(expressionParser.ExprListContext ctx);
+	void exitReactionExpressionConst(expressionParser.ReactionExpressionConstContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#reactionExpr}.
+	 * Enter a parse tree produced by the {@code ReactionExpression}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterReactionExpr(expressionParser.ReactionExprContext ctx);
+	void enterReactionExpression(expressionParser.ReactionExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#reactionExpr}.
+	 * Exit a parse tree produced by the {@code ReactionExpression}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitReactionExpr(expressionParser.ReactionExprContext ctx);
+	void exitReactionExpression(expressionParser.ReactionExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#exprParenthesis}.
+	 * Enter a parse tree produced by the {@code OperationExpression}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExprParenthesis(expressionParser.ExprParenthesisContext ctx);
+	void enterOperationExpression(expressionParser.OperationExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#exprParenthesis}.
+	 * Exit a parse tree produced by the {@code OperationExpression}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExprParenthesis(expressionParser.ExprParenthesisContext ctx);
+	void exitOperationExpression(expressionParser.OperationExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#reactionExprList}.
+	 * Enter a parse tree produced by the {@code AdditionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterReactionExprList(expressionParser.ReactionExprListContext ctx);
+	void enterAdditionExpression(expressionParser.AdditionExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#reactionExprList}.
+	 * Exit a parse tree produced by the {@code AdditionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitReactionExprList(expressionParser.ReactionExprListContext ctx);
+	void exitAdditionExpression(expressionParser.AdditionExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#reactionParameter}.
+	 * Enter a parse tree produced by the {@code NumOrID}
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterReactionParameter(expressionParser.ReactionParameterContext ctx);
+	void enterNumOrID(expressionParser.NumOrIDContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#reactionParameter}.
+	 * Exit a parse tree produced by the {@code NumOrID}
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitReactionParameter(expressionParser.ReactionParameterContext ctx);
+	void exitNumOrID(expressionParser.NumOrIDContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#multiplyExpr}.
+	 * Enter a parse tree produced by the {@code MultiplyExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterMultiplyExpr(expressionParser.MultiplyExprContext ctx);
+	void enterMultiplyExpression(expressionParser.MultiplyExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#multiplyExpr}.
+	 * Exit a parse tree produced by the {@code MultiplyExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitMultiplyExpr(expressionParser.MultiplyExprContext ctx);
+	void exitMultiplyExpression(expressionParser.MultiplyExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#addExpr}.
+	 * Enter a parse tree produced by the {@code Number}
+	 * labeled alternative in {@link expressionParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void enterAddExpr(expressionParser.AddExprContext ctx);
+	void enterNumber(expressionParser.NumberContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#addExpr}.
+	 * Exit a parse tree produced by the {@code Number}
+	 * labeled alternative in {@link expressionParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void exitAddExpr(expressionParser.AddExprContext ctx);
+	void exitNumber(expressionParser.NumberContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#parameterExpr}.
+	 * Enter a parse tree produced by the {@code Variable}
+	 * labeled alternative in {@link expressionParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void enterParameterExpr(expressionParser.ParameterExprContext ctx);
+	void enterVariable(expressionParser.VariableContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#parameterExpr}.
+	 * Exit a parse tree produced by the {@code Variable}
+	 * labeled alternative in {@link expressionParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void exitParameterExpr(expressionParser.ParameterExprContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#parameterID}.
-	 * @param ctx the parse tree
-	 */
-	void enterParameterID(expressionParser.ParameterIDContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#parameterID}.
-	 * @param ctx the parse tree
-	 */
-	void exitParameterID(expressionParser.ParameterIDContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#paraExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterParaExpr(expressionParser.ParaExprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#paraExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitParaExpr(expressionParser.ParaExprContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#exprParameters}.
-	 * @param ctx the parse tree
-	 */
-	void enterExprParameters(expressionParser.ExprParametersContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#exprParameters}.
-	 * @param ctx the parse tree
-	 */
-	void exitExprParameters(expressionParser.ExprParametersContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#valueParameter}.
-	 * @param ctx the parse tree
-	 */
-	void enterValueParameter(expressionParser.ValueParameterContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#valueParameter}.
-	 * @param ctx the parse tree
-	 */
-	void exitValueParameter(expressionParser.ValueParameterContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#declParameters}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclParameters(expressionParser.DeclParametersContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#declParameters}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclParameters(expressionParser.DeclParametersContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#declStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclStatement(expressionParser.DeclStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#declStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclStatement(expressionParser.DeclStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#multipleStmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterMultipleStmt(expressionParser.MultipleStmtContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#multipleStmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitMultipleStmt(expressionParser.MultipleStmtContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#func}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunc(expressionParser.FuncContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#func}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunc(expressionParser.FuncContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#setList}.
-	 * @param ctx the parse tree
-	 */
-	void enterSetList(expressionParser.SetListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#setList}.
-	 * @param ctx the parse tree
-	 */
-	void exitSetList(expressionParser.SetListContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#listParameters}.
-	 * @param ctx the parse tree
-	 */
-	void enterListParameters(expressionParser.ListParametersContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#listParameters}.
-	 * @param ctx the parse tree
-	 */
-	void exitListParameters(expressionParser.ListParametersContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#listExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterListExpr(expressionParser.ListExprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#listExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitListExpr(expressionParser.ListExprContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#listExprList}.
-	 * @param ctx the parse tree
-	 */
-	void enterListExprList(expressionParser.ListExprListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#listExprList}.
-	 * @param ctx the parse tree
-	 */
-	void exitListExprList(expressionParser.ListExprListContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#listParameter}.
-	 * @param ctx the parse tree
-	 */
-	void enterListParameter(expressionParser.ListParameterContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#listParameter}.
-	 * @param ctx the parse tree
-	 */
-	void exitListParameter(expressionParser.ListParameterContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#multiValues}.
-	 * @param ctx the parse tree
-	 */
-	void enterMultiValues(expressionParser.MultiValuesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#multiValues}.
-	 * @param ctx the parse tree
-	 */
-	void exitMultiValues(expressionParser.MultiValuesContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#runSSA}.
-	 * @param ctx the parse tree
-	 */
-	void enterRunSSA(expressionParser.RunSSAContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#runSSA}.
-	 * @param ctx the parse tree
-	 */
-	void exitRunSSA(expressionParser.RunSSAContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#ssaMethod}.
-	 * @param ctx the parse tree
-	 */
-	void enterSsaMethod(expressionParser.SsaMethodContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#ssaMethod}.
-	 * @param ctx the parse tree
-	 */
-	void exitSsaMethod(expressionParser.SsaMethodContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#ssaParameter}.
-	 * @param ctx the parse tree
-	 */
-	void enterSsaParameter(expressionParser.SsaParameterContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#ssaParameter}.
-	 * @param ctx the parse tree
-	 */
-	void exitSsaParameter(expressionParser.SsaParameterContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#ssaParameters}.
-	 * @param ctx the parse tree
-	 */
-	void enterSsaParameters(expressionParser.SsaParametersContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#ssaParameters}.
-	 * @param ctx the parse tree
-	 */
-	void exitSsaParameters(expressionParser.SsaParametersContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#ssaMethodParameters}.
-	 * @param ctx the parse tree
-	 */
-	void enterSsaMethodParameters(expressionParser.SsaMethodParametersContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#ssaMethodParameters}.
-	 * @param ctx the parse tree
-	 */
-	void exitSsaMethodParameters(expressionParser.SsaMethodParametersContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#methodParameters}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodParameters(expressionParser.MethodParametersContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#methodParameters}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodParameters(expressionParser.MethodParametersContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void enterValue(expressionParser.ValueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void exitValue(expressionParser.ValueContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#reactionOperator}.
-	 * @param ctx the parse tree
-	 */
-	void enterReactionOperator(expressionParser.ReactionOperatorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#reactionOperator}.
-	 * @param ctx the parse tree
-	 */
-	void exitReactionOperator(expressionParser.ReactionOperatorContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#add}.
-	 * @param ctx the parse tree
-	 */
-	void enterAdd(expressionParser.AddContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#add}.
-	 * @param ctx the parse tree
-	 */
-	void exitAdd(expressionParser.AddContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link expressionParser#mult}.
-	 * @param ctx the parse tree
-	 */
-	void enterMult(expressionParser.MultContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link expressionParser#mult}.
-	 * @param ctx the parse tree
-	 */
-	void exitMult(expressionParser.MultContext ctx);
+	void exitVariable(expressionParser.VariableContext ctx);
 }

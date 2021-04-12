@@ -1,0 +1,30 @@
+//Declaring variables
+species a : 15
+int b : 12
+
+//Printing variables
+a
+b
+
+//Declare species
+species e : 10
+species f : 20
+
+//Declaring integers
+int c : 30
+int d : 40
+
+//Testing addition
+a + b
+
+//Testing multiplication
+c * d
+
+//Testing equation with no whitespace
+a*c+d*b
+
+//Testing equation with whitespace
+a * c + d * b
+
+//Testing reaction declarations
+reaction one : a + b => c + d (e)

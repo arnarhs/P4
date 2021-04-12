@@ -93,6 +93,7 @@ bild_output.txt
 runtime/Cpp/demo/generated
 xcuserdata
 *.jar
+!p4compile.jar
 .vscode
 
 # VSCode Java plugin temporary files

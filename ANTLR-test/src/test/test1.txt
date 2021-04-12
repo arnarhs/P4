@@ -1,21 +1,16 @@
-//Test case that doesn't work
-
 species a: 10
-
 species b: 10
+list listName : {
+	2 => 2, 
+	3 => 5 + 2 (b), 
+	2 + 2 => 3 + 7 (b + k)
+}
 
 //Define your solution object. 
-
-solution test(species a, species b) {
-
-	//TODO: Maybe consider whether we want this behavior, and if we want it, what that will mean for our "Reaction" type
-	reaction one: a + b => c + d (k) => a * b (k) => 2*c (k)
-	//TODO: FIX
+solution test() {
 	reaction two: 2 => 2
+	reaction three: a + b => c + d (k) 
+}
 
-	reaction three: a + b => c + d (k) }
-
-//ssa ssaModel: ({a, b, c}, rSet)
-//simulation sim: ssaModel.simulate(generations)
-//list<simulations> sim: ssaModel.simulate(generations, trajectories)
-a(a , a ,a)
+a(a, a, a)
+ssa({a,s,b}, reactions) 
