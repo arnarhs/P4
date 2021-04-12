@@ -1,6 +1,7 @@
-species a : 15
 int b : 12
+int a : 2 + 4 + b + b
+
+2 + 4 + b + b
 
 a
 b
-

@@ -11,7 +11,7 @@ import models.declarations.VariableDeclaration;
 /*visitor pattern is a better choice to evaluate our data*/
 public class ExpressionProcessor {
 	List<Statement> list;
-	public Map<String, String> values;
+	public Map<String, Expression> values;
 	
 	public ExpressionProcessor(List<Statement> list) {
 		this.list = list;
@@ -45,16 +45,7 @@ public class ExpressionProcessor {
 		} 
 		else if (e instanceof Variable) {
 			Variable var = (Variable) e;
-			
-			String strValue = null;
-			Integer intValue = null;
-			
-			while (intValue == null) {
-				strValue = values.get(var.ID);
-				intValue = parseIntOrNull(strValue);
-			}
-							
-			result = intValue;
+			result = getEvalResult(values.get(var.ID));
 		}
 		else if (e instanceof Addition) {
 			Addition add = (Addition) e;

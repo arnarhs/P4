@@ -442,32 +442,24 @@ public class expressionParser extends Parser {
 	}
 
 	public static class ExprContext extends ParserRuleContext {
+		public ValueExprContext valueExpr() {
+			return getRuleContext(ValueExprContext.class,0);
+		}
 		public ExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expr; }
-	 
-		public ExprContext() { }
-		public void copyFrom(ExprContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class ValueExpressionContext extends ExprContext {
-		public ValueExprContext valueExpr() {
-			return getRuleContext(ValueExprContext.class,0);
-		}
-		public ValueExpressionContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterValueExpression(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitValueExpression(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitExpr(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitValueExpression(this);
+			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -476,7 +468,6 @@ public class expressionParser extends Parser {
 		ExprContext _localctx = new ExprContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_expr);
 		try {
-			_localctx = new ValueExpressionContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(42);

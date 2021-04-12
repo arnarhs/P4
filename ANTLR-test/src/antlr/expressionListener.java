@@ -80,17 +80,15 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitIntDecl(expressionParser.IntDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ValueExpression}
-	 * labeled alternative in {@link expressionParser#expr}.
+	 * Enter a parse tree produced by {@link expressionParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterValueExpression(expressionParser.ValueExpressionContext ctx);
+	void enterExpr(expressionParser.ExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ValueExpression}
-	 * labeled alternative in {@link expressionParser#expr}.
+	 * Exit a parse tree produced by {@link expressionParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitValueExpression(expressionParser.ValueExpressionContext ctx);
+	void exitExpr(expressionParser.ExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AdditionExpression}
 	 * labeled alternative in {@link expressionParser#valueExpr}.

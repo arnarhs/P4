@@ -1,5 +1,4 @@
 package models.declarations;
-import models.Declarations;
 import models.expressions.Param;
 import models.Scope;
 

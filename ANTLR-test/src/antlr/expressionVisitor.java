@@ -54,12 +54,11 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIntDecl(expressionParser.IntDeclContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ValueExpression}
-	 * labeled alternative in {@link expressionParser#expr}.
+	 * Visit a parse tree produced by {@link expressionParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitValueExpression(expressionParser.ValueExpressionContext ctx);
+	T visitExpr(expressionParser.ExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code AdditionExpression}
 	 * labeled alternative in {@link expressionParser#valueExpr}.

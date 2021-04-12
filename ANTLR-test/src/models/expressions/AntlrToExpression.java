@@ -21,7 +21,6 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	private List<String> vars; //A list that stores all the declared variables.
 	private List<String> semanticErrors; //A list that stores all the semantic errors.
 
- 
 	public AntlrToExpression(List<String> semanticErrors) {
 		vars = new ArrayList<>();
 		this.semanticErrors = semanticErrors;
@@ -35,7 +34,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 
 		String type = ctx.getChild(0).getText();
 		String id = ctx.getChild(1).getText();
-		String value = ctx.getChild(3).getText(); // skal måske laves som nogle rekursive noget
+		Expression value = visitChildren(ctx); 
 		
 		if (vars.contains(id)) {
 			semanticErrors.add("Error @" + line + "," + column + " : reaction '" + id + "' already declared.");
@@ -72,14 +71,14 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 
 		String type = ctx.getChild(0).getText();
 		String id = ctx.getChild(1).getText();
-		String value = ctx.getChild(3).getText();
+		Expression value = visitChildren(ctx); 
 		
 		if (vars.contains(id)) {
 			semanticErrors.add("Error @" + line + "," + column + " : variable '" + id + "' already declared.");
 		} else {
 			vars.add(id);
 		}		
-
+		
 		return new VariableDeclaration(id, type, value);
 	}
 
@@ -126,7 +125,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitMultiplyExpression(MultiplyExpressionContext ctx) {
 		Expression left = visit(ctx.getChild(0));
-		Expression right = visit(ctx.getChild(2));
+		Expression right =  visit(ctx.getChild(2));
 		return new Multiplication(left, right);
 	}
 
@@ -150,5 +149,4 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
 		return new Variable(id);
 	}
- 
 }
