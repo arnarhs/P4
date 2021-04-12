@@ -19,9 +19,11 @@ public class ExpressionApp {
 			expressionParser parser = getParser(fileName);
 			ParseTree antlrAST = parser.prog();
 			
-			
 			AntlrToProgram progVisitor = new AntlrToProgram();
 			Program prog = progVisitor.visit(antlrAST);
+			if (SyntaxErrorListener.errorOccured) {
+				return;
+			}
 			
 			if(progVisitor.semanticErrors.isEmpty()) {
 				ExpressionProcessor ep = new ExpressionProcessor(prog.statements);
@@ -48,6 +50,9 @@ public class ExpressionApp {
 			expressionLexer lexer = new expressionLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			parser = new expressionParser(tokens);
+			//Add our own personal syntax error listener 
+			parser.removeErrorListeners();
+			parser.addErrorListener(new SyntaxErrorListener());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

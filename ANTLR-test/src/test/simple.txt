@@ -3,7 +3,7 @@ int a : 2 + 4 + b + b
 
 2 + 4 + b + b
 
-reaction one : 3 + 2 => 2 * b ( 3 + 3 )
+reaction one : 3 + 2 => 2 * b ( 3 + 3 ))
 
 a
 b

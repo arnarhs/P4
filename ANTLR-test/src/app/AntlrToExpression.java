@@ -43,7 +43,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression value = visitChildren(ctx); 
 		
 		if (vars.contains(id)) {
-			semanticErrors.add("Error @" + line + "," + column + " : reaction '" + id + "' already declared.");
+			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
 			vars.add(id);
 		}		
@@ -61,7 +61,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		String id = ctx.getChild(1).getText();
 		
 		if (vars.contains(id)) {
-			semanticErrors.add("Error @" + line + "," + column + " : reaction '" + id + "' already declared.");
+			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
 			vars.add(id);
 		}		
@@ -80,7 +80,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression value = visitChildren(ctx); 
 		
 		if (vars.contains(id)) {
-			semanticErrors.add("Error @" + line + "," + column + " : variable '" + id + "' already declared.");
+			SemanticError(line, column, "variable '" + id + "' already declared.");
 		} else {
 			vars.add(id);
 		}		
@@ -98,7 +98,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		String id = ctx.getChild(1).getText();
 		
 		if (vars.contains(id)) {
-			semanticErrors.add("Error @" + line + "," + column + " : variable '" + id + "' already declared.");
+			SemanticError(line, column, "variable '" + id + "' already declared.");
 		} else {
 			vars.add(id);
 		}		
@@ -150,9 +150,13 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
 		String id = ctx.getChild(0).getText();
 		if (!vars.contains(id)) {
-			semanticErrors.add("Error @" + line + "," + column + " : variable '" + id + "' not declared.");
+			SemanticError(line, column, "variable '" + id + "' not declared.");
 		}
  
 		return new Variable(id);
+	}
+	
+	public void SemanticError(Integer line, Integer column, String error) {
+		semanticErrors.add("Error @ " + line + ":" + column + " : " + error);
 	}
 }
