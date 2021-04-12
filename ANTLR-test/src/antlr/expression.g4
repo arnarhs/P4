@@ -55,25 +55,29 @@ formalParams
     ;*/
 
 expr
-    : valueExpr                                         //# ValueExpression
+    : valueExpr                                        
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
 
 valueExpr
-    : valueExpr REAC valueExpr '(' valueExpr ')'        # ReactionExpressionConst
-    | valueExpr REAC valueExpr                          # ReactionExpression
-    | valueExpr MULT valueExpr                          # MultiplyExpression   
-    | valueExpr ADD valueExpr                           # AdditionExpression
-    | value                                             # NumOrID
-    ;                                           
+    : opExpr REAC opExpr '(' opExpr ')'           # ReactionExpressionConst
+    | opExpr REAC opExpr                          # ReactionExpression
+    | opExpr                                      # OperationExpression
+    ;
+
+opExpr
+    : opExpr MULT opExpr                          # MultiplyExpression   
+    | opExpr ADD opExpr                           # AdditionExpression
+    | value                                       # NumOrID
+    ;       
 
 value
     : NUM                                        # Number
     | ID                                         # Variable
     ;
 
-REAC: '=>' | '<=>' | '<=' ;
+REAC: '=>' ;
 ADD: '+' ;
 MULT: '*' ;
 

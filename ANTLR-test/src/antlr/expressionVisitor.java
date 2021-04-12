@@ -60,13 +60,6 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpr(expressionParser.ExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code AdditionExpression}
-	 * labeled alternative in {@link expressionParser#valueExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAdditionExpression(expressionParser.AdditionExpressionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code ReactionExpressionConst}
 	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
@@ -81,15 +74,29 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitReactionExpression(expressionParser.ReactionExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code NumOrID}
+	 * Visit a parse tree produced by the {@code OperationExpression}
 	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOperationExpression(expressionParser.OperationExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AdditionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAdditionExpression(expressionParser.AdditionExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NumOrID}
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNumOrID(expressionParser.NumOrIDContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code MultiplyExpression}
-	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

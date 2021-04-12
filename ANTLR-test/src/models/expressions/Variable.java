@@ -1,7 +1,7 @@
 package models.expressions;
 
 public class Variable extends Expression{
-	String ID;
+	public String ID;
 	
 	public Variable(String ID) {
 		this.ID = ID;

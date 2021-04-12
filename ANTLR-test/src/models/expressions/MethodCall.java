@@ -1,10 +1,10 @@
 package models.expressions;
 
-public class MethodCall extends Expression{
-	public ID	id;
+public class MethodCall extends Expression {
+	public String id;
 	public Param parameters;
 	
-	public MethodCall(ID id, Param parameters) {
+	public MethodCall(String id, Param parameters) {
 		this.id = id;
 		this.parameters = parameters;
 	}

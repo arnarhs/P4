@@ -13,6 +13,6 @@ public class ReactionExpr extends Expression {
 	
 	@Override
 	public String toString() {
-		return left.toString() + "=>" + right.toString() + "(" + constant.toString() + ")";
+		return left.toString() + " => " + right.toString() + " (" + constant.toString() + ")";
 	}
 }

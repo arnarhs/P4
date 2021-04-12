@@ -90,18 +90,6 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitExpr(expressionParser.ExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code AdditionExpression}
-	 * labeled alternative in {@link expressionParser#valueExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterAdditionExpression(expressionParser.AdditionExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code AdditionExpression}
-	 * labeled alternative in {@link expressionParser#valueExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitAdditionExpression(expressionParser.AdditionExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code ReactionExpressionConst}
 	 * labeled alternative in {@link expressionParser#valueExpr}.
 	 * @param ctx the parse tree
@@ -126,26 +114,50 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitReactionExpression(expressionParser.ReactionExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NumOrID}
+	 * Enter a parse tree produced by the {@code OperationExpression}
 	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperationExpression(expressionParser.OperationExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code OperationExpression}
+	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperationExpression(expressionParser.OperationExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AdditionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAdditionExpression(expressionParser.AdditionExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AdditionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAdditionExpression(expressionParser.AdditionExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NumOrID}
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
 	void enterNumOrID(expressionParser.NumOrIDContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code NumOrID}
-	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
 	void exitNumOrID(expressionParser.NumOrIDContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code MultiplyExpression}
-	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
 	void enterMultiplyExpression(expressionParser.MultiplyExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code MultiplyExpression}
-	 * labeled alternative in {@link expressionParser#valueExpr}.
+	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
 	 */
 	void exitMultiplyExpression(expressionParser.MultiplyExpressionContext ctx);

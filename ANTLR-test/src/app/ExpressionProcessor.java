@@ -1,4 +1,4 @@
-package models.expressions;
+package app;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,11 @@ import java.util.Map;
 
 import models.Statement;
 import models.declarations.VariableDeclaration;
+import models.expressions.Addition;
+import models.expressions.Expression;
+import models.expressions.Multiplication;
+import models.expressions.Number;
+import models.expressions.Variable;
 
 /*visitor pattern is a better choice to evaluate our data*/
 public class ExpressionProcessor {

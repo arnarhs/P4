@@ -1,4 +1,4 @@
-package models.expressions;
+package app;
  
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,12 @@ import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
 import antlr.expressionParser.VariableContext;
 import models.declarations.VariableDeclaration;
+import models.expressions.Addition;
+import models.expressions.Expression;
+import models.expressions.Multiplication;
+import models.expressions.Number;
+import models.expressions.ReactionExpr;
+import models.expressions.Variable;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  

@@ -1,6 +1,6 @@
 package models.declarations;
-import models.expressions.Param;
 import models.Scope;
+import models.expressions.Param;
 
 public class Method extends Declarations {
 	String type;

@@ -1,8 +1,8 @@
 package models.expressions;
 
 public class Multiplication extends Expression {
-    Expression left;
-    Expression right;
+	public Expression left;
+	public Expression right;
 
     public Multiplication(Expression left, Expression right) {
         this.left = left;

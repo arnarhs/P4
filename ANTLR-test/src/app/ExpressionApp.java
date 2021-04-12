@@ -1,4 +1,4 @@
-package main;
+package app;
 
 import java.io.IOException;
 
@@ -10,16 +10,16 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import antlr.expressionLexer;
 import antlr.expressionParser;
 import models.Program;
-import models.expressions.AntlrToProgram;
-import models.expressions.ExpressionProcessor;
 
-public class ExpressionMain {
+public class ExpressionApp {
 
 	public static void main(String[] args) {
 		if (args.length == 1) {
 			String fileName = args[0];
 			expressionParser parser = getParser(fileName);
 			ParseTree antlrAST = parser.prog();
+			
+			
 			AntlrToProgram progVisitor = new AntlrToProgram();
 			Program prog = progVisitor.visit(antlrAST);
 			
