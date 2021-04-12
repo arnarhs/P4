@@ -16,10 +16,7 @@ import models.expressions.ExpressionProcessor;
 public class ExpressionMain {
 
 	public static void main(String[] args) {
-		if (args.length < 1) {
-			System.err.print("Usage: file name\n");
-		}
-		else {
+		if (args.length == 1) {
 			String fileName = args[0];
 			expressionParser parser = getParser(fileName);
 			ParseTree antlrAST = parser.prog();
@@ -36,6 +33,9 @@ public class ExpressionMain {
 					System.out.println(err);
 				}
 			}
+		}
+		else {
+			System.err.print("Usage: file name\n");
 		}
 	}
 	
