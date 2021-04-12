@@ -16,26 +16,20 @@ import models.expressions.ExpressionProcessor;
 public class ExpressionMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		if(args.length != 1) {
-			System.err.print("Usage: file name\n");
-		}
-		else {
-			String fileName = args[0];
-			expressionParser parser = getParser(fileName);
-			ParseTree antlrAST = parser.prog();
-			AntlrToProgram progVisitor = new AntlrToProgram();
-			Program prog = progVisitor.visit(antlrAST);
-			
-			if(progVisitor.semanticErrors.isEmpty()) {
-				ExpressionProcessor ep = new ExpressionProcessor(prog.statements);
-				for(String evaluation: ep.getEvaluationResults()) {
-					System.out.println(evaluation);
-				}
-			} else {
-				for(String err: progVisitor.semanticErrors) {
-					System.out.println(err);
-				}
+		String fileName = args[0];
+		expressionParser parser = getParser(fileName);
+		ParseTree antlrAST = parser.prog();
+		AntlrToProgram progVisitor = new AntlrToProgram();
+		Program prog = progVisitor.visit(antlrAST);
+		
+		if(progVisitor.semanticErrors.isEmpty()) {
+			ExpressionProcessor ep = new ExpressionProcessor(prog.statements);
+			for(String evaluation: ep.getEvaluationResults()) {
+				System.out.println(evaluation);
+			}
+		} else {
+			for(String err: progVisitor.semanticErrors) {
+				System.out.println(err);
 			}
 		}
 	}
