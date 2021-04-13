@@ -11,25 +11,27 @@ prog
 decl
     : declReaction                              
     | declInt                                               
-    //| declList                                  # ListDeclaration
-    //| declMethod                                # MethodDeclaration
+    | declList                                  
+  //| declMethod                                # MethodDeclaration
     ;
 
 declReaction
-    : KEYWORD ID ':' valueExpr                  # ReacDeclAssignment                  
+    : KEYWORD ID ':' reacExpr                   # ReacDeclAssignment                  
     | KEYWORD ID                                # ReacDecl
     ;
 
 declInt
-    : INT ID ':' valueExpr                      # IntDeclAssignment
+    : INT ID ':' basicExpr                      # IntDeclAssignment
     | INT ID                                    # IntDecl
     ;
 
-/*declList
-    : LIST ID ':' '{' exprParams '}'
-    | LIST ID 
+declList
+    : LIST ID ':' '{' reacParams '}'            #ListDeclParams
+    | LIST ID                                   #ListDecl
     ;
 
+
+/*
 declMethod
     : KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'
     ;
@@ -39,11 +41,11 @@ formalParams
     | KEYWORD ID                                //# Param
     ;
 */
-/*exprParams
-    : valueExpr ',' exprParams 
-    | valueExpr
+reacParams
+    : reacExpr ',' reacParams 
+    | reacExpr
     ;
-*/
+
 /*ssaParams
     : '{' ssaList '}' ',' ID
     | ID
@@ -55,22 +57,22 @@ formalParams
     ;*/
 
 expr
-    : valueExpr                                        
+    : reacExpr
+    | basicExpr                                        
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
 
-valueExpr
-    : opExpr REAC opExpr '(' opExpr ')'           # ReactionExpressionConst
-    | opExpr REAC opExpr                          # ReactionExpression
-    | opExpr                                      # OperationExpression
+reacExpr
+    : basicExpr REAC basicExpr '(' basicExpr ')'        # ReactionExpressionConst
+    | basicExpr REAC basicExpr                          # ReactionExpression
     ;
 
-opExpr
-    : opExpr MULT opExpr                          # MultiplyExpression   
-    | opExpr ADD opExpr                           # AdditionExpression
+basicExpr
+    : basicExpr MULT basicExpr                    # MultiplyExpression   
+    | basicExpr ADD basicExpr                     # AdditionExpression
     | value                                       # NumOrID
-    ;       
+    ;    
 
 value
     : NUM                                        # Number
