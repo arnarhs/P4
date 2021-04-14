@@ -7,6 +7,8 @@ import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
 import antlr.expressionParser.IntDeclAssignmentContext;
 import antlr.expressionParser.IntDeclContext;
+import antlr.expressionParser.ListDeclContext;
+import antlr.expressionParser.ListDeclParamsContext;
 import antlr.expressionParser.MultiplyExpressionContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.ReacDeclAssignmentContext;
@@ -14,6 +16,7 @@ import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
 import antlr.expressionParser.VariableContext;
+import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
 import models.expressions.Expression;
@@ -24,6 +27,8 @@ import models.expressions.Variable;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
+
+
 	private List<String> vars; //A list that stores all the declared variables.
 	private List<String> semanticErrors; //A list that stores all the semantic errors.
 
@@ -104,6 +109,49 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		}		
 
 		return new VariableDeclaration(id, type, null);
+	}
+	
+	@Override
+	public Expression visitListDeclParams(ListDeclParamsContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		
+		if (vars.contains(id)) {
+			SemanticError(line, column, "list '" + id + "' already declared.");
+		} else {
+			vars.add(id);
+		}		
+		
+		Integer listSize = ctx.getChild(4).getChildCount();	
+		List<Expression> list = new ArrayList();
+			
+		for (int i = 0; i < listSize; i+= 2) {
+			// get the reaction expressions somehow
+		}
+
+		return new ListDeclaration(id, type, list);
+	}
+
+	@Override
+	public Expression visitListDecl(ListDeclContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		
+		if (vars.contains(id)) {
+			SemanticError(line, column, "list '" + id + "' already declared.");
+		} else {
+			vars.add(id);
+		}		
+
+		return new ListDeclaration(id, type, new ArrayList());
 	}
 
 	@Override
