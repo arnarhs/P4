@@ -1,0 +1,7 @@
+species a : 5
+species b : 10
+
+a * b + 4
+
+(a + b - 4 - ( ( 6 + 5 ) * 3) 
+

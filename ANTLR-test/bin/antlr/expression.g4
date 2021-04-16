@@ -61,14 +61,17 @@ expr
     ;
 
 valueExpr
-    : opExpr REAC opExpr '(' opExpr ')'           # ReactionExpressionConst
-    | opExpr REAC opExpr                          # ReactionExpression
+    : opExpr '=>' opExpr '(' opExpr ')'           # ReactionExpressionConst
+    | opExpr '=>' opExpr                          # ReactionExpression
     | opExpr                                      # OperationExpression
     ;
 
 opExpr
-    : opExpr MULT opExpr                          # MultiplyExpression   
-    | opExpr ADD opExpr                           # AdditionExpression
+    : '(' opExpr ')'						      # BracketExpression
+    | opExpr '*' opExpr                 # MultiplyExpression 
+    | opExpr '/' opExpr   				# DivisionExpression
+    | opExpr '-' opExpr                 # SubtractionExpression
+    | opExpr '+' opExpr                 # AdditionExpression
     | value                                       # NumOrID
     ;       
 
@@ -76,10 +79,6 @@ value
     : NUM                                        # Number
     | ID                                         # Variable
     ;
-
-REAC: '=>' ;
-ADD: '+' ;
-MULT: '*' ;
 
 KEYWORD: 'species' | 'solution' | 'reaction' | 'print' ;
 INT: 'int' ;

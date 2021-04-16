@@ -8,9 +8,11 @@ import java.util.Map;
 import models.Statement;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.Division;
 import models.expressions.Expression;
 import models.expressions.Multiplication;
 import models.expressions.Number;
+import models.expressions.Subtraction;
 import models.expressions.Variable;
 
 /*visitor pattern is a better choice to evaluate our data*/
@@ -63,6 +65,18 @@ public class ExpressionProcessor {
 			int left = getEvalResult(add.left);
 			int right = getEvalResult(add.right);
 			result = left * right;
+		}
+		else if (e instanceof Division) {
+			Division add = (Division) e;
+			int left = getEvalResult(add.left);
+			int right = getEvalResult(add.right);
+			result = left / right;
+		}
+		else if (e instanceof Subtraction) {
+			Subtraction add = (Subtraction) e;
+			int left = getEvalResult(add.left);
+			int right = getEvalResult(add.right);
+			result = left - right;
 		}
 		
 		return result;

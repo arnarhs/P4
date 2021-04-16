@@ -126,6 +126,30 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitOperationExpression(expressionParser.OperationExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code BracketExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBracketExpression(expressionParser.BracketExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BracketExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBracketExpression(expressionParser.BracketExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code SubtractionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterSubtractionExpression(expressionParser.SubtractionExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SubtractionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitSubtractionExpression(expressionParser.SubtractionExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code AdditionExpression}
 	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
@@ -161,6 +185,18 @@ public interface expressionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultiplyExpression(expressionParser.MultiplyExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DivisionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterDivisionExpression(expressionParser.DivisionExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DivisionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitDivisionExpression(expressionParser.DivisionExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Number}
 	 * labeled alternative in {@link expressionParser#value}.

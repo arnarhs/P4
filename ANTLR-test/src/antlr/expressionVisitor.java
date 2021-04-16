@@ -81,6 +81,20 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitOperationExpression(expressionParser.OperationExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code BracketExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBracketExpression(expressionParser.BracketExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SubtractionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSubtractionExpression(expressionParser.SubtractionExpressionContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code AdditionExpression}
 	 * labeled alternative in {@link expressionParser#opExpr}.
 	 * @param ctx the parse tree
@@ -101,6 +115,13 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMultiplyExpression(expressionParser.MultiplyExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code DivisionExpression}
+	 * labeled alternative in {@link expressionParser#opExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDivisionExpression(expressionParser.DivisionExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Number}
 	 * labeled alternative in {@link expressionParser#value}.

@@ -5,6 +5,8 @@ import java.util.List;
 import org.antlr.v4.runtime.Token;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
+import antlr.expressionParser.BracketExpressionContext;
+import antlr.expressionParser.DivisionExpressionContext;
 import antlr.expressionParser.IntDeclAssignmentContext;
 import antlr.expressionParser.IntDeclContext;
 import antlr.expressionParser.MultiplyExpressionContext;
@@ -13,13 +15,16 @@ import antlr.expressionParser.ReacDeclAssignmentContext;
 import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
+import antlr.expressionParser.SubtractionExpressionContext;
 import antlr.expressionParser.VariableContext;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.Division;
 import models.expressions.Expression;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.ReactionExpr;
+import models.expressions.Subtraction;
 import models.expressions.Variable;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
@@ -64,7 +69,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
 			vars.add(id);
-		}		
+		}
 
 		return new VariableDeclaration(id, type, null);
 	}
@@ -83,9 +88,29 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
 		} else {
 			vars.add(id);
-		}		
+		}
 		
 		return new VariableDeclaration(id, type, value);
+	}
+
+	@Override
+	public Expression visitBracketExpression(BracketExpressionContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitBracketExpression(ctx);
+	}
+
+	@Override
+	public Expression visitSubtractionExpression(SubtractionExpressionContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new Subtraction(left, right);
+	}
+
+	@Override
+	public Expression visitDivisionExpression(DivisionExpressionContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new Division(left, right);
 	}
 
 	@Override
