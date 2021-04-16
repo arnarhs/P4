@@ -5,7 +5,7 @@ grammar expression;
 }
 
 prog
-    : (decl | expr)+ EOF                        # Program
+    : (decl | expr )+ EOF                        # Program
     ;
  
 decl
@@ -55,7 +55,8 @@ formalParams
     ;*/
 
 expr
-    : valueExpr                                        
+    : valueExpr 
+    | ifStmt //methExpr                                      
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
@@ -75,31 +76,39 @@ opExpr
     | value                                       # NumOrID
     ;       
 
-methExpr
-	: METH '(' conds ')' '{' expr '}'
-	;
+ifStmt
+    : KEYWORD '(' ifconds ')' '{' expr '}' (elseifStmt)* elseStmt? # IfStatement
+    ;
 
-conds
-	: boolExpr , conds
-	| boolExpr
-	;
-	
-boolExpr
-	: BOOL
-	| opExpr LOGOP opExpr
-	;
+elseifStmt
+    : KEYWORD KEYWORD '(' ifconds ')' '{' expr '}'                 # ElseIfStatement
+    ;
+
+elseStmt
+    : KEYWORD '{' expr '}'                                         # ElseStatement
+    ;
+
+ifconds
+    : logicExpr BOOLOP ifconds                                      # BooleanOperatorExpr
+    | logicExpr                                                     # BooleanExpr
+    ;
+
+logicExpr
+    : BOOL                                                         # Boolean
+    | opExpr LOGOP opExpr                                          # LogicalOperatorExpr
+    ;
 
 value
     : NUM                                        # Number
     | ID                                         # Variable
     ;
 
-KEYWORD: 'species' | 'solution' | 'reaction' | 'print' ;
+KEYWORD: 'species' | 'solution' | 'reaction' | 'print' | 'while' | 'if' | 'else' ;
 INT: 'int' ;
 SSA: 'ssa' ;
 LIST: 'list' ;
-METH: 'while' | 'if' ;
-LOGOP: '<' | '<=' | '>' | '>=' | '==' | '!=' | '||' | '&&' ;
+LOGOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
+BOOLOP: '||' | '&&' ;
 BOOL: 'true' | 'false' ;
 
 ID: [a-z][a-zA-Z0-9_]* ;
