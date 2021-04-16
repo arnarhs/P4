@@ -75,6 +75,20 @@ opExpr
     | value                                       # NumOrID
     ;       
 
+methExpr
+	: METH '(' conds ')' '{' expr '}'
+	;
+
+conds
+	: boolExpr , conds
+	| boolExpr
+	;
+	
+boolExpr
+	: BOOL
+	| opExpr LOGOP opExpr
+	;
+
 value
     : NUM                                        # Number
     | ID                                         # Variable
@@ -84,6 +98,9 @@ KEYWORD: 'species' | 'solution' | 'reaction' | 'print' ;
 INT: 'int' ;
 SSA: 'ssa' ;
 LIST: 'list' ;
+METH: 'while' | 'if' ;
+LOGOP: '<' | '<=' | '>' | '>=' | '==' | '!=' | '||' | '&&' ;
+BOOL: 'true' | 'false' ;
 
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  
