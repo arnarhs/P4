@@ -58,7 +58,7 @@ ifStmt
 elseifStmt
 elseStmt
 ifconds
-boolExpr
+logicExpr
 value
 
 

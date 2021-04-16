@@ -9,7 +9,10 @@ import models.Statement;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
 import models.expressions.Division;
+import models.expressions.ElseIfStatement;
+import models.expressions.ElseStatement;
 import models.expressions.Expression;
+import models.expressions.IfStatement;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.Subtraction;
@@ -78,7 +81,15 @@ public class ExpressionProcessor {
 			int right = getEvalResult(add.right);
 			result = left - right;
 		}
-		
+		else if (e instanceof IfStatement) {
+			
+		}
+		else if (e instanceof ElseIfStatement) {
+			
+		}
+		else if (e instanceof ElseStatement) {
+	
+		}
 		return result;
 	}
 	

@@ -25,11 +25,11 @@ public class expressionParser extends Parser {
 	public static final int
 		RULE_prog = 0, RULE_decl = 1, RULE_declReaction = 2, RULE_declInt = 3, 
 		RULE_expr = 4, RULE_valueExpr = 5, RULE_opExpr = 6, RULE_ifStmt = 7, RULE_elseifStmt = 8, 
-		RULE_elseStmt = 9, RULE_ifconds = 10, RULE_boolExpr = 11, RULE_value = 12;
+		RULE_elseStmt = 9, RULE_ifconds = 10, RULE_logicExpr = 11, RULE_value = 12;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"prog", "decl", "declReaction", "declInt", "expr", "valueExpr", "opExpr", 
-			"ifStmt", "elseifStmt", "elseStmt", "ifconds", "boolExpr", "value"
+			"ifStmt", "elseifStmt", "elseStmt", "ifconds", "logicExpr", "value"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -1152,8 +1152,8 @@ public class expressionParser extends Parser {
 		}
 	}
 	public static class BooleanOperatorExprContext extends IfcondsContext {
-		public BoolExprContext boolExpr() {
-			return getRuleContext(BoolExprContext.class,0);
+		public LogicExprContext logicExpr() {
+			return getRuleContext(LogicExprContext.class,0);
 		}
 		public TerminalNode BOOLOP() { return getToken(expressionParser.BOOLOP, 0); }
 		public IfcondsContext ifconds() {
@@ -1175,8 +1175,8 @@ public class expressionParser extends Parser {
 		}
 	}
 	public static class BooleanExprContext extends IfcondsContext {
-		public BoolExprContext boolExpr() {
-			return getRuleContext(BoolExprContext.class,0);
+		public LogicExprContext logicExpr() {
+			return getRuleContext(LogicExprContext.class,0);
 		}
 		public BooleanExprContext(IfcondsContext ctx) { copyFrom(ctx); }
 		@Override
@@ -1206,7 +1206,7 @@ public class expressionParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(127);
-				boolExpr();
+				logicExpr();
 				setState(128);
 				match(BOOLOP);
 				setState(129);
@@ -1218,7 +1218,7 @@ public class expressionParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(131);
-				boolExpr();
+				logicExpr();
 				}
 				break;
 			}
@@ -1234,18 +1234,18 @@ public class expressionParser extends Parser {
 		return _localctx;
 	}
 
-	public static class BoolExprContext extends ParserRuleContext {
-		public BoolExprContext(ParserRuleContext parent, int invokingState) {
+	public static class LogicExprContext extends ParserRuleContext {
+		public LogicExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_boolExpr; }
+		@Override public int getRuleIndex() { return RULE_logicExpr; }
 	 
-		public BoolExprContext() { }
-		public void copyFrom(BoolExprContext ctx) {
+		public LogicExprContext() { }
+		public void copyFrom(LogicExprContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class LogicalOperatorExprContext extends BoolExprContext {
+	public static class LogicalOperatorExprContext extends LogicExprContext {
 		public List<OpExprContext> opExpr() {
 			return getRuleContexts(OpExprContext.class);
 		}
@@ -1253,7 +1253,7 @@ public class expressionParser extends Parser {
 			return getRuleContext(OpExprContext.class,i);
 		}
 		public TerminalNode LOGOP() { return getToken(expressionParser.LOGOP, 0); }
-		public LogicalOperatorExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public LogicalOperatorExprContext(LogicExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterLogicalOperatorExpr(this);
@@ -1268,9 +1268,9 @@ public class expressionParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class BooleanContext extends BoolExprContext {
+	public static class BooleanContext extends LogicExprContext {
 		public TerminalNode BOOL() { return getToken(expressionParser.BOOL, 0); }
-		public BooleanContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public BooleanContext(LogicExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterBoolean(this);
@@ -1286,9 +1286,9 @@ public class expressionParser extends Parser {
 		}
 	}
 
-	public final BoolExprContext boolExpr() throws RecognitionException {
-		BoolExprContext _localctx = new BoolExprContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_boolExpr);
+	public final LogicExprContext logicExpr() throws RecognitionException {
+		LogicExprContext _localctx = new LogicExprContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_logicExpr);
 		try {
 			setState(139);
 			_errHandler.sync(this);

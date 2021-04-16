@@ -1,31 +1,21 @@
 package models.expressions;
 
-import models.Statement;
-
 public class IfStatement extends Expression {
-	Statement thenStmt;
-	Statement elseIfStmt;
-	Statement elseStmt;
+	String type;
 	Expression condition;
-	String typeIf;
-	String typeElseIf;
-	String typeElse;
+	Expression thenExpr;
+	Expression elseExpr = null;
 	
-	public IfStatement(Expression condition, Statement thenStmt, Statement elseIfStmt, 
-			Statement elseStmt, String typeIf, String typeElseIf, String typeElse) {
+	public IfStatement(String type, Expression condition, Expression thenExpr, Expression elseExpr) {
+		this.type = type;
 		this.condition = condition;
-		this.thenStmt = thenStmt;
-		this.elseIfStmt = elseIfStmt;
-		this.elseStmt = elseStmt;
-		this.typeIf = typeIf;
-		this.typeElseIf = typeElseIf;
-		this.typeElse = typeElse;
+		this.thenExpr = thenExpr;
+		this.elseExpr = elseExpr;
 	}
 	
 	@Override
 	public String toString() {
-		return typeIf.toString() + '(' + condition.toString() + ')' + '{' + thenStmt.toString() + '}'
-				+ typeElseIf.toString() + '(' + condition.toString() + ')' + '{' + elseIfStmt.toString() + '}'
-				+ typeElse.toString() + '{' + elseStmt.toString() + '}';
+		return type.toString() + '(' + condition.toString() + ')' 
+				+ '{' + thenExpr.toString() + '}' + elseExpr.toString();
 	}
 }

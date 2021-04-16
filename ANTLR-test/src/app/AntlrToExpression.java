@@ -8,6 +8,8 @@ import antlr.expressionParser.AdditionExpressionContext;
 import antlr.expressionParser.BooleanOperatorExprContext;
 import antlr.expressionParser.BracketExpressionContext;
 import antlr.expressionParser.DivisionExpressionContext;
+import antlr.expressionParser.ElseIfStatementContext;
+import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
 import antlr.expressionParser.IntDeclAssignmentContext;
 import antlr.expressionParser.IntDeclContext;
@@ -24,6 +26,8 @@ import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
 import models.expressions.BooleanExpression;
 import models.expressions.Division;
+import models.expressions.ElseIfStatement;
+import models.expressions.ElseStatement;
 import models.expressions.Expression;
 import models.expressions.IfStatement;
 import models.expressions.LogicalExpression;
@@ -164,6 +168,31 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression left = visit(ctx.getChild(0));
 		Expression right =  visit(ctx.getChild(2));
 		return new Multiplication(left, right);
+	}
+
+	@Override
+	public Expression visitIfStatement(IfStatementContext ctx) {
+		String type = ctx.getChild(0).getText();
+		Expression condition = visit(ctx.getChild(2));
+		Expression thenExpr = visit(ctx.getChild(5));
+		Expression elseExpr = visitChildren(ctx); //Check this again
+		return new IfStatement(type, condition, thenExpr, elseExpr);
+	}
+
+	@Override
+	public Expression visitElseIfStatement(ElseIfStatementContext ctx) {
+		String typeElse = ctx.getChild(0).getText();
+		String typeIf = ctx.getChild(1).getText();
+		Expression condition = visit(ctx.getChild(3));
+		Expression thenExpr = visit(ctx.getChild(6));
+		return new ElseIfStatement(typeElse, typeIf, condition, thenExpr);
+	}
+
+	@Override
+	public Expression visitElseStatement(ElseStatementContext ctx) {
+		String typeElse = ctx.getChild(0).getText();
+		Expression thenExpr = visit(ctx.getChild(2));
+		return new ElseStatement(typeElse, thenExpr);
 	}
 
 	@Override

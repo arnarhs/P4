@@ -77,8 +77,12 @@ opExpr
     ;       
 
 ifStmt
-    : KEYWORD '(' ifconds ')' '{' expr '}' (elseifStmt)* elseStmt? # IfStatement
+    : KEYWORD '(' ifconds ')' '{' expr '}' else # IfStatement
     ;
+
+else
+	: (elseifStmt)* elseStmt?
+	;
 
 elseifStmt
     : KEYWORD KEYWORD '(' ifconds ')' '{' expr '}'                 # ElseIfStatement

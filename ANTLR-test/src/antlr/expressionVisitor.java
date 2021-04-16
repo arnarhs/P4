@@ -159,14 +159,14 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	T visitBooleanExpr(expressionParser.BooleanExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Boolean}
-	 * labeled alternative in {@link expressionParser#boolExpr}.
+	 * labeled alternative in {@link expressionParser#logicExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBoolean(expressionParser.BooleanContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code LogicalOperatorExpr}
-	 * labeled alternative in {@link expressionParser#boolExpr}.
+	 * labeled alternative in {@link expressionParser#logicExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

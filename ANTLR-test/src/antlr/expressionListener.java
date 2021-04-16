@@ -259,25 +259,25 @@ public interface expressionListener extends ParseTreeListener {
 	void exitBooleanExpr(expressionParser.BooleanExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Boolean}
-	 * labeled alternative in {@link expressionParser#boolExpr}.
+	 * labeled alternative in {@link expressionParser#logicExpr}.
 	 * @param ctx the parse tree
 	 */
 	void enterBoolean(expressionParser.BooleanContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code Boolean}
-	 * labeled alternative in {@link expressionParser#boolExpr}.
+	 * labeled alternative in {@link expressionParser#logicExpr}.
 	 * @param ctx the parse tree
 	 */
 	void exitBoolean(expressionParser.BooleanContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code LogicalOperatorExpr}
-	 * labeled alternative in {@link expressionParser#boolExpr}.
+	 * labeled alternative in {@link expressionParser#logicExpr}.
 	 * @param ctx the parse tree
 	 */
 	void enterLogicalOperatorExpr(expressionParser.LogicalOperatorExprContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code LogicalOperatorExpr}
-	 * labeled alternative in {@link expressionParser#boolExpr}.
+	 * labeled alternative in {@link expressionParser#logicExpr}.
 	 * @param ctx the parse tree
 	 */
 	void exitLogicalOperatorExpr(expressionParser.LogicalOperatorExprContext ctx);
