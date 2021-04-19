@@ -130,6 +130,12 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfStatement(expressionParser.IfStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link expressionParser#els}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEls(expressionParser.ElsContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ElseIfStatement}
 	 * labeled alternative in {@link expressionParser#elseifStmt}.
 	 * @param ctx the parse tree
@@ -144,15 +150,15 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitElseStatement(expressionParser.ElseStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code BooleanOperatorExpr}
-	 * labeled alternative in {@link expressionParser#ifconds}.
+	 * Visit a parse tree produced by the {@code LogicalOperator}
+	 * labeled alternative in {@link expressionParser#ifConds}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBooleanOperatorExpr(expressionParser.BooleanOperatorExprContext ctx);
+	T visitLogicalOperator(expressionParser.LogicalOperatorContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code BooleanExpr}
-	 * labeled alternative in {@link expressionParser#ifconds}.
+	 * labeled alternative in {@link expressionParser#ifConds}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -165,12 +171,12 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolean(expressionParser.BooleanContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code LogicalOperatorExpr}
+	 * Visit a parse tree produced by the {@code RelationalOperator}
 	 * labeled alternative in {@link expressionParser#logicExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLogicalOperatorExpr(expressionParser.LogicalOperatorExprContext ctx);
+	T visitRelationalOperator(expressionParser.RelationalOperatorContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Number}
 	 * labeled alternative in {@link expressionParser#value}.

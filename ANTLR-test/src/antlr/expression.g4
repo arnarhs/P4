@@ -77,10 +77,10 @@ opExpr
     ;       
 
 ifStmt
-    : KEYWORD '(' ifConds ')' '{' expr '}' else 					# IfStatement
+    : KEYWORD '(' ifConds ')' '{' expr '}' els 					# IfStatement
     ;
 
-else
+els
 	: (elseifStmt)* elseStmt?
 	;
 
@@ -99,7 +99,7 @@ ifConds
 
 logicExpr
     : BOOL                                                         # Boolean
-    | opExpr RELOP opExpr                                          # RelationalExpression
+    | opExpr RELOP opExpr                                          # RelationalOperator
     ;
 
 value

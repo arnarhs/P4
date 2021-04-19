@@ -5,7 +5,7 @@ import java.util.List;
 import org.antlr.v4.runtime.Token;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
-import antlr.expressionParser.BooleanOperatorExprContext;
+import antlr.expressionParser.LogicalOperatorContext;
 import antlr.expressionParser.BracketExpressionContext;
 import antlr.expressionParser.DivisionExpressionContext;
 import antlr.expressionParser.ElseIfStatementContext;
@@ -13,7 +13,7 @@ import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
 import antlr.expressionParser.IntDeclAssignmentContext;
 import antlr.expressionParser.IntDeclContext;
-import antlr.expressionParser.LogicalOperatorExprContext;
+import antlr.expressionParser.RelationalOperatorContext;
 import antlr.expressionParser.MultiplyExpressionContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.ReacDeclAssignmentContext;
@@ -30,7 +30,7 @@ import models.expressions.ElseIfStatement;
 import models.expressions.ElseStatement;
 import models.expressions.Expression;
 import models.expressions.IfStatement;
-import models.expressions.RelationalExpression;
+import models.expressions.RelationalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.ReactionExpr;
@@ -196,7 +196,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	}
 
 	@Override
-	public Expression visitBooleanOperatorExpr(BooleanOperatorExprContext ctx) {
+	public Expression visitLogicalOperator(LogicalOperatorContext ctx) {
 		Expression left = visit(ctx.getChild(0));
 		Expression center = visit(ctx.getChild(1));
 		Expression right =  visit(ctx.getChild(2));
@@ -204,12 +204,13 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	}
 
 	@Override
-	public Expression visitLogicalOperatorExpr(LogicalOperatorExprContext ctx) {
+	public Expression visitRelationalOperator(RelationalOperatorContext ctx) {
 		Expression left = visit(ctx.getChild(0));
 		Expression center = visit(ctx.getChild(1));
 		Expression right =  visit(ctx.getChild(2));
-		return new RelationalExpression(left, center, right);
+		return new RelationalOperator(left, center, right);
 	}
+
 
 	@Override
 	public Expression visitNumber(NumberContext ctx) {

@@ -20,7 +20,7 @@ public class expressionLexer extends Lexer {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, KEYWORD=11, INT=12, SSA=13, LIST=14, LOGOP=15, BOOLOP=16, BOOL=17, 
+		T__9=10, KEYWORD=11, INT=12, SSA=13, LIST=14, RELOP=15, LOGOP=16, BOOL=17, 
 		ID=18, NUM=19, COMMENT=20, WS=21;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -33,7 +33,7 @@ public class expressionLexer extends Lexer {
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
-			"T__9", "KEYWORD", "INT", "SSA", "LIST", "LOGOP", "BOOLOP", "BOOL", "ID", 
+			"T__9", "KEYWORD", "INT", "SSA", "LIST", "RELOP", "LOGOP", "BOOL", "ID", 
 			"NUM", "COMMENT", "WS"
 		};
 	}
@@ -49,7 +49,7 @@ public class expressionLexer extends Lexer {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, "KEYWORD", 
-			"INT", "SSA", "LIST", "LOGOP", "BOOLOP", "BOOL", "ID", "NUM", "COMMENT", 
+			"INT", "SSA", "LIST", "RELOP", "LOGOP", "BOOL", "ID", "NUM", "COMMENT", 
 			"WS"
 		};
 	}

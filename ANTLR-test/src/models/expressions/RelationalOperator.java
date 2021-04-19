@@ -1,11 +1,11 @@
 package models.expressions;
 
-public class RelationalExpression extends Expression {
+public class RelationalOperator extends Expression {
 	public Expression left;
 	public Expression right;
 	public Expression operator;
 	    	    
-	public RelationalExpression(Expression left, Expression right, Expression operator) {
+	public RelationalOperator(Expression left, Expression right, Expression operator) {
 		this.left = left;
 		this.right = right;
 		this.operator = operator;
