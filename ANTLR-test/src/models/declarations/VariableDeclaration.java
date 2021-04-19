@@ -1,8 +1,8 @@
 package models.declarations;
 
 import models.expressions.Expression;
-
-public class VariableDeclaration extends Expression {
+//HVIS KLASSEN SKAL NEDAVRE FRA EXPRESSION GIV TEAM VIPER BESKED
+public class VariableDeclaration extends Expression{
 	public String id;
 	public String type;
 	public Expression value;

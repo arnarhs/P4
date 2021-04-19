@@ -123,6 +123,61 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDivisionExpression(expressionParser.DivisionExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code IfStatement}
+	 * labeled alternative in {@link expressionParser#ifStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfStatement(expressionParser.IfStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link expressionParser#els}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEls(expressionParser.ElsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ElseIfStatement}
+	 * labeled alternative in {@link expressionParser#elseifStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseIfStatement(expressionParser.ElseIfStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ElseStatement}
+	 * labeled alternative in {@link expressionParser#elseStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseStatement(expressionParser.ElseStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LogicalOperator}
+	 * labeled alternative in {@link expressionParser#ifConds}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLogicalOperator(expressionParser.LogicalOperatorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BooleanExpr}
+	 * labeled alternative in {@link expressionParser#ifConds}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBooleanExpr(expressionParser.BooleanExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Boolean}
+	 * labeled alternative in {@link expressionParser#logicExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolean(expressionParser.BooleanContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RelationalOperator}
+	 * labeled alternative in {@link expressionParser#logicExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelationalOperator(expressionParser.RelationalOperatorContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Number}
 	 * labeled alternative in {@link expressionParser#value}.
 	 * @param ctx the parse tree
