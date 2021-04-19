@@ -1,11 +1,11 @@
 package models.expressions;
 
-public class BooleanExpression extends Expression {
+public class LogicalOperator extends Expression {
     public Expression left;
     public Expression right;
     public Expression center;
     	    
-    public BooleanExpression(Expression left, Expression right, Expression center) {
+    public LogicalOperator(Expression left, Expression right, Expression center) {
         this.left = left;
         this.right = right;
         this.center = center;

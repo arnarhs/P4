@@ -24,13 +24,13 @@ import antlr.expressionParser.SubtractionExpressionContext;
 import antlr.expressionParser.VariableContext;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
-import models.expressions.BooleanExpression;
+import models.expressions.LogicalOperator;
 import models.expressions.Division;
 import models.expressions.ElseIfStatement;
 import models.expressions.ElseStatement;
 import models.expressions.Expression;
 import models.expressions.IfStatement;
-import models.expressions.LogicalExpression;
+import models.expressions.RelationalExpression;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.ReactionExpr;
@@ -200,7 +200,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression left = visit(ctx.getChild(0));
 		Expression center = visit(ctx.getChild(1));
 		Expression right =  visit(ctx.getChild(2));
-		return new BooleanExpression(left, center, right);
+		return new LogicalOperator(left, center, right);
 	}
 
 	@Override
@@ -208,7 +208,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression left = visit(ctx.getChild(0));
 		Expression center = visit(ctx.getChild(1));
 		Expression right =  visit(ctx.getChild(2));
-		return new LogicalExpression(left, center, right);
+		return new RelationalExpression(left, center, right);
 	}
 
 	@Override
