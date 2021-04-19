@@ -106,7 +106,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitBracketExpression(BracketExpressionContext ctx) {
 		// TODO Auto-generated method stub
-		return super.visitBracketExpression(ctx);
+		return visit(ctx.getChild(1));
 	}
 
 	@Override
