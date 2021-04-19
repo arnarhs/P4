@@ -104,15 +104,29 @@ public interface expressionListener extends ParseTreeListener {
 	 */
 	void exitListDecl(expressionParser.ListDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link expressionParser#reacParams}.
+	 * Enter a parse tree produced by the {@code ReactionParameters}
+	 * labeled alternative in {@link expressionParser#reacParams}.
 	 * @param ctx the parse tree
 	 */
-	void enterReacParams(expressionParser.ReacParamsContext ctx);
+	void enterReactionParameters(expressionParser.ReactionParametersContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link expressionParser#reacParams}.
+	 * Exit a parse tree produced by the {@code ReactionParameters}
+	 * labeled alternative in {@link expressionParser#reacParams}.
 	 * @param ctx the parse tree
 	 */
-	void exitReacParams(expressionParser.ReacParamsContext ctx);
+	void exitReactionParameters(expressionParser.ReactionParametersContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ReactionParameter}
+	 * labeled alternative in {@link expressionParser#reacParams}.
+	 * @param ctx the parse tree
+	 */
+	void enterReactionParameter(expressionParser.ReactionParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ReactionParameter}
+	 * labeled alternative in {@link expressionParser#reacParams}.
+	 * @param ctx the parse tree
+	 */
+	void exitReactionParameter(expressionParser.ReactionParameterContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link expressionParser#expr}.
 	 * @param ctx the parse tree

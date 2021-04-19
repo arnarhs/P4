@@ -26,8 +26,8 @@ declInt
     ;
 
 declList
-    : LIST ID ':' '{' reacParams '}'            #ListDeclParams
-    | LIST ID                                   #ListDecl
+    : LIST ID ':' '{' reacParams '}'            # ListDeclParams
+    | LIST ID                                   # ListDecl
     ;
 
 
@@ -43,8 +43,8 @@ formalParams
 */
 
 reacParams
-    : reacExpr ',' reacParams 
-    | reacExpr
+    : reacExpr ',' reacParams                   # ReactionParameters
+    | reacExpr                                  # ReactionParameter
     ;
 
 /*ssaParams

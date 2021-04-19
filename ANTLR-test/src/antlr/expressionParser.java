@@ -554,27 +554,54 @@ public class expressionParser extends Parser {
 	}
 
 	public static class ReacParamsContext extends ParserRuleContext {
+		public ReacParamsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_reacParams; }
+	 
+		public ReacParamsContext() { }
+		public void copyFrom(ReacParamsContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ReactionParameterContext extends ReacParamsContext {
+		public ReacExprContext reacExpr() {
+			return getRuleContext(ReacExprContext.class,0);
+		}
+		public ReactionParameterContext(ReacParamsContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterReactionParameter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitReactionParameter(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitReactionParameter(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ReactionParametersContext extends ReacParamsContext {
 		public ReacExprContext reacExpr() {
 			return getRuleContext(ReacExprContext.class,0);
 		}
 		public ReacParamsContext reacParams() {
 			return getRuleContext(ReacParamsContext.class,0);
 		}
-		public ReacParamsContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_reacParams; }
+		public ReactionParametersContext(ReacParamsContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterReacParams(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).enterReactionParameters(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitReacParams(this);
+			if ( listener instanceof expressionListener ) ((expressionListener)listener).exitReactionParameters(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitReacParams(this);
+			if ( visitor instanceof expressionVisitor ) return ((expressionVisitor<? extends T>)visitor).visitReactionParameters(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -587,6 +614,7 @@ public class expressionParser extends Parser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
+				_localctx = new ReactionParametersContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(60);
@@ -598,6 +626,7 @@ public class expressionParser extends Parser {
 				}
 				break;
 			case 2:
+				_localctx = new ReactionParameterContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(64);

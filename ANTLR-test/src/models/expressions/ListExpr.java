@@ -10,6 +10,10 @@ public class ListExpr extends Expression{
 		this.list = list;
 	}
 	
+	public ListExpr() {
+		this.list = new ArrayList();
+	}
+	
 	@Override
 	public String toString() {
 		String str = "List: ";

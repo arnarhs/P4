@@ -15,11 +15,14 @@ import antlr.expressionParser.ReacDeclAssignmentContext;
 import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
+import antlr.expressionParser.ReactionParameterContext;
+import antlr.expressionParser.ReactionParametersContext;
 import antlr.expressionParser.VariableContext;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
 import models.expressions.Expression;
+import models.expressions.ListExpr;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.ReactionExpr;
@@ -27,8 +30,6 @@ import models.expressions.Variable;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
-
-
 	private List<String> vars; //A list that stores all the declared variables.
 	private List<String> semanticErrors; //A list that stores all the semantic errors.
 
@@ -126,14 +127,39 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			vars.add(id);
 		}		
 		
-		Integer listSize = ctx.getChild(4).getChildCount();	
-		List<Expression> list = new ArrayList();
+		
 			
-		for (int i = 0; i < listSize; i+= 2) {
-			// get the reaction expressions somehow
-		}
+		Expression reacParams = visit(ctx.reacParams());
 
 		return new ListDeclaration(id, type, list);
+	}
+
+	//Multiple reaction parameters
+	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
+		ListExpr list = new ListExpr();
+		List<Expression> exprList = new ArrayList();
+		exprList.add(visit(ctx.reacExpr()));
+		
+		Integer length = ctx.getChildCount();
+		if (length > 1) {
+			list.list.addAll(visit(ctx.reacParams()));
+		}
+		
+		return null;
+	}
+
+	//One reaction parameter
+	@Override
+	public ReactionExpr visitReactionParameter(ReactionParameterContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		Expression constant = visit(ctx.getChild(4));
+		
+		if(constant == null) {
+			return new ReactionExpr(left, right);
+		} else {
+			return new ReactionExpr(left, right, constant);
+		}
 	}
 
 	@Override

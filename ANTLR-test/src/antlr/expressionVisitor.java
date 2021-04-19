@@ -68,11 +68,19 @@ public interface expressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitListDecl(expressionParser.ListDeclContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link expressionParser#reacParams}.
+	 * Visit a parse tree produced by the {@code ReactionParameters}
+	 * labeled alternative in {@link expressionParser#reacParams}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitReacParams(expressionParser.ReacParamsContext ctx);
+	T visitReactionParameters(expressionParser.ReactionParametersContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ReactionParameter}
+	 * labeled alternative in {@link expressionParser#reacParams}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReactionParameter(expressionParser.ReactionParameterContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link expressionParser#expr}.
 	 * @param ctx the parse tree
