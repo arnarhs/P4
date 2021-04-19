@@ -24,4 +24,8 @@ public class ListExpr extends Expression{
 		
 		return str;
 	}
+	
+	public void Combine(ListExpr otherList) {
+		this.list.addAll(otherList.list);
+	}
 }

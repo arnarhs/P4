@@ -126,40 +126,26 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		} else {
 			vars.add(id);
 		}		
-		
-		
-			
-		Expression reacParams = visit(ctx.reacParams());
-
-		return new ListDeclaration(id, type, list);
+					
+		ListExpr reacParams = (ListExpr) visit(ctx.reacParams());		
+		return new ListDeclaration(id, type, reacParams.list);
 	}
 
 	//Multiple reaction parameters
 	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
 		ListExpr list = new ListExpr();
-		List<Expression> exprList = new ArrayList();
-		exprList.add(visit(ctx.reacExpr()));
-		
-		Integer length = ctx.getChildCount();
-		if (length > 1) {
-			list.list.addAll(visit(ctx.reacParams()));
-		}
-		
-		return null;
+		Expression reac = visit(ctx.reacExpr());
+		list.list.add(reac);		
+		list.Combine((ListExpr) visit(ctx.reacParams()));
+		return list;
 	}
 
 	//One reaction parameter
 	@Override
-	public ReactionExpr visitReactionParameter(ReactionParameterContext ctx) {
-		Expression left = visit(ctx.getChild(0));
-		Expression right = visit(ctx.getChild(2));
-		Expression constant = visit(ctx.getChild(4));
-		
-		if(constant == null) {
-			return new ReactionExpr(left, right);
-		} else {
-			return new ReactionExpr(left, right, constant);
-		}
+	public ListExpr visitReactionParameter(ReactionParameterContext ctx) {
+		ListExpr list = new ListExpr();		
+		list.list.add(visitChildren(ctx));
+		return list;
 	}
 
 	@Override
