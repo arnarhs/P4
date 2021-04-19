@@ -90,6 +90,54 @@ public class expressionBaseListener implements expressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterListDeclParams(expressionParser.ListDeclParamsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitListDeclParams(expressionParser.ListDeclParamsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterListDecl(expressionParser.ListDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitListDecl(expressionParser.ListDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReactionParameters(expressionParser.ReactionParametersContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReactionParameters(expressionParser.ReactionParametersContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReactionParameter(expressionParser.ReactionParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReactionParameter(expressionParser.ReactionParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpr(expressionParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -121,18 +169,6 @@ public class expressionBaseListener implements expressionListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReactionExpression(expressionParser.ReactionExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterOperationExpression(expressionParser.OperationExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOperationExpression(expressionParser.OperationExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
