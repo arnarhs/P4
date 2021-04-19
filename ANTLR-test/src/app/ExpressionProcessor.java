@@ -81,6 +81,7 @@ public class ExpressionProcessor {
 			int right = getEvalResult(add.right);
 			result = left - right;
 		}
+		/*
 		else if (e instanceof IfStatement) {
 			
 		}
@@ -90,6 +91,7 @@ public class ExpressionProcessor {
 		else if (e instanceof ElseStatement) {
 	
 		}
+		*/
 		return result;
 	}
 	

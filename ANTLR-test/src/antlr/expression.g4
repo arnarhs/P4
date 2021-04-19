@@ -77,7 +77,7 @@ opExpr
     ;       
 
 ifStmt
-    : KEYWORD '(' ifconds ')' '{' expr '}' else # IfStatement
+    : KEYWORD '(' ifConds ')' '{' expr '}' else 					# IfStatement
     ;
 
 else
@@ -85,21 +85,21 @@ else
 	;
 
 elseifStmt
-    : KEYWORD KEYWORD '(' ifconds ')' '{' expr '}'                 # ElseIfStatement
+    : KEYWORD KEYWORD '(' ifConds ')' '{' expr '}'                 # ElseIfStatement
     ;
 
 elseStmt
     : KEYWORD '{' expr '}'                                         # ElseStatement
     ;
 
-ifconds
-    : logicExpr BOOLOP ifconds                                      # BooleanOperatorExpr
+ifConds
+    : logicExpr LOGOP ifConds                                       # LogicalOperator
     | logicExpr                                                     # BooleanExpr
     ;
 
 logicExpr
     : BOOL                                                         # Boolean
-    | opExpr LOGOP opExpr                                          # LogicalOperatorExpr
+    | opExpr RELOP opExpr                                          # RelationalExpression
     ;
 
 value
@@ -111,8 +111,8 @@ KEYWORD: 'species' | 'solution' | 'reaction' | 'print' | 'while' | 'if' | 'else'
 INT: 'int' ;
 SSA: 'ssa' ;
 LIST: 'list' ;
-LOGOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
-BOOLOP: '||' | '&&' ;
+RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
+LOGOP: '||' | '&&' ;
 BOOL: 'true' | 'false' ;
 
 ID: [a-z][a-zA-Z0-9_]* ;
