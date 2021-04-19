@@ -1,14 +1,14 @@
 package models.expressions;
 
 public class Bracket extends Expression {
-	 public Expression bracket;
+	 public Expression expr;
 
-	 public Bracket(Expression bracket) {
-	     this.bracket = bracket;
+	 public Bracket(Expression expr) {
+	     this.expr = expr;
 	 }
 
 	 @Override
 	 public String toString() {
-	     return "(" + bracket.toString() + ")";
+	     return "(" + expr.toString() + ")";
 	 }
 }

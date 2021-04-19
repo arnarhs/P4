@@ -8,6 +8,7 @@ import java.util.Map;
 import models.Statement;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.Bracket;
 import models.expressions.Division;
 import models.expressions.ElseIfStatement;
 import models.expressions.ElseStatement;
@@ -56,6 +57,9 @@ public class ExpressionProcessor {
 		else if (e instanceof Variable) {
 			Variable var = (Variable) e;
 			result = getEvalResult(values.get(var.ID));
+		}
+		else if (e instanceof Bracket) {
+			result = getEvalResult(((Bracket) e).expr);
 		}
 		else if (e instanceof Addition) {
 			Addition add = (Addition) e;

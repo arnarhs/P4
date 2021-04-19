@@ -24,6 +24,7 @@ import antlr.expressionParser.SubtractionExpressionContext;
 import antlr.expressionParser.VariableContext;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.Bracket;
 import models.expressions.LogicalOperator;
 import models.expressions.Division;
 import models.expressions.ElseIfStatement;
@@ -105,8 +106,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 
 	@Override
 	public Expression visitBracketExpression(BracketExpressionContext ctx) {
-		// TODO Auto-generated method stub
-		return visit(ctx.getChild(1));
+		return new Bracket(visit(ctx.getChild(1)));
 	}
 
 	@Override
