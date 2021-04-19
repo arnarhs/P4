@@ -135,7 +135,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
 		ListExpr list = new ListExpr();
 		Expression reac = visit(ctx.reacExpr());
-		list.list.add(reac);		
+		list.Add(reac);		
 		list.Combine((ListExpr) visit(ctx.reacParams()));
 		return list;
 	}
@@ -144,7 +144,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public ListExpr visitReactionParameter(ReactionParameterContext ctx) {
 		ListExpr list = new ListExpr();		
-		list.list.add(visitChildren(ctx));
+		list.Add(visitChildren(ctx));
 		return list;
 	}
 

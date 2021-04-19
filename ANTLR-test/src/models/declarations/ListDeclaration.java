@@ -30,4 +30,12 @@ public class ListDeclaration extends Expression {
 		}		
 		return str + " }";
 	}
+	
+	public int Length() {
+		return this.list.size();
+	}
+	
+	public Expression Get(int i) {
+		return this.list.get(i);
+	}
 }

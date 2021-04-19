@@ -28,4 +28,8 @@ public class ListExpr extends Expression{
 	public void Combine(ListExpr otherList) {
 		this.list.addAll(otherList.list);
 	}
+	
+	public void Add(Expression expr) {
+		this.list.add(expr);
+	}
 }
