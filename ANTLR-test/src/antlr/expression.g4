@@ -5,7 +5,7 @@ grammar expression;
 }
 
 prog
-    : (decl | expr)+ EOF                        # Program
+    : (decl | expr )+ EOF                        # Program
     ;
  
 decl
@@ -58,36 +58,65 @@ reacParams
     ;*/
 
 expr
-    : reacExpr
-    | basicExpr                                        
+    : valueExpr 
+    | ifStmt //methExpr                                      
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
 
-reacExpr
-    : basicExpr REAC basicExpr '(' basicExpr ')'        # ReactionExpressionConst
-    | basicExpr REAC basicExpr                          # ReactionExpression
+valueExpr
+    : opExpr '=>' opExpr '(' opExpr ')'           # ReactionExpressionConst
+    | opExpr '=>' opExpr                          # ReactionExpression
+    | opExpr                                      # OperationExpression
     ;
 
-basicExpr
-    : basicExpr MULT basicExpr                    # MultiplyExpression   
-    | basicExpr ADD basicExpr                     # AdditionExpression
+opExpr
+    : '(' opExpr ')'						      # BracketExpression
+    | opExpr '*' opExpr                 # MultiplyExpression 
+    | opExpr '/' opExpr   				# DivisionExpression
+    | opExpr '-' opExpr                 # SubtractionExpression
+    | opExpr '+' opExpr                 # AdditionExpression
     | value                                       # NumOrID
     ;    
+
+ifStmt
+    : KEYWORD '(' ifConds ')' '{' expr '}' els 					# IfStatement
+    ;
+
+els
+	: (elseifStmt)* elseStmt?
+	;
+
+elseifStmt
+    : KEYWORD KEYWORD '(' ifConds ')' '{' expr '}'                 # ElseIfStatement
+    ;
+
+elseStmt
+    : KEYWORD '{' expr '}'                                         # ElseStatement
+    ;
+
+ifConds
+    : logicExpr LOGOP ifConds                                       # LogicalOperator
+    | logicExpr                                                     # BooleanExpr
+    ;
+
+logicExpr
+    : BOOL                                                         # Boolean
+    | opExpr RELOP opExpr                                          # RelationalOperator
+    ;
 
 value
     : NUM                                        # Number
     | ID                                         # Variable
     ;
 
-REAC: '=>' ;
-ADD: '+' ;
-MULT: '*' ;
-
-KEYWORD: 'species' | 'solution' | 'reaction' | 'print' ;
+KEYWORD: 'species' | 'solution' | 'reaction' | 'print' | 'while' | 'if' | 'else' ;
 INT: 'int' ;
 SSA: 'ssa' ;
 LIST: 'list' ;
+RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
+LOGOP: '||' | '&&' ;
+BOOL: 'true' | 'false' ;
 
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '0' | '-'?[1-9][0-9]* ;  

@@ -9,9 +9,15 @@ import models.Statement;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.Bracket;
+import models.expressions.Division;
+import models.expressions.ElseIfStatement;
+import models.expressions.ElseStatement;
 import models.expressions.Expression;
+import models.expressions.IfStatement;
 import models.expressions.Multiplication;
 import models.expressions.Number;
+import models.expressions.Subtraction;
 import models.expressions.Variable;
 
 /*visitor pattern is a better choice to evaluate our data*/
@@ -59,6 +65,9 @@ public class ExpressionProcessor {
 			Variable var = (Variable) e;
 			result = getEvalResult(values.get(var.ID));
 		}
+		else if (e instanceof Bracket) {
+			result = getEvalResult(((Bracket) e).expr);
+		}
 		else if (e instanceof Addition) {
 			Addition add = (Addition) e;
 			int left = getEvalResult(add.left);
@@ -71,7 +80,29 @@ public class ExpressionProcessor {
 			int right = getEvalResult(add.right);
 			result = left * right;
 		}
-		
+		else if (e instanceof Division) {
+			Division add = (Division) e;
+			int left = getEvalResult(add.left);
+			int right = getEvalResult(add.right);
+			result = left / right;
+		}
+		else if (e instanceof Subtraction) {
+			Subtraction add = (Subtraction) e;
+			int left = getEvalResult(add.left);
+			int right = getEvalResult(add.right);
+			result = left - right;
+		}
+		/*
+		else if (e instanceof IfStatement) {
+			
+		}
+		else if (e instanceof ElseIfStatement) {
+			
+		}
+		else if (e instanceof ElseStatement) {
+	
+		}
+		*/
 		return result;
 	}
 }

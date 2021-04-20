@@ -5,27 +5,38 @@ import java.util.List;
 import org.antlr.v4.runtime.Token;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
+import antlr.expressionParser.LogicalOperatorContext;
+import antlr.expressionParser.BracketExpressionContext;
+import antlr.expressionParser.DivisionExpressionContext;
+import antlr.expressionParser.ElseIfStatementContext;
+import antlr.expressionParser.ElseStatementContext;
+import antlr.expressionParser.IfStatementContext;
 import antlr.expressionParser.IntDeclAssignmentContext;
 import antlr.expressionParser.IntDeclContext;
-import antlr.expressionParser.ListDeclContext;
-import antlr.expressionParser.ListDeclParamsContext;
+import antlr.expressionParser.RelationalOperatorContext;
 import antlr.expressionParser.MultiplyExpressionContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.ReacDeclAssignmentContext;
 import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
-import antlr.expressionParser.ReactionParameterContext;
-import antlr.expressionParser.ReactionParametersContext;
+import antlr.expressionParser.SubtractionExpressionContext;
 import antlr.expressionParser.VariableContext;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.Bracket;
+import models.expressions.LogicalOperator;
+import models.expressions.Division;
+import models.expressions.ElseIfStatement;
+import models.expressions.ElseStatement;
 import models.expressions.Expression;
-import models.expressions.ListExpr;
+import models.expressions.IfStatement;
+import models.expressions.RelationalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.ReactionExpr;
+import models.expressions.Subtraction;
 import models.expressions.Variable;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
@@ -70,7 +81,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
 			vars.add(id);
-		}		
+		}
 
 		return new VariableDeclaration(id, type, null);
 	}
@@ -89,9 +100,28 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
 		} else {
 			vars.add(id);
-		}		
+		}
 		
 		return new VariableDeclaration(id, type, value);
+	}
+
+	@Override
+	public Expression visitBracketExpression(BracketExpressionContext ctx) {
+		return new Bracket(visit(ctx.getChild(1)));
+	}
+
+	@Override
+	public Expression visitSubtractionExpression(SubtractionExpressionContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new Subtraction(left, right);
+	}
+
+	@Override
+	public Expression visitDivisionExpression(DivisionExpressionContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new Division(left, right);
 	}
 
 	@Override
@@ -194,6 +224,48 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression right =  visit(ctx.getChild(2));
 		return new Multiplication(left, right);
 	}
+
+	@Override
+	public Expression visitIfStatement(IfStatementContext ctx) {
+		String type = ctx.getChild(0).getText();
+		Expression condition = visit(ctx.getChild(2));
+		Expression thenExpr = visit(ctx.getChild(5));
+		Expression elseExpr = visitChildren(ctx); //Check this again
+		return new IfStatement(type, condition, thenExpr, elseExpr);
+	}
+
+	@Override
+	public Expression visitElseIfStatement(ElseIfStatementContext ctx) {
+		String typeElse = ctx.getChild(0).getText();
+		String typeIf = ctx.getChild(1).getText();
+		Expression condition = visit(ctx.getChild(3));
+		Expression thenExpr = visit(ctx.getChild(6));
+		return new ElseIfStatement(typeElse, typeIf, condition, thenExpr);
+	}
+
+	@Override
+	public Expression visitElseStatement(ElseStatementContext ctx) {
+		String typeElse = ctx.getChild(0).getText();
+		Expression thenExpr = visit(ctx.getChild(2));
+		return new ElseStatement(typeElse, thenExpr);
+	}
+
+	@Override
+	public Expression visitLogicalOperator(LogicalOperatorContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression center = visit(ctx.getChild(1));
+		Expression right =  visit(ctx.getChild(2));
+		return new LogicalOperator(left, center, right);
+	}
+
+	@Override
+	public Expression visitRelationalOperator(RelationalOperatorContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression center = visit(ctx.getChild(1));
+		Expression right =  visit(ctx.getChild(2));
+		return new RelationalOperator(left, center, right);
+	}
+
 
 	@Override
 	public Expression visitNumber(NumberContext ctx) {
