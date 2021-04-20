@@ -1,4 +1,4 @@
-  
+
 # Maven build folders
 target/
 # ... but not code generation targets
@@ -93,6 +93,7 @@ bild_output.txt
 runtime/Cpp/demo/generated
 xcuserdata
 *.jar
+!p4compile.jar
 .vscode
 
 # VSCode Java plugin temporary files
@@ -103,6 +104,10 @@ javac-services.0.log.lck
 !runtime/Python3/test/
 Antlr4.sln
 *.bat
+
+!ANTLR-test/src/antlr
+ANTLR-test/src/antlr/*
+!ANTLR-test/src/antlr/expression.g4
 
 #############################
 ## Java
