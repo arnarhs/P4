@@ -11,15 +11,16 @@ import antlr.expressionParser.DivisionExpressionContext;
 import antlr.expressionParser.ElseIfStatementContext;
 import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
-import antlr.expressionParser.IntDeclAssignmentContext;
 import antlr.expressionParser.IntDeclContext;
+import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
 import antlr.expressionParser.MultiplyExpressionContext;
 import antlr.expressionParser.NumberContext;
-import antlr.expressionParser.ReacDeclAssignmentContext;
 import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
+import antlr.expressionParser.ReactionParameterContext;
+import antlr.expressionParser.ReactionParametersContext;
 import antlr.expressionParser.SubtractionExpressionContext;
 import antlr.expressionParser.VariableContext;
 import models.declarations.ListDeclaration;
@@ -32,6 +33,7 @@ import models.expressions.ElseIfStatement;
 import models.expressions.ElseStatement;
 import models.expressions.Expression;
 import models.expressions.IfStatement;
+import models.expressions.ListExpr;
 import models.expressions.RelationalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
@@ -48,25 +50,6 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		vars = new ArrayList<>();
 		this.semanticErrors = semanticErrors;
 	}
-	
-	@Override
-	public Expression visitReacDeclAssignment(ReacDeclAssignmentContext ctx) {
-		Token idToken = ctx.ID().getSymbol();
-		int line = idToken.getLine();
-		int column = idToken.getCharPositionInLine() + 1;
-
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
-		Expression value = visitChildren(ctx); 
-		
-		if (vars.contains(id)) {
-			SemanticError(line, column, "reaction '" + id + "' already declared.");
-		} else {
-			vars.add(id);
-		}		
-
-		return new VariableDeclaration(id, type, value);
-	}
 
 	@Override
 	public Expression visitReacDecl(ReacDeclContext ctx) {
@@ -76,6 +59,11 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 
 		String type = ctx.getChild(0).getText();
 		String id = ctx.getChild(1).getText();
+		Expression value = null; 
+		
+		if (ctx.getChildCount() > 2) {
+			value = visitChildren(ctx); 
+		}
 		
 		if (vars.contains(id)) {
 			SemanticError(line, column, "reaction '" + id + "' already declared.");
@@ -83,25 +71,6 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			vars.add(id);
 		}
 
-		return new VariableDeclaration(id, type, null);
-	}
-
-	@Override
-	public Expression visitIntDeclAssignment(IntDeclAssignmentContext ctx) {
-		Token idToken = ctx.ID().getSymbol();
-		int line = idToken.getLine();
-		int column = idToken.getCharPositionInLine() + 1;
-
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
-		Expression value = visitChildren(ctx); 
-		
-		if (vars.contains(id)) {
-			SemanticError(line, column, "variable '" + id + "' already declared.");
-		} else {
-			vars.add(id);
-		}
-		
 		return new VariableDeclaration(id, type, value);
 	}
 
@@ -132,6 +101,11 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 
 		String type = ctx.getChild(0).getText();
 		String id = ctx.getChild(1).getText();
+		Expression value = null; 
+		
+		if (ctx.getChildCount() > 2) {
+			value = visitChildren(ctx); 
+		}
 		
 		if (vars.contains(id)) {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
@@ -139,27 +113,9 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			vars.add(id);
 		}		
 
-		return new VariableDeclaration(id, type, null);
+		return new VariableDeclaration(id, type, value);
 	}
 	
-	@Override
-	public Expression visitListDeclParams(ListDeclParamsContext ctx) {
-		Token idToken = ctx.ID().getSymbol();
-		int line = idToken.getLine();
-		int column = idToken.getCharPositionInLine() + 1;
-
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
-		
-		if (vars.contains(id)) {
-			SemanticError(line, column, "list '" + id + "' already declared.");
-		} else {
-			vars.add(id);
-		}		
-					
-		ListExpr reacParams = (ListExpr) visit(ctx.reacParams());		
-		return new ListDeclaration(id, type, reacParams.list);
-	}
 
 	//Multiple reaction parameters
 	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
@@ -186,14 +142,19 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 
 		String type = ctx.getChild(0).getText();
 		String id = ctx.getChild(1).getText();
+		ListExpr reacParams = new ListExpr();
+		
+		if(ctx.getChildCount() > 2) {
+			reacParams = (ListExpr) visit(ctx.reacParams());	
+		}
 		
 		if (vars.contains(id)) {
 			SemanticError(line, column, "list '" + id + "' already declared.");
 		} else {
 			vars.add(id);
 		}		
-
-		return new ListDeclaration(id, type, new ArrayList());
+		 	
+		return new ListDeclaration(id, type, reacParams.list);
 	}
 
 	@Override

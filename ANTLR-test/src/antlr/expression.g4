@@ -9,33 +9,13 @@ prog
     ;
  
 decl
-    : declReaction                              
-    | declInt                                               
-    | declList                                  
-  //| declMethod                                # MethodDeclaration
+    : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
+    | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
+    | INT ID ( ':' opExpr )?                         # IntDecl                                  
+  //| KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'     # MethodDeclaration
     ;
-
-declReaction
-    : KEYWORD ID ':' reacExpr                   # ReacDeclAssignment                  
-    | KEYWORD ID                                # ReacDecl
-    ;
-
-declInt
-    : INT ID ':' basicExpr                      # IntDeclAssignment
-    | INT ID                                    # IntDecl
-    ;
-
-declList
-    : LIST ID ':' '{' reacParams '}'            # ListDeclParams
-    | LIST ID                                   # ListDecl
-    ;
-
 
 /*
-declMethod
-    : KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'
-    ;
-
 formalParams                                   
     : KEYWORD ID ',' formalParams               //# ParamList
     | KEYWORD ID                                //# Param
@@ -58,16 +38,16 @@ reacParams
     ;*/
 
 expr
-    : valueExpr 
+    : reacExpr 
+    | opExpr
     | ifStmt //methExpr                                      
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
 
-valueExpr
+reacExpr
     : opExpr '=>' opExpr '(' opExpr ')'           # ReactionExpressionConst
     | opExpr '=>' opExpr                          # ReactionExpression
-    | opExpr                                      # OperationExpression
     ;
 
 opExpr
@@ -80,12 +60,12 @@ opExpr
     ;    
 
 ifStmt
-    : KEYWORD '(' ifConds ')' '{' expr '}' els 					# IfStatement
+    : KEYWORD '(' ifConds ')' '{' expr '}' els                  # IfStatement
     ;
 
 els
-	: (elseifStmt)* elseStmt?
-	;
+    : (elseifStmt)* elseStmt?
+    ;
 
 elseifStmt
     : KEYWORD KEYWORD '(' ifConds ')' '{' expr '}'                 # ElseIfStatement
