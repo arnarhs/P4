@@ -22,6 +22,12 @@ formalParams
     ;
 */
 
+assign
+    : ID ':' reacExpr                   # ReacAssign
+    | ID ':' opExpr                     # IntAssign
+    | ID ':' '{' reacParams '}'         # ListAssign
+    ;
+
 reacParams
     : reacExpr ',' reacParams                   # ReactionParameters
     | reacExpr                                  # ReactionParameter
@@ -90,8 +96,11 @@ value
     | ID                                         # Variable
     ;
 
-KEYWORD: 'species' | 'solution' | 'reaction' | 'print' | 'while' | 'if' | 'else' ;
+KEYWORD: 'print' | 'while' | 'if' | 'else' ;
 INT: 'int' ;
+SPECIES: 'species' ;
+REACTION: 'reaction' ; 
+SOLUTION: 'solution' ;
 SSA: 'ssa' ;
 LIST: 'list' ;
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
