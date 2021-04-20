@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.Statement;
+import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
 import models.expressions.Bracket;
@@ -32,10 +33,16 @@ public class ExpressionProcessor {
 	public List<String> getEvaluationResults() {
 		List<String> evaluations = new ArrayList<>();
 		
-		for(Statement e : list) {
+		for (Statement e : list) {
 			if(e instanceof VariableDeclaration) {
 				VariableDeclaration decl = (VariableDeclaration) e;
 				values.put(decl.id, decl.value);
+			}
+			else if(e instanceof ListDeclaration) {
+				ListDeclaration listDecl = (ListDeclaration) e;
+				for(int i = 0; i < listDecl.Length(); i++) {
+					values.put(listDecl.id, listDecl.Get(i));
+				}
 			}
 			else {
 				String input = e.toString();
@@ -97,13 +104,5 @@ public class ExpressionProcessor {
 		}
 		*/
 		return result;
-	}
-	
-	public Integer parseIntOrNull(String value) {
-	    try {
-	        return Integer.parseInt(value);
-	    } catch (NumberFormatException e) {
-	        return null;
-	    }
 	}
 }

@@ -22,6 +22,7 @@ import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
 import antlr.expressionParser.SubtractionExpressionContext;
 import antlr.expressionParser.VariableContext;
+import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
 import models.expressions.Bracket;
@@ -139,6 +140,60 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		}		
 
 		return new VariableDeclaration(id, type, null);
+	}
+	
+	@Override
+	public Expression visitListDeclParams(ListDeclParamsContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		
+		if (vars.contains(id)) {
+			SemanticError(line, column, "list '" + id + "' already declared.");
+		} else {
+			vars.add(id);
+		}		
+					
+		ListExpr reacParams = (ListExpr) visit(ctx.reacParams());		
+		return new ListDeclaration(id, type, reacParams.list);
+	}
+
+	//Multiple reaction parameters
+	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
+		ListExpr list = new ListExpr();
+		Expression reac = visit(ctx.reacExpr());
+		list.Add(reac);		
+		list.Combine((ListExpr) visit(ctx.reacParams()));
+		return list;
+	}
+
+	//One reaction parameter
+	@Override
+	public ListExpr visitReactionParameter(ReactionParameterContext ctx) {
+		ListExpr list = new ListExpr();		
+		list.Add(visitChildren(ctx));
+		return list;
+	}
+
+	@Override
+	public Expression visitListDecl(ListDeclContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		
+		if (vars.contains(id)) {
+			SemanticError(line, column, "list '" + id + "' already declared.");
+		} else {
+			vars.add(id);
+		}		
+
+		return new ListDeclaration(id, type, new ArrayList());
 	}
 
 	@Override

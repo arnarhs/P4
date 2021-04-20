@@ -11,25 +11,27 @@ prog
 decl
     : declReaction                              
     | declInt                                               
-    //| declList                                  # ListDeclaration
-    //| declMethod                                # MethodDeclaration
+    | declList                                  
+  //| declMethod                                # MethodDeclaration
     ;
 
 declReaction
-    : KEYWORD ID ':' valueExpr                  # ReacDeclAssignment                  
+    : KEYWORD ID ':' reacExpr                   # ReacDeclAssignment                  
     | KEYWORD ID                                # ReacDecl
     ;
 
 declInt
-    : INT ID ':' valueExpr                      # IntDeclAssignment
+    : INT ID ':' basicExpr                      # IntDeclAssignment
     | INT ID                                    # IntDecl
     ;
 
-/*declList
-    : LIST ID ':' '{' exprParams '}'
-    | LIST ID 
+declList
+    : LIST ID ':' '{' reacParams '}'            # ListDeclParams
+    | LIST ID                                   # ListDecl
     ;
 
+
+/*
 declMethod
     : KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'
     ;
@@ -39,11 +41,12 @@ formalParams
     | KEYWORD ID                                //# Param
     ;
 */
-/*exprParams
-    : valueExpr ',' exprParams 
-    | valueExpr
+
+reacParams
+    : reacExpr ',' reacParams                   # ReactionParameters
+    | reacExpr                                  # ReactionParameter
     ;
-*/
+
 /*ssaParams
     : '{' ssaList '}' ',' ID
     | ID
@@ -74,7 +77,7 @@ opExpr
     | opExpr '-' opExpr                 # SubtractionExpression
     | opExpr '+' opExpr                 # AdditionExpression
     | value                                       # NumOrID
-    ;       
+    ;    
 
 ifStmt
     : KEYWORD '(' ifConds ')' '{' expr '}' els 					# IfStatement

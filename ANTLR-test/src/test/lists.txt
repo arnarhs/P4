@@ -1,0 +1,9 @@
+int a : 1
+int b : 2
+int c : 3
+int d : 4
+int k : 5
+int g : 6 
+
+
+list myList : { a => b (2) , c => d (k), 2 + 3 => 3 + a (g) }
