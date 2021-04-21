@@ -244,8 +244,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitNumber(NumberContext ctx) {
 		String numText = ctx.getChild(0).getText();
-		double num = Double.parseDouble(numText);
-		return new Number(num);
+		return new Number(numText);
 	}
  
 	@Override

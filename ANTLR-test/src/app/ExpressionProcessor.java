@@ -59,7 +59,7 @@ public class ExpressionProcessor {
 		
 		if(e instanceof Number) {
 			Number num = (Number) e;
-			result = num.num;
+			result = Double.parseDouble(num.num);
 		} 
 		else if (e instanceof Variable) {
 			Variable var = (Variable) e;
