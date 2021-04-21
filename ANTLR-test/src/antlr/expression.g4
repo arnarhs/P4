@@ -27,12 +27,6 @@ formalParams
     ;
 */
 
-assign
-    : ID ':' reacExpr                   # ReacAssign
-    | ID ':' opExpr                     # NumberAssign  // Kan vi samle den her med float og m?ke bool?
-    | ID ':' BOOL                      # BoolAssign
-    | ID ':' '{' reacParams '}'         # ListAssign
-    ;
 
 reacParams
     : reacExpr ',' reacParams                   # ReactionParameters
@@ -50,11 +44,20 @@ reacParams
     ;*/
 
 expr
-    : reacExpr 
+    : assign
+    | reacExpr 
     | opExpr
-    | ifStmt //methExpr                                      
+    | ifStmt
+     //methExpr                                      
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
+    ;
+
+assign
+    : ID ':' reacExpr                   # ReacAssign
+    | ID ':' opExpr                     # NumberAssign  // Kan vi samle den her med float og m?ke bool?
+    | ID ':' BOOL                       # BoolAssign
+    | ID ':' '{' reacParams '}'         # ListAssign
     ;
 
 reacExpr
