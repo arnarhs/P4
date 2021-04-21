@@ -5,14 +5,14 @@ grammar expression;
 }
 
 prog
-    : scope EOF                        # Program
+    : ( decl | expr )+ EOF                        # Program
     ;
 
 scope
-    :  ( decl | expr )+                     # Scoper
+    :  '{' ( decl | expr )+ '}'                   	# ScopeDecl
     ;
 
-decl
+decl 
     : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
     | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
     | NUMT ID ( ':' opExpr )?                        # NumberDecl
@@ -72,7 +72,7 @@ opExpr
     ;    
 
 ifStmt
-    : KEYWORD '(' pred ')' '{' scope '}'  els                  # IfStatement
+    : KEYWORD '(' pred ')' scope els                  # IfStatement
     ;
 
 els
@@ -80,11 +80,11 @@ els
     ;
 
 elseIfStmt
-    : KEYWORD KEYWORD '(' pred ')' '{' scope '}'                 # ElseIfStatement
+    : KEYWORD KEYWORD '(' pred ')' scope                 # ElseIfStatement
     ;
 
 elseStmt
-    : KEYWORD '{' scope '}'                                         # ElseStatement
+    : KEYWORD scope                                         # ElseStatement
     ;
 
 pred

@@ -116,16 +116,15 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		
 		if (ctx.getChildCount() > 2) {
 			value = visitChildren(ctx); 
-		}
+		}	
 		
 		if (vars.contains(id)) {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
-		} else if(type == "int" && TryParseInt(value.toString()) == null) {
+		} else if(type.equals("int") && TryParseInt(value.toString()) == null) {
 			SemanticError(line, column, value.toString() + " is not a valid " + type);
 		} else {
 			vars.add(id);
 		}
-		
 		
 		return new VariableDeclaration(id, type, value);
 	}
