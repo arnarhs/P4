@@ -9,7 +9,7 @@ prog
     ;
 
 scope
-    :  ( decl | expr )+                     # Scoper
+    :  ( decl | expr )+                     # ScopeDecl
     ;
 
 decl
