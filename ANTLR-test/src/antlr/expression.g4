@@ -5,13 +5,18 @@ grammar expression;
 }
 
 prog
-    : (decl | expr )+ EOF                        # Program
+    : ( decl | expr )+ EOF                        # Program
     ;
- 
+
+scope
+    : '{' ( decl | expr )+ '}'                    # scope
+
 decl
     : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
     | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
-    | INT ID ( ':' opExpr )?                         # IntDecl                                  
+    | INT ID ( ':' opExpr )?                         # IntDecl
+    | DOUBLE ID ( ':' opExpr )?                       # DoubleDecl
+    | BOOL ID ( ':' BOOLT )?                        # BoolDecl
   //| KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'     # MethodDeclaration
     ;
 
@@ -24,7 +29,8 @@ formalParams
 
 assign
     : ID ':' reacExpr                   # ReacAssign
-    | ID ':' opExpr                     # IntAssign
+    | ID ':' opExpr                     # IntAssign  // Kan vi samle den her med float og måske bool?
+    | ID ':' BOOLT                      # BoolAssign
     | ID ':' '{' reacParams '}'         # ListAssign
     ;
 
@@ -52,8 +58,8 @@ expr
     ;
 
 reacExpr
-    : opExpr '=>' opExpr '(' opExpr ')'           # ReactionExpressionConst
-    | opExpr '=>' opExpr                          # ReactionExpression
+    : opExpr '->' opExpr '(' opExpr ')'           # ReactionExpressionConst
+    | opExpr '->' opExpr                          # ReactionExpression
     ;
 
 opExpr
@@ -62,42 +68,47 @@ opExpr
     | opExpr '/' opExpr   				# DivisionExpression
     | opExpr '-' opExpr                 # SubtractionExpression
     | opExpr '+' opExpr                 # AdditionExpression
-    | value                                       # NumOrID
+    | value                                       # NumOrID // hvor er den?
     ;    
 
 ifStmt
-    : KEYWORD '(' ifConds ')' '{' expr '}' els                  # IfStatement
+    : KEYWORD '(' pred ')' scope els                  # IfStatement
     ;
 
 els
-    : (elseifStmt)* elseStmt?
+    : (elseIfStmt)* elseStmt?
     ;
 
-elseifStmt
-    : KEYWORD KEYWORD '(' ifConds ')' '{' expr '}'                 # ElseIfStatement
+elseIfStmt
+    : KEYWORD KEYWORD '(' pred ')' scope                 # ElseIfStatement
     ;
 
 elseStmt
-    : KEYWORD '{' expr '}'                                         # ElseStatement
+    : KEYWORD scope                                         # ElseStatement
     ;
 
-ifConds
-    : logicExpr LOGOP ifConds                                       # LogicalOperator
+pred
+    : logicExpr LOGOP pred                                       # LogicalOperator
     | logicExpr                                                     # BooleanExpr
     ;
 
 logicExpr
-    : BOOL                                                         # Boolean
-    | opExpr RELOP opExpr                                          # RelationalOperator
+    : opExpr RELOP opExpr                                           # RelationalOperator
+    | ( BOOLT | value )                                                # Boolean
     ;
 
 value
-    : NUM                                        # Number
+    : INUM                                        # Integer // fix visitor + klasse
     | ID                                         # Variable
+    | DNUM                                       # Double
     ;
 
+
+
 KEYWORD: 'print' | 'while' | 'if' | 'else' ;
-INT: 'int' ;
+INT: 'int' ;                                      // kunne vi samle den her med float og måske bool?
+DOUBLE: 'double' ;
+BOOL: 'bool' ;
 SPECIES: 'species' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;
@@ -105,9 +116,10 @@ SSA: 'ssa' ;
 LIST: 'list' ;
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
 LOGOP: '||' | '&&' ;
-BOOL: 'true' | 'false' ;
 
+BOOLT: 'true' | 'false' ;
 ID: [a-z][a-zA-Z0-9_]* ;
-NUM: '0' | '-'?[1-9][0-9]* ;  
+INUM: '0' | '-'?[1-9][0-9]* ;
+DNUM: '-'?('0'|[1-9][0-9]*)'.'[0-9]*[1-9];
 COMMENT: '//' ~[\r\n]* -> skip ;
 WS: [ \r\t\n]+ -> channel(HIDDEN) ;
