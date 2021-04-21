@@ -5,11 +5,11 @@ grammar expression;
 }
 
 prog
-    : ( decl | expr )+ EOF                        # Program
+    : scope EOF                        # Program
     ;
 
 scope
-    : '{' ( decl | expr )+ '}'                    # scope
+    :  ( decl | expr )+                     # scope
 
 decl
     : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
@@ -29,7 +29,7 @@ formalParams
 
 assign
     : ID ':' reacExpr                   # ReacAssign
-    | ID ':' opExpr                     # IntAssign  // Kan vi samle den her med float og måske bool?
+    | ID ':' opExpr                     # IntAssign  // Kan vi samle den her med float og m?ke bool?
     | ID ':' BOOLT                      # BoolAssign
     | ID ':' '{' reacParams '}'         # ListAssign
     ;
@@ -64,15 +64,15 @@ reacExpr
 
 opExpr
     : '(' opExpr ')'						      # BracketExpression
-    | opExpr '*' opExpr                 # MultiplyExpression 
-    | opExpr '/' opExpr   				# DivisionExpression
-    | opExpr '-' opExpr                 # SubtractionExpression
-    | opExpr '+' opExpr                 # AdditionExpression
+    | opExpr '*' opExpr                         # MultiplyExpression 
+    | opExpr '/' opExpr   				      # DivisionExpression
+    | opExpr '-' opExpr                         # SubtractionExpression
+    | opExpr '+' opExpr                         # AdditionExpression
     | value                                       # NumOrID // hvor er den?
     ;    
 
 ifStmt
-    : KEYWORD '(' pred ')' scope els                  # IfStatement
+    : KEYWORD '(' pred ')' '{' scope '}'  els                  # IfStatement
     ;
 
 els
@@ -80,11 +80,11 @@ els
     ;
 
 elseIfStmt
-    : KEYWORD KEYWORD '(' pred ')' scope                 # ElseIfStatement
+    : KEYWORD KEYWORD '(' pred ')' '{' scope '}'                 # ElseIfStatement
     ;
 
 elseStmt
-    : KEYWORD scope                                         # ElseStatement
+    : KEYWORD '{' scope '}'                                         # ElseStatement
     ;
 
 pred
@@ -106,7 +106,7 @@ value
 
 
 KEYWORD: 'print' | 'while' | 'if' | 'else' ;
-INT: 'int' ;                                      // kunne vi samle den her med float og måske bool?
+INT: 'int' ;                                      // kunne vi samle den her med float og m?ke bool?
 DOUBLE: 'double' ;
 BOOL: 'bool' ;
 SPECIES: 'species' ;
@@ -120,6 +120,6 @@ LOGOP: '||' | '&&' ;
 BOOLT: 'true' | 'false' ;
 ID: [a-z][a-zA-Z0-9_]* ;
 INUM: '0' | '-'?[1-9][0-9]* ;
-DNUM: '-'?('0'|[1-9][0-9]*)'.'[0-9]*[1-9];
+DNUM: '-'?('0'|[1-9][0-9]*)'.'[0-9]*[1-9] ; 
 COMMENT: '//' ~[\r\n]* -> skip ;
 WS: [ \r\t\n]+ -> channel(HIDDEN) ;
