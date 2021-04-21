@@ -1,9 +1,9 @@
 package models.expressions;
 
 public class Number extends Expression {
-    public int num;
+    public double num;
 
-    public Number(int num){
+    public Number(double num){
         this.num = num;
     }
 

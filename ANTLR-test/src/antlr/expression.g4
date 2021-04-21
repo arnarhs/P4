@@ -9,14 +9,14 @@ prog
     ;
 
 scope
-    :  ( decl | expr )+                     # scope
+    :  ( decl | expr )+                     # Scoper
+    ;
 
 decl
     : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
     | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
-    | INT ID ( ':' opExpr )?                         # IntDecl
-    | DOUBLE ID ( ':' opExpr )?                       # DoubleDecl
-    | BOOL ID ( ':' BOOLT )?                        # BoolDecl
+    | NUMT ID ( ':' opExpr )?                        # NumberDecl
+    | BOOLT ID ( ':' BOOL )?                        # BoolDecl
   //| KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'     # MethodDeclaration
     ;
 
@@ -29,8 +29,8 @@ formalParams
 
 assign
     : ID ':' reacExpr                   # ReacAssign
-    | ID ':' opExpr                     # IntAssign  // Kan vi samle den her med float og m?ke bool?
-    | ID ':' BOOLT                      # BoolAssign
+    | ID ':' opExpr                     # NumberAssign  // Kan vi samle den her med float og m?ke bool?
+    | ID ':' BOOL                      # BoolAssign
     | ID ':' '{' reacParams '}'         # ListAssign
     ;
 
@@ -94,22 +94,19 @@ pred
 
 logicExpr
     : opExpr RELOP opExpr                                           # RelationalOperator
-    | ( BOOLT | value )                                                # Boolean
+    | ( BOOL | value )                                                # Boolean
     ;
 
 value
-    : INUM                                        # Integer // fix visitor + klasse
+    : NUM                                        # Number // fix visitor + klasse
     | ID                                         # Variable
-    | DNUM                                       # Double
     ;
 
 
 
 KEYWORD: 'print' | 'while' | 'if' | 'else' ;
-INT: 'int' ;                                      // kunne vi samle den her med float og m?ke bool?
-DOUBLE: 'double' ;
-BOOL: 'bool' ;
-SPECIES: 'species' ;
+NUMT: 'int' | 'double' | 'species' ;
+BOOLT: 'bool' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;
 SSA: 'ssa' ;
@@ -117,9 +114,8 @@ LIST: 'list' ;
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
 LOGOP: '||' | '&&' ;
 
-BOOLT: 'true' | 'false' ;
+BOOL: 'true' | 'false' ;
 ID: [a-z][a-zA-Z0-9_]* ;
-INUM: '0' | '-'?[1-9][0-9]* ;
-DNUM: '-'?('0'|[1-9][0-9]*)'.'[0-9]*[1-9] ; 
+NUM: '-'?([0-9]+)('.'[0-9]+)?;
 COMMENT: '//' ~[\r\n]* -> skip ;
 WS: [ \r\t\n]+ -> channel(HIDDEN) ;

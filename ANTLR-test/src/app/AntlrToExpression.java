@@ -11,11 +11,11 @@ import antlr.expressionParser.DivisionExpressionContext;
 import antlr.expressionParser.ElseIfStatementContext;
 import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
-import antlr.expressionParser.IntDeclContext;
 import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
 import antlr.expressionParser.MultiplyExpressionContext;
 import antlr.expressionParser.NumberContext;
+import antlr.expressionParser.NumberDeclContext;
 import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
@@ -51,6 +51,17 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		this.semanticErrors = semanticErrors;
 	}
 
+	
+	public Integer TryParseInt(String someText) {
+		   try {
+		      return Integer.parseInt(someText);
+		   } catch (NumberFormatException ex) {
+		      return null;
+		   }
+		}
+	
+	
+	
 	@Override
 	public Expression visitReacDecl(ReacDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
@@ -94,7 +105,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	}
 
 	@Override
-	public Expression visitIntDecl(IntDeclContext ctx) {
+	public Expression visitNumberDecl(NumberDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
 		int line = idToken.getLine();
 		int column = idToken.getCharPositionInLine() + 1;
@@ -109,10 +120,13 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		
 		if (vars.contains(id)) {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
+		} else if(type == "int" && TryParseInt(value.toString()) == null) {
+			SemanticError(line, column, value.toString() + " is not a valid " + type);
 		} else {
 			vars.add(id);
-		}		
-
+		}
+		
+		
 		return new VariableDeclaration(id, type, value);
 	}
 	
@@ -231,7 +245,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitNumber(NumberContext ctx) {
 		String numText = ctx.getChild(0).getText();
-		int num = Integer.parseInt(numText);
+		double num = Double.parseDouble(numText);
 		return new Number(num);
 	}
  
