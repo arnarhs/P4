@@ -5,17 +5,21 @@ import java.util.List;
 import org.antlr.v4.runtime.Token;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
+import antlr.expressionParser.BoolAssignContext;
 import antlr.expressionParser.LogicalOperatorContext;
 import antlr.expressionParser.BracketExpressionContext;
 import antlr.expressionParser.DivisionExpressionContext;
 import antlr.expressionParser.ElseIfStatementContext;
 import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
+import antlr.expressionParser.ListAssignContext;
 import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
 import antlr.expressionParser.MultiplyExpressionContext;
+import antlr.expressionParser.NumberAssignContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.NumberDeclContext;
+import antlr.expressionParser.ReacAssignContext;
 import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
@@ -26,6 +30,7 @@ import antlr.expressionParser.VariableContext;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.Assign;
 import models.expressions.Bracket;
 import models.expressions.LogicalOperator;
 import models.expressions.Division;
@@ -247,6 +252,44 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new Number(numText);
 	}
  
+	@Override
+	public Expression visitReacAssign(ReacAssignContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitReacAssign(ctx);
+	}
+
+
+	@Override
+	public Expression visitNumberAssign(NumberAssignContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		Expression value = visit(ctx.getChild(2));		
+		
+		if (!vars.contains(id)) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new Assign(id, value);
+	}
+
+
+	@Override
+	public Expression visitBoolAssign(BoolAssignContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitBoolAssign(ctx);
+	}
+
+
+	@Override
+	public Expression visitListAssign(ListAssignContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitListAssign(ctx);
+	}
+
+
 	@Override
 	public Expression visitVariable(VariableContext ctx) {
 		Token idToken = ctx.ID().getSymbol();

@@ -9,6 +9,7 @@ import models.Statement;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.Assign;
 import models.expressions.Bracket;
 import models.expressions.Division;
 import models.expressions.ElseIfStatement;
@@ -43,6 +44,10 @@ public class ExpressionProcessor {
 				for(int i = 0; i < listDecl.Length(); i++) {
 					values.put(listDecl.id, listDecl.Get(i));
 				}
+			}
+			else if(e instanceof Assign) {
+				Assign assign = (Assign) e;
+				values.put(assign.id, assign.value); // Assume we are only dealing with numbers at the moment
 			}
 			else {
 				String input = e.toString();
