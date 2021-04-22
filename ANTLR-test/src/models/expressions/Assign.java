@@ -9,7 +9,6 @@ public class Assign extends Expression{
 		this.rightside = right;
 	}
 	
-	//Skal der være toString()?
 	@Override
 	public String toString() {
 		return leftside.toString() + ":" + rightside.toString();

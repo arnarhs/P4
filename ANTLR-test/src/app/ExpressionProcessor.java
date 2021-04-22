@@ -46,7 +46,7 @@ public class ExpressionProcessor {
 			}
 			else {
 				String input = e.toString();
-				int result = getEvalResult(e);
+				double result = getEvalResult(e);
 				evaluations.add(input + " = " + result);
 			}
 		}
@@ -54,12 +54,12 @@ public class ExpressionProcessor {
 		return evaluations;
 	}
 	
-	private int getEvalResult(Statement e) {
-		int result = 0;
+	private double getEvalResult(Statement e) {
+		double result = 0;
 		
 		if(e instanceof Number) {
 			Number num = (Number) e;
-			result = num.num;
+			result = Double.parseDouble(num.num);
 		} 
 		else if (e instanceof Variable) {
 			Variable var = (Variable) e;
@@ -70,26 +70,26 @@ public class ExpressionProcessor {
 		}
 		else if (e instanceof Addition) {
 			Addition add = (Addition) e;
-			int left = getEvalResult(add.left);
-			int right = getEvalResult(add.right);
+			double left = getEvalResult(add.left);
+			double right = getEvalResult(add.right);
 			result = left + right;
 		}
 		else if (e instanceof Multiplication) {
 			Multiplication add = (Multiplication) e;
-			int left = getEvalResult(add.left);
-			int right = getEvalResult(add.right);
+			double left = getEvalResult(add.left);
+			double right = getEvalResult(add.right);
 			result = left * right;
 		}
 		else if (e instanceof Division) {
 			Division add = (Division) e;
-			int left = getEvalResult(add.left);
-			int right = getEvalResult(add.right);
+			double left = getEvalResult(add.left);
+			double right = getEvalResult(add.right);
 			result = left / right;
 		}
 		else if (e instanceof Subtraction) {
 			Subtraction add = (Subtraction) e;
-			int left = getEvalResult(add.left);
-			int right = getEvalResult(add.right);
+			double left = getEvalResult(add.left);
+			double right = getEvalResult(add.right);
 			result = left - right;
 		}
 		/*
