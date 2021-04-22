@@ -74,6 +74,14 @@ opExpr
     | value                                       # NumOrID // hvor er den?
     ;    
 
+whileStmt
+	: KEYWORD '(' pred ')' scope //definere repeat, i visitor
+	//'scope' ændre til 'block', 'stmts'
+	//Undersøg 'logical' navngivning istedet for predicate. 
+	//hvorfor har vi ikke Lparen, Rparen, Lbracket, Rbracket, defineret
+	//Ligesom andre grammars.
+	;
+	
 ifStmt
     : KEYWORD '(' pred ')' scope els                  # IfStatement
     ;
