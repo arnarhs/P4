@@ -16,7 +16,7 @@ decl
     : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
     | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
     | NUMT ID ( ':' opExpr )?                        # NumberDecl
-    | BOOLT ID ( ':' BOOL )?                        # BoolDecl
+    | BOOLT ID ( ':' pred )?                        # BoolDecl
   //| KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'     # MethodDeclaration
     ;
 

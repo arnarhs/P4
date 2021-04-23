@@ -5,6 +5,8 @@ import java.util.List;
 import org.antlr.v4.runtime.Token;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
+import antlr.expressionParser.BoolAssignContext;
+import antlr.expressionParser.BoolDeclContext;
 import antlr.expressionParser.BooleanContext;
 import antlr.expressionParser.LogicalOperatorContext;
 import antlr.expressionParser.BracketExpressionContext;
@@ -257,6 +259,37 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new Number(numText);
 	}
  
+	@Override
+	public Expression visitBoolDecl(BoolDeclContext ctx) {		
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+	
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		Expression value = null; 
+		
+		if (ctx.getChildCount() > 2) {
+			value = visitChildren(ctx); 
+		}	
+		
+		if (vars.contains(id)) {
+			SemanticError(line, column, "variable '" + id + "' already declared.");
+		} else {
+			vars.add(id);
+		}
+		
+		return new VariableDeclaration(id, type, value);
+	}
+
+
+	@Override
+	public Expression visitBoolAssign(BoolAssignContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitBoolAssign(ctx);
+	}
+
+
 	@Override
 	public Expression visitBoolean(BooleanContext ctx) {	
 		return new BoolExpr(ctx.getChild(0).toString());
