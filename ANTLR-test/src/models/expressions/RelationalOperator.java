@@ -5,7 +5,7 @@ public class RelationalOperator extends Expression {
 	public Expression right;
 	public Expression operator;
 	    	    
-	public RelationalOperator(Expression left, Expression right, Expression operator) {
+	public RelationalOperator(Expression left, Expression operator, Expression right) {
 		this.left = left;
 		this.right = right;
 		this.operator = operator;

@@ -48,6 +48,7 @@ expr
     | reacExpr 
     | opExpr
     | ifStmt
+    | pred
      //methExpr                                      
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
@@ -91,13 +92,13 @@ elseStmt
     ;
 
 pred
-    : logicExpr LOGOP pred                                       # LogicalOperator
-    | logicExpr                                                     # BooleanExpr
+    : relExpr LOGOP pred                                       # LogicalOperator
+    | relExpr                                                     # BooleanExpr
     ;
 
-logicExpr
+relExpr
     : opExpr RELOP opExpr                                           # RelationalOperator
-    | ( BOOL | value )                                                # Boolean
+    | ( BOOL | opExpr )                                                # Boolean
     ;
 
 value

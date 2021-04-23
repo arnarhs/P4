@@ -261,6 +261,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new Variable(id);
 	}
 	
+	
+	
 	public void SemanticError(Integer line, Integer column, String error) {
 		semanticErrors.add("Error @ " + line + ":" + column + " : " + error);
 	}

@@ -15,8 +15,10 @@ import models.expressions.ElseIfStatement;
 import models.expressions.ElseStatement;
 import models.expressions.Expression;
 import models.expressions.IfStatement;
+import models.expressions.LogicalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
+import models.expressions.RelationalOperator;
 import models.expressions.Subtraction;
 import models.expressions.Variable;
 
@@ -92,6 +94,35 @@ public class ExpressionProcessor {
 			double right = getEvalResult(add.right);
 			result = left - right;
 		}
+		else if (e instanceof LogicalOperator) {
+			LogicalOperator log = (LogicalOperator) e;
+			boolean left = BoolCheck(log.left);
+			String operator = log.operator.toString();
+			boolean right = BoolCheck(log.right);
+			switch(operator) {
+			case "||" : return (left || right) ? 1 : 0;
+			case "&&" : return (left && right) ? 1 : 0;
+
+			default : System.out.println("Bruhhh");
+			}
+
+		}
+		else if (e instanceof RelationalOperator) {
+			RelationalOperator rel = (RelationalOperator) e;
+			double left = getEvalResult(rel.left);
+			String operator = rel.operator.toString();
+			double right = getEvalResult(rel.right);
+			
+			switch(operator) {
+			case "<" : return (left < right) ? 1 : 0;
+			case "<=" : return (left <= right) ? 1 : 0;
+			case ">" : return (left > right) ? 1 : 0;
+			case ">=" : return (left >= right) ? 1 : 0;
+			case "==" : return (left == right) ? 1 : 0;
+			case "!=" : return (left != right) ? 1 : 0;
+			default : System.out.println("Bruhhh");
+			}
+		}
 		/*
 		else if (e instanceof IfStatement) {
 			
@@ -104,5 +135,11 @@ public class ExpressionProcessor {
 		}
 		*/
 		return result;
+	}
+	
+	public boolean BoolCheck(Expression e) {
+		if (e.equals("true")) return true;
+		if (e.equals("false")) return true;
+		return (getEvalResult(e) != 0) ? true : false;
 	}
 }
