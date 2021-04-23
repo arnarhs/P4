@@ -92,7 +92,7 @@ elseStmt
     ;
 
 pred
-    : '(' pred ')' 							# PBracketExpression
+    : '(' pred ')' 										# PBracketExpression
     | pred LOGOP pred                                       # LogicalOperator
     | relExpr                                                     # BooleanExpr
     ;

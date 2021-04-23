@@ -66,7 +66,6 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		}
 	
 	
-	
 	@Override
 	public Expression visitReacDecl(ReacDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
@@ -94,14 +93,11 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	public Expression visitBracketExpression(BracketExpressionContext ctx) {
 		return new Bracket(visit(ctx.getChild(1)));
 	}
-	
-	
 
 	@Override
 	public Expression visitPBracketExpression(PBracketExpressionContext ctx) {
 		return new Bracket(visit(ctx.getChild(1)));
 	}
-
 
 	@Override
 	public Expression visitSubtractionExpression(SubtractionExpressionContext ctx) {
@@ -291,8 +287,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 
 
 	@Override
-	public Expression visitBoolean(BooleanContext ctx) {	
-		return new BoolExpr(ctx.getChild(0).toString());
+	public Expression visitBoolean(BooleanContext ctx) {			
+		return new BoolExpr(visitChildren(ctx).toString());
 	}
 
 	@Override
