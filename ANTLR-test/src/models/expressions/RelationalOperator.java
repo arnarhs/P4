@@ -3,9 +3,9 @@ package models.expressions;
 public class RelationalOperator extends Expression {
 	public Expression left;
 	public Expression right;
-	public Expression operator;
+	public String operator;
 	    	    
-	public RelationalOperator(Expression left, Expression operator, Expression right) {
+	public RelationalOperator(Expression left, String operator, Expression right) {
 		this.left = left;
 		this.right = right;
 		this.operator = operator;
@@ -13,7 +13,7 @@ public class RelationalOperator extends Expression {
 
 	@Override
 	public String toString() {
-		return left.toString() + operator.toString() + right.toString();
+		return left.toString() + " " + operator + " " + right.toString();
     }
 }
 

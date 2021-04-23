@@ -5,6 +5,7 @@ import java.util.List;
 import org.antlr.v4.runtime.Token;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
+import antlr.expressionParser.BooleanContext;
 import antlr.expressionParser.LogicalOperatorContext;
 import antlr.expressionParser.BracketExpressionContext;
 import antlr.expressionParser.DivisionExpressionContext;
@@ -26,6 +27,7 @@ import antlr.expressionParser.VariableContext;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.BoolExpr;
 import models.expressions.Bracket;
 import models.expressions.LogicalOperator;
 import models.expressions.Division;
@@ -227,19 +229,18 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitLogicalOperator(LogicalOperatorContext ctx) {
 		Expression left = visit(ctx.getChild(0));
-		Expression center = visit(ctx.getChild(1));
+		String operator = ctx.getChild(1).toString();
 		Expression right =  visit(ctx.getChild(2));
-		return new LogicalOperator(left, center, right);
+		return new LogicalOperator(left, operator, right);
 	}
 
 	@Override
 	public Expression visitRelationalOperator(RelationalOperatorContext ctx) {
 		Expression left = visit(ctx.getChild(0));
-		Expression center = visit(ctx.getChild(1));
+		String operator = ctx.getChild(1).toString();
 		Expression right =  visit(ctx.getChild(2));
-		return new RelationalOperator(left, center, right);
+		return new RelationalOperator(left, operator, right);
 	}
-
 
 	@Override
 	public Expression visitNumber(NumberContext ctx) {
@@ -247,6 +248,11 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new Number(numText);
 	}
  
+	@Override
+	public Expression visitBoolean(BooleanContext ctx) {	
+		return new BoolExpr(ctx.getChild(0).toString());
+	}
+
 	@Override
 	public Expression visitVariable(VariableContext ctx) {
 		Token idToken = ctx.ID().getSymbol();

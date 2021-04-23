@@ -97,30 +97,27 @@ public class ExpressionProcessor {
 		else if (e instanceof LogicalOperator) {
 			LogicalOperator log = (LogicalOperator) e;
 			boolean left = BoolCheck(log.left);
-			String operator = log.operator.toString();
 			boolean right = BoolCheck(log.right);
-			switch(operator) {
-			case "||" : return (left || right) ? 1 : 0;
-			case "&&" : return (left && right) ? 1 : 0;
-
-			default : System.out.println("Bruhhh");
+			
+			switch(log.operator) {
+				case "||" : return (left || right) ? 1 : 0;
+				case "&&" : return (left && right) ? 1 : 0;
+				default : System.out.println("Bruhhh");
 			}
-
 		}
 		else if (e instanceof RelationalOperator) {
 			RelationalOperator rel = (RelationalOperator) e;
 			double left = getEvalResult(rel.left);
-			String operator = rel.operator.toString();
 			double right = getEvalResult(rel.right);
 			
-			switch(operator) {
-			case "<" : return (left < right) ? 1 : 0;
-			case "<=" : return (left <= right) ? 1 : 0;
-			case ">" : return (left > right) ? 1 : 0;
-			case ">=" : return (left >= right) ? 1 : 0;
-			case "==" : return (left == right) ? 1 : 0;
-			case "!=" : return (left != right) ? 1 : 0;
-			default : System.out.println("Bruhhh");
+			switch(rel.operator) {
+				case "<" : return (left < right) ? 1 : 0;
+				case "<=" : return (left <= right) ? 1 : 0;
+				case ">" : return (left > right) ? 1 : 0;
+				case ">=" : return (left >= right) ? 1 : 0;
+				case "==" : return (left == right) ? 1 : 0;
+				case "!=" : return (left != right) ? 1 : 0;
+				default : System.out.println("Bruhhh");
 			}
 		}
 		/*
@@ -138,8 +135,8 @@ public class ExpressionProcessor {
 	}
 	
 	public boolean BoolCheck(Expression e) {
-		if (e.equals("true")) return true;
-		if (e.equals("false")) return true;
+		if (e.toString().equals("true")) return true;
+		if (e.toString().equals("false")) return false;
 		return (getEvalResult(e) != 0) ? true : false;
 	}
 }

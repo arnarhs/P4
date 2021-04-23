@@ -3,9 +3,9 @@ package models.expressions;
 public class LogicalOperator extends Expression {
     public Expression left;
     public Expression right;
-    public Expression operator;
+    public String operator;
     	    
-    public LogicalOperator(Expression left, Expression operator, Expression right) {
+    public LogicalOperator(Expression left, String operator, Expression right) {
         this.left = left;
         this.right = right;
         this.operator = operator;
@@ -13,6 +13,6 @@ public class LogicalOperator extends Expression {
 
     @Override
     public String toString() {
-        return left.toString() + operator.toString() + right.toString();
+        return left.toString() + " " + operator + " " + right.toString();
     }
 }
