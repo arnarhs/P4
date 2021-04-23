@@ -254,8 +254,18 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
 	@Override
 	public Expression visitReacAssign(ReacAssignContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitReacAssign(ctx);
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		Expression value = visit(ctx.getChild(2));		
+		
+		if (!vars.contains(id)) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new Assign(id, value);
 	}
 
 

@@ -3,3 +3,8 @@ a
 
 a : 10
 a
+
+int k : 14
+
+reaction b : a + a -> a (k)
+b : k + k -> a

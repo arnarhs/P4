@@ -13,7 +13,7 @@ scope
     ;
 
 decl 
-    : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
+    : REACTION ID ( ':' reacExpr )?                   # ReacDecl                                 
     | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
     | NUMT ID ( ':' opExpr )?                        # NumberDecl
     | BOOLT ID ( ':' BOOL )?                        # BoolDecl
