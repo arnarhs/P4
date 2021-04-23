@@ -75,11 +75,7 @@ opExpr
     ;    
 
 whileStmt
-	: KEYWORD '(' pred ')' scope //definere repeat, i visitor
-	//'scope' ændre til 'block', 'stmts'
-	//Undersøg 'logical' navngivning istedet for predicate. 
-	//hvorfor har vi ikke Lparen, Rparen, Lbracket, Rbracket, defineret
-	//Ligesom andre grammars.
+	: WHILE '(' pred ')' scope
 	;
 	
 ifStmt
@@ -115,11 +111,12 @@ value
 
 
 
-KEYWORD: 'print' | 'while' | 'if' | 'else' ;
+KEYWORD: 'print' | 'if' | 'else' ;
 NUMT: 'int' | 'double' | 'species' ;
 BOOLT: 'bool' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;
+WHILE: 'while' ;
 SSA: 'ssa' ;
 LIST: 'list' ;
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
