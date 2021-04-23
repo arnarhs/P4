@@ -17,6 +17,7 @@ import antlr.expressionParser.RelationalOperatorContext;
 import antlr.expressionParser.MultiplyExpressionContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.NumberDeclContext;
+import antlr.expressionParser.PBracketExpressionContext;
 import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
@@ -91,6 +92,14 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	public Expression visitBracketExpression(BracketExpressionContext ctx) {
 		return new Bracket(visit(ctx.getChild(1)));
 	}
+	
+	
+
+	@Override
+	public Expression visitPBracketExpression(PBracketExpressionContext ctx) {
+		return new Bracket(visit(ctx.getChild(1)));
+	}
+
 
 	@Override
 	public Expression visitSubtractionExpression(SubtractionExpressionContext ctx) {
