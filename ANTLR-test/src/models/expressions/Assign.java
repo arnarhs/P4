@@ -1,16 +1,16 @@
 package models.expressions;
 
 public class Assign extends Expression{
-	public Variable leftside;
-	public Expression rightside;
+	public String id;
+	public Expression value;
 	
-	public Assign(Variable left, Expression right) {
-		this.leftside = left;
-		this.rightside = right;
+	public Assign(String id, Expression value) {
+		this.id = id;
+		this.value = value;
 	}
 	
 	@Override
 	public String toString() {
-		return leftside.toString() + ":" + rightside.toString();
+		return id.toString() + " : " + value.toString();
 	}
 }

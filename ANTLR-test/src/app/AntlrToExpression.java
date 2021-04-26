@@ -14,9 +14,11 @@ import antlr.expressionParser.DivisionExpressionContext;
 import antlr.expressionParser.ElseIfStatementContext;
 import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
+import antlr.expressionParser.ListAssignContext;
 import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
 import antlr.expressionParser.MultiplyExpressionContext;
+import antlr.expressionParser.NumberAssignContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.NumberDeclContext;
 import antlr.expressionParser.PBracketExpressionContext;
@@ -83,6 +85,22 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 
 		return new VariableDeclaration(id, type, value);
 	}
+  
+  @Override
+	public Expression visitReacAssign(ReacAssignContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		Expression value = visit(ctx.getChild(2));		
+		
+		if (!vars.contains(id)) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new Assign(id, value);
+	}
 	
 	@Override
 	public Expression visitReactionExpression(ReactionExpressionContext ctx) {
@@ -98,7 +116,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression constant = visit(ctx.getChild(4));
 		return new ReactionExpr(left, right, constant);
 	}
-	
+  
 
 	/*
 	 *  NUMBERS (INT, DOUBLE & SPECIES)
@@ -128,13 +146,30 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		
 		return new VariableDeclaration(id, type, value);
 	}
+ 
+	@Override
+	public Expression visitNumberAssign(NumberAssignContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		Expression value = visit(ctx.getChild(2));		
+		
+		if (!vars.contains(id)) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new Assign(id, value);
+	}
 	
 	@Override
 	public Expression visitNumber(NumberContext ctx) {
 		String numText = ctx.getChild(0).getText();
 		return new Number(numText);
 	}
-
+  
+  
 	/*
 	 *  LISTS
 	 */
@@ -160,6 +195,12 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		}		
 		 	
 		return new ListDeclaration(id, type, reacParams.list);
+	}
+  
+  	@Override
+	public Expression visitListAssign(ListAssignContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitListAssign(ctx);
 	}
 	
 	//Multiple reaction parameters
