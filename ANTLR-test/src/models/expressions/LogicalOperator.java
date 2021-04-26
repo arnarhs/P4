@@ -3,16 +3,16 @@ package models.expressions;
 public class LogicalOperator extends Expression {
     public Expression left;
     public Expression right;
-    public Expression center;
+    public String operator;
     	    
-    public LogicalOperator(Expression left, Expression right, Expression center) {
+    public LogicalOperator(Expression left, String operator, Expression right) {
         this.left = left;
         this.right = right;
-        this.center = center;
+        this.operator = operator;
     }
 
     @Override
     public String toString() {
-        return left.toString() + center.toString() + right.toString();
+        return left.toString() + " " + operator + " " + right.toString();
     }
 }
