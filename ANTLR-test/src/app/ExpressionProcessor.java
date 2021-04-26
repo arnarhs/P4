@@ -38,13 +38,11 @@ public class ExpressionProcessor {
 		for (Statement e : list) {
 			if(e instanceof VariableDeclaration) {
 				VariableDeclaration decl = (VariableDeclaration) e;
-				values.put(decl.id, decl.value);
+				values.put(decl.id, decl);
 			}
 			else if(e instanceof ListDeclaration) {
 				ListDeclaration listDecl = (ListDeclaration) e;
-				for(int i = 0; i < listDecl.Length(); i++) {
-					values.put(listDecl.id, listDecl.Get(i));
-				}
+				values.put(listDecl.id, listDecl);
 			}
 			else {
 				String input = e.toString();
@@ -57,42 +55,47 @@ public class ExpressionProcessor {
 	}
 	
 	private double getEvalResult(Statement e) {
-		double result = 0;
 		
 		if(e instanceof Number) {
 			Number num = (Number) e;
-			result = Double.parseDouble(num.num);
+			return Double.parseDouble(num.num);
 		} 
 		else if (e instanceof Variable) {
 			Variable var = (Variable) e;
-			result = getEvalResult(values.get(var.ID));
+			Expression varDecl = values.get(var.ID);
+			
+			if (varDecl instanceof VariableDeclaration) {
+				return getEvalResult(((VariableDeclaration) varDecl).value);
+			} else {
+				return 0;
+			}
 		}
 		else if (e instanceof Bracket) {
-			result = getEvalResult(((Bracket) e).expr);
+			return getEvalResult(((Bracket) e).expr);
 		}
 		else if (e instanceof Addition) {
 			Addition add = (Addition) e;
 			double left = getEvalResult(add.left);
 			double right = getEvalResult(add.right);
-			result = left + right;
+			return left + right;
 		}
 		else if (e instanceof Multiplication) {
 			Multiplication add = (Multiplication) e;
 			double left = getEvalResult(add.left);
 			double right = getEvalResult(add.right);
-			result = left * right;
+			return left * right;
 		}
 		else if (e instanceof Division) {
 			Division add = (Division) e;
 			double left = getEvalResult(add.left);
 			double right = getEvalResult(add.right);
-			result = left / right;
+			return left / right;
 		}
 		else if (e instanceof Subtraction) {
 			Subtraction add = (Subtraction) e;
 			double left = getEvalResult(add.left);
 			double right = getEvalResult(add.right);
-			result = left - right;
+			return left - right;
 		}
 		else if (e instanceof LogicalOperator) {
 			LogicalOperator log = (LogicalOperator) e;
@@ -100,9 +103,10 @@ public class ExpressionProcessor {
 			boolean right = BoolCheck(log.right);
 			
 			switch(log.operator) {
-				case "||" : return (left || right) ? 1 : 0;
-				case "&&" : return (left && right) ? 1 : 0;
-				default : System.out.println("Bruhhh");
+				case "||" : 
+					return (left || right) ? 1 : 0;
+				case "&&" : 
+					return (left && right) ? 1 : 0;
 			}
 		}
 		else if (e instanceof RelationalOperator) {
@@ -111,27 +115,22 @@ public class ExpressionProcessor {
 			double right = getEvalResult(rel.right);
 			
 			switch(rel.operator) {
-				case "<" : return (left < right) ? 1 : 0;
-				case "<=" : return (left <= right) ? 1 : 0;
-				case ">" : return (left > right) ? 1 : 0;
-				case ">=" : return (left >= right) ? 1 : 0;
-				case "==" : return (left == right) ? 1 : 0;
-				case "!=" : return (left != right) ? 1 : 0;
-				default : System.out.println("Bruhhh");
+				case "<" : 
+					return (left < right) ? 1 : 0;
+				case "<=" : 
+					return (left <= right) ? 1 : 0;
+				case ">" : 
+					return (left > right) ? 1 : 0;
+				case ">=" : 
+					return (left >= right) ? 1 : 0;
+				case "==" : 
+					return (left == right) ? 1 : 0;
+				case "!=" : 
+					return (left != right) ? 1 : 0;
 			}
 		}
-		/*
-		else if (e instanceof IfStatement) {
-			
-		}
-		else if (e instanceof ElseIfStatement) {
-			
-		}
-		else if (e instanceof ElseStatement) {
-	
-		}
-		*/
-		return result;
+
+		return 0;
 	}
 	
 	public boolean BoolCheck(Expression e) {

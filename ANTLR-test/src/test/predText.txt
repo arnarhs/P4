@@ -1,14 +1,4 @@
-bool a : ( 4 < 6 || 8 < 2 ) && 8 < 7
-bool b: ( 4 < 6 || 8 < 2 ) || 8 < 7
-
-bool c : true
-bool d : 1
-
-bool e : 3
-a
-b
-c
-d
-e
-( a < 6 || a ) || b
-
+int a : 4
+bool b : a
+a 
+b : 

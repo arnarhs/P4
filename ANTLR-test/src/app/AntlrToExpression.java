@@ -54,17 +54,12 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	public AntlrToExpression(List<String> semanticErrors) {
 		vars = new ArrayList<>();
 		this.semanticErrors = semanticErrors;
-	}
-
+	}	
 	
-	public Integer TryParseInt(String someText) {
-		   try {
-		      return Integer.parseInt(someText);
-		   } catch (NumberFormatException ex) {
-		      return null;
-		   }
-		}
 	
+	/* 
+	 *  REACTIONS
+	 */
 	
 	@Override
 	public Expression visitReacDecl(ReacDeclContext ctx) {
@@ -88,30 +83,26 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 
 		return new VariableDeclaration(id, type, value);
 	}
-
+	
 	@Override
-	public Expression visitBracketExpression(BracketExpressionContext ctx) {
-		return new Bracket(visit(ctx.getChild(1)));
-	}
-
-	@Override
-	public Expression visitPBracketExpression(PBracketExpressionContext ctx) {
-		return new Bracket(visit(ctx.getChild(1)));
-	}
-
-	@Override
-	public Expression visitSubtractionExpression(SubtractionExpressionContext ctx) {
+	public Expression visitReactionExpression(ReactionExpressionContext ctx) {
 		Expression left = visit(ctx.getChild(0));
 		Expression right = visit(ctx.getChild(2));
-		return new Subtraction(left, right);
+		return new ReactionExpr(left, right, null);
 	}
-
+	
 	@Override
-	public Expression visitDivisionExpression(DivisionExpressionContext ctx) {
+	public Expression visitReactionExpressionConst(ReactionExpressionConstContext ctx) {
 		Expression left = visit(ctx.getChild(0));
 		Expression right = visit(ctx.getChild(2));
-		return new Division(left, right);
+		Expression constant = visit(ctx.getChild(4));
+		return new ReactionExpr(left, right, constant);
 	}
+	
+
+	/*
+	 *  NUMBERS (INT, DOUBLE & SPECIES)
+	 */
 
 	@Override
 	public Expression visitNumberDecl(NumberDeclContext ctx) {
@@ -129,8 +120,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		
 		if (vars.contains(id)) {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
-		} else if(type.equals("int") && TryParseInt(value.toString()) == null) {
-			SemanticError(line, column, value.toString() + " is not a valid " + type);
+		//} else if(type.equals("int") && TryParseInt(value.toString()) == null) {
+		//	SemanticError(line, column, value.toString() + " is not a valid " + type);
 		} else {
 			vars.add(id);
 		}
@@ -138,24 +129,16 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new VariableDeclaration(id, type, value);
 	}
 	
-
-	//Multiple reaction parameters
-	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
-		ListExpr list = new ListExpr();
-		Expression reac = visit(ctx.reacExpr());
-		list.Add(reac);		
-		list.Combine((ListExpr) visit(ctx.reacParams()));
-		return list;
-	}
-
-	//One reaction parameter
 	@Override
-	public ListExpr visitReactionParameter(ReactionParameterContext ctx) {
-		ListExpr list = new ListExpr();		
-		list.Add(visitChildren(ctx));
-		return list;
+	public Expression visitNumber(NumberContext ctx) {
+		String numText = ctx.getChild(0).getText();
+		return new Number(numText);
 	}
 
+	/*
+	 *  LISTS
+	 */
+	
 	@Override
 	public Expression visitListDecl(ListDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
@@ -178,27 +161,46 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		 	
 		return new ListDeclaration(id, type, reacParams.list);
 	}
-
-	@Override
-	public Expression visitReactionExpression(ReactionExpressionContext ctx) {
-		Expression left = visit(ctx.getChild(0));
-		Expression right = visit(ctx.getChild(2));
-		return new ReactionExpr(left, right, null);
+	
+	//Multiple reaction parameters
+	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
+		ListExpr list = new ListExpr();
+		Expression reac = visit(ctx.reacExpr());
+		list.Add(reac);		
+		list.Combine((ListExpr) visit(ctx.reacParams()));
+		return list;
 	}
+
+	//One reaction parameter
+	@Override
+	public ListExpr visitReactionParameter(ReactionParameterContext ctx) {
+		ListExpr list = new ListExpr();		
+		list.Add(visitChildren(ctx));
+		return list;
+	}
+
+	
+	/*
+	 *  ARITHMETIC
+	 */
 	
 	@Override
-	public Expression visitReactionExpressionConst(ReactionExpressionConstContext ctx) {
-		Expression left = visit(ctx.getChild(0));
-		Expression right = visit(ctx.getChild(2));
-		Expression constant = visit(ctx.getChild(4));
-		return new ReactionExpr(left, right, constant);
+	public Expression visitBracketExpression(BracketExpressionContext ctx) {
+		return new Bracket(visit(ctx.getChild(1)));
 	}
-
+	
 	@Override
 	public Expression visitAdditionExpression(AdditionExpressionContext ctx) {
 		Expression left = visit(ctx.getChild(0));
 		Expression right = visit(ctx.getChild(2));
 		return new Addition(left, right);
+	}
+	
+	@Override
+	public Expression visitSubtractionExpression(SubtractionExpressionContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new Subtraction(left, right);
 	}
 
 	@Override
@@ -207,54 +209,19 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression right =  visit(ctx.getChild(2));
 		return new Multiplication(left, right);
 	}
-
+	
 	@Override
-	public Expression visitIfStatement(IfStatementContext ctx) {
-		String type = ctx.getChild(0).getText();
-		Expression condition = visit(ctx.getChild(2));
-		Expression thenExpr = visit(ctx.getChild(5));
-		Expression elseExpr = visitChildren(ctx); //Check this again
-		return new IfStatement(type, condition, thenExpr, elseExpr);
-	}
-
-	@Override
-	public Expression visitElseIfStatement(ElseIfStatementContext ctx) {
-		String typeElse = ctx.getChild(0).getText();
-		String typeIf = ctx.getChild(1).getText();
-		Expression condition = visit(ctx.getChild(3));
-		Expression thenExpr = visit(ctx.getChild(6));
-		return new ElseIfStatement(typeElse, typeIf, condition, thenExpr);
-	}
-
-	@Override
-	public Expression visitElseStatement(ElseStatementContext ctx) {
-		String typeElse = ctx.getChild(0).getText();
-		Expression thenExpr = visit(ctx.getChild(2));
-		return new ElseStatement(typeElse, thenExpr);
-	}
-
-	@Override
-	public Expression visitLogicalOperator(LogicalOperatorContext ctx) {
+	public Expression visitDivisionExpression(DivisionExpressionContext ctx) {
 		Expression left = visit(ctx.getChild(0));
-		String operator = ctx.getChild(1).toString();
-		Expression right =  visit(ctx.getChild(2));
-		return new LogicalOperator(left, operator, right);
+		Expression right = visit(ctx.getChild(2));
+		return new Division(left, right);
 	}
-
-	@Override
-	public Expression visitRelationalOperator(RelationalOperatorContext ctx) {
-		Expression left = visit(ctx.getChild(0));
-		String operator = ctx.getChild(1).toString();
-		Expression right =  visit(ctx.getChild(2));
-		return new RelationalOperator(left, operator, right);
-	}
-
-	@Override
-	public Expression visitNumber(NumberContext ctx) {
-		String numText = ctx.getChild(0).getText();
-		return new Number(numText);
-	}
- 
+	
+	
+	/*
+	 *  BOOLS
+	 */
+	
 	@Override
 	public Expression visitBoolDecl(BoolDeclContext ctx) {		
 		Token idToken = ctx.ID().getSymbol();
@@ -277,20 +244,81 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		
 		return new VariableDeclaration(id, type, value);
 	}
-
-
+	
 	@Override
 	public Expression visitBoolAssign(BoolAssignContext ctx) {
 		// TODO Auto-generated method stub
 		return super.visitBoolAssign(ctx);
+	}	
+	
+	@Override
+	public Expression visitBoolean(BooleanContext ctx) {	
+		String strValue = ctx.getChild(0).toString();
+		boolean value = strValue.equals("true");
+		return new BoolExpr(value);
 	}
-
+	
+	
+	/*
+	 *  PREDICATES
+	 */
 
 	@Override
-	public Expression visitBoolean(BooleanContext ctx) {			
-		return new BoolExpr(visitChildren(ctx).toString());
+	public Expression visitLogicalOperator(LogicalOperatorContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		String operator = ctx.getChild(1).toString();
+		Expression right =  visit(ctx.getChild(2));
+		return new LogicalOperator(left, operator, right);
 	}
 
+	@Override
+	public Expression visitRelationalOperator(RelationalOperatorContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		String operator = ctx.getChild(1).toString();
+		Expression right =  visit(ctx.getChild(2));
+		return new RelationalOperator(left, operator, right);
+	}
+	
+	@Override
+	public Expression visitPBracketExpression(PBracketExpressionContext ctx) {
+		return new Bracket(visit(ctx.getChild(1)));
+	}
+	
+	
+	/*
+	 *  IF STATEMENT
+	 */
+	
+	@Override
+	public Expression visitIfStatement(IfStatementContext ctx) {
+		String type = ctx.getChild(0).getText();
+		Expression condition = visit(ctx.getChild(2));
+		Expression thenExpr = visit(ctx.getChild(5));
+		Expression elseExpr = visitChildren(ctx); //Check this again
+		return new IfStatement(type, condition, thenExpr, elseExpr);
+	}
+	
+	@Override
+	public Expression visitElseIfStatement(ElseIfStatementContext ctx) {
+		String typeElse = ctx.getChild(0).getText();
+		String typeIf = ctx.getChild(1).getText();
+		Expression condition = visit(ctx.getChild(3));
+		Expression thenExpr = visit(ctx.getChild(6));
+		return new ElseIfStatement(typeElse, typeIf, condition, thenExpr);
+	}
+
+	@Override
+	public Expression visitElseStatement(ElseStatementContext ctx) {
+		String typeElse = ctx.getChild(0).getText();
+		Expression thenExpr = visit(ctx.getChild(2));
+		return new ElseStatement(typeElse, thenExpr);
+	}
+
+
+	/* 
+	 *  HELPERS
+	 */
+	
 	@Override
 	public Expression visitVariable(VariableContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
@@ -305,9 +333,15 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new Variable(id);
 	}
 	
-	
-	
 	public void SemanticError(Integer line, Integer column, String error) {
 		semanticErrors.add("Error @ " + line + ":" + column + " : " + error);
+	}
+	
+	public Integer TryParseInt(String someText) {
+	   try {
+	      return Integer.parseInt(someText);
+	   } catch (NumberFormatException ex) {
+	      return null;
+	   }
 	}
 }
