@@ -57,7 +57,7 @@ expr
 assign
     : ID ':' reacExpr                   				# ReacAssign
     | ID ':' opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
-    | ID ':' BOOL                       				# BoolAssign
+    | ID ':' pred                       				# BoolAssign
     | ID ':' '{' reacParams '}'         				# ListAssign
     ;
 
