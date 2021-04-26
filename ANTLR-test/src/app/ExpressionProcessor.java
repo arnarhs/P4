@@ -9,7 +9,6 @@ import models.Statement;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
-import models.expressions.Assign;
 import models.expressions.Bracket;
 import models.expressions.Division;
 import models.expressions.ElseIfStatement;
@@ -37,18 +36,14 @@ public class ExpressionProcessor {
 		List<String> evaluations = new ArrayList<>();
 		
 		for (Statement e : list) {
-			if(e instanceof VariableDeclaration) {
+			if (e instanceof VariableDeclaration) {
 				VariableDeclaration decl = (VariableDeclaration) e;
 				values.put(decl.id, decl);
 			}
-			else if(e instanceof ListDeclaration) {
+			else if (e instanceof ListDeclaration) {
 				ListDeclaration listDecl = (ListDeclaration) e;
 				values.put(listDecl.id, listDecl);
-      } 
-      else if(e instanceof Assign) {
-				Assign assign = (Assign) e;
-				values.put(assign.id, assign.value);
-			}
+			} 
 			else {
 				String input = e.toString();
 				double result = getEvalResult(e);
@@ -61,7 +56,7 @@ public class ExpressionProcessor {
 	
 	private double getEvalResult(Statement e) {
 		
-		if(e instanceof Number) {
+		if (e instanceof Number) {
 			Number num = (Number) e;
 			return Double.parseDouble(num.num);
 		} 

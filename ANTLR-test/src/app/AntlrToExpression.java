@@ -2,6 +2,8 @@ package app;
  
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import org.antlr.v4.runtime.Token;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
@@ -22,6 +24,7 @@ import antlr.expressionParser.NumberAssignContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.NumberDeclContext;
 import antlr.expressionParser.PBracketExpressionContext;
+import antlr.expressionParser.ReacAssignContext;
 import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
@@ -50,11 +53,10 @@ import models.expressions.Variable;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
-	private List<String> vars; //A list that stores all the declared variables.
+	private Map<String, String> vars; //A map that stores all the declared variables and their types.
 	private List<String> semanticErrors; //A list that stores all the semantic errors.
 
 	public AntlrToExpression(List<String> semanticErrors) {
-		vars = new ArrayList<>();
 		this.semanticErrors = semanticErrors;
 	}	
 	
@@ -77,10 +79,10 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			value = visitChildren(ctx); 
 		}
 		
-		if (vars.contains(id)) {
+		if (vars.get(id) != null) {
 			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
-			vars.add(id);
+			vars.put(id, type);
 		}
 
 		return new VariableDeclaration(id, type, value);
@@ -95,11 +97,11 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		String id = ctx.getChild(0).getText();
 		Expression value = visit(ctx.getChild(2));		
 		
-		if (!vars.contains(id)) {
+		if (vars.get(id) == null) {
 			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
 		}
 		
-		return new Assign(id, value);
+		return new VariableDeclaration(id, vars.get(id), value);
 	}
 	
 	@Override
@@ -136,12 +138,12 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			value = visitChildren(ctx); 
 		}	
 		
-		if (vars.contains(id)) {
+		if (vars.get(id) != null) {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
 		//} else if(type.equals("int") && TryParseInt(value.toString()) == null) {
 		//	SemanticError(line, column, value.toString() + " is not a valid " + type);
 		} else {
-			vars.add(id);
+			vars.put(id, type);
 		}
 		
 		return new VariableDeclaration(id, type, value);
@@ -156,11 +158,11 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		String id = ctx.getChild(0).getText();
 		Expression value = visit(ctx.getChild(2));		
 		
-		if (!vars.contains(id)) {
+		if (vars.get(id) == null) {
 			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
 		}
 		
-		return new Assign(id, value);
+		return new VariableDeclaration(id, vars.get(id), value);
 	}
 	
 	@Override
@@ -188,10 +190,10 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			reacParams = (ListExpr) visit(ctx.reacParams());	
 		}
 		
-		if (vars.contains(id)) {
+		if (vars.get(id) != null) {
 			SemanticError(line, column, "list '" + id + "' already declared.");
 		} else {
-			vars.add(id);
+			vars.put(id, type);
 		}		
 		 	
 		return new ListDeclaration(id, type, reacParams.list);
@@ -199,8 +201,18 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
   
   	@Override
 	public Expression visitListAssign(ListAssignContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitListAssign(ctx);
+  		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		ListExpr value = (ListExpr) visit(ctx.reacParams());		
+		
+		if (vars.get(id) == null) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new ListDeclaration(id, vars.get(id), value.list);
 	}
 	
 	//Multiple reaction parameters
@@ -277,10 +289,10 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			value = visitChildren(ctx); 
 		}	
 		
-		if (vars.contains(id)) {
+		if (vars.get(id) != null) {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
 		} else {
-			vars.add(id);
+			vars.put(id, type);
 		}
 		
 		return new VariableDeclaration(id, type, value);
@@ -288,8 +300,18 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	
 	@Override
 	public Expression visitBoolAssign(BoolAssignContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitBoolAssign(ctx);
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		Expression value = visitChildren(ctx); 	
+		
+		if (vars.get(id) == null) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new VariableDeclaration(id, vars.get(id), value);
 	}	
 	
 	@Override
@@ -376,7 +398,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		int column = idToken.getCharPositionInLine() + 1;
  
 		String id = ctx.getChild(0).getText();
-		if (!vars.contains(id)) {
+		if (vars.get(id) == null) {
 			SemanticError(line, column, "variable '" + id + "' not declared.");
 		}
  
