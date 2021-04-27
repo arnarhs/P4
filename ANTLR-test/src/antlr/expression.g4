@@ -76,30 +76,19 @@ opExpr
     ;    
 
 ifStmt
-    : KEYWORD '(' pred ')' scope els                  	# IfStatement
-    ;
-
-els
-    : (elseIfStmt)* elseStmt?
-    ;
-
-elseIfStmt
-    : KEYWORD KEYWORD '(' pred ')' scope                  # ElseIfStatement
-    ;
-
-elseStmt
-    : KEYWORD scope                                       # ElseStatement
+    : IF '(' pred ')' scope								# IfStatement
+    | IF '(' pred ')' scope ELSE scope        			# IfElseStatement
     ;
 
 pred
-    : '(' pred ')' 										  # PBracketExpression
-    | pred LOGOP pred                                     # LogicalOperator
-    | relExpr                                             # BooleanExpr
+    : '(' pred ')' 										# PBracketExpression
+    | pred LOGOP pred                                   # LogicalOperator
+    | relExpr                                           # BooleanExpr
     ;
 
 relExpr
-    : opExpr RELOP opExpr                                 # RelationalOperator
-    | BOOL                                                # Boolean
+    : opExpr RELOP opExpr                               # RelationalOperator
+    | BOOL                                              # Boolean
     ;
 
 value
@@ -108,12 +97,15 @@ value
     ;
 
 
-KEYWORD: 'print' | 'while' | 'if' | 'else' ;
+KEYWORD: 'print' | 'while' ;
 NUMT: 'int' | 'double' | 'species' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;
 SSA: 'ssa' ;
 LIST: 'list' ;
+
+IF: 'if' ;
+ELSE: 'else' ;
 
 BOOLT: 'bool' ;
 BOOL: 'true' | 'false' ;

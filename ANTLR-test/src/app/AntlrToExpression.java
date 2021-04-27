@@ -1,6 +1,5 @@
 package app;
  
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,9 +12,8 @@ import antlr.expressionParser.BooleanContext;
 import antlr.expressionParser.LogicalOperatorContext;
 import antlr.expressionParser.BracketExpressionContext;
 import antlr.expressionParser.DivisionExpressionContext;
-import antlr.expressionParser.ElseIfStatementContext;
-import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
+import antlr.expressionParser.IfElseStatementContext;
 import antlr.expressionParser.ListAssignContext;
 import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
@@ -39,8 +37,6 @@ import models.expressions.BoolExpr;
 import models.expressions.Bracket;
 import models.expressions.LogicalOperator;
 import models.expressions.Division;
-import models.expressions.ElseIfStatement;
-import models.expressions.ElseStatement;
 import models.expressions.Expression;
 import models.expressions.IfStatement;
 import models.expressions.ListExpr;
@@ -354,27 +350,17 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	
 	@Override
 	public Expression visitIfStatement(IfStatementContext ctx) {
-		String type = ctx.getChild(0).getText();
 		Expression condition = visit(ctx.getChild(2));
-		Expression thenExpr = visit(ctx.getChild(5));
-		Expression elseExpr = visitChildren(ctx); //Check this again
-		return new IfStatement(type, condition, thenExpr, elseExpr);
+		Expression thenScope = visit(ctx.getChild(4));
+		return new IfStatement(condition, thenScope, null);
 	}
 	
 	@Override
-	public Expression visitElseIfStatement(ElseIfStatementContext ctx) {
-		String typeElse = ctx.getChild(0).getText();
-		String typeIf = ctx.getChild(1).getText();
-		Expression condition = visit(ctx.getChild(3));
-		Expression thenExpr = visit(ctx.getChild(6));
-		return new ElseIfStatement(typeElse, typeIf, condition, thenExpr);
-	}
-
-	@Override
-	public Expression visitElseStatement(ElseStatementContext ctx) {
-		String typeElse = ctx.getChild(0).getText();
-		Expression thenExpr = visit(ctx.getChild(2));
-		return new ElseStatement(typeElse, thenExpr);
+	public Expression visitIfElseStatement(IfElseStatementContext ctx) {
+		Expression condition = visit(ctx.getChild(2));
+		Expression thenScope = visit(ctx.getChild(4));
+		Expression elseScope = visit(ctx.getChild(6));
+		return new IfStatement(condition, thenScope, elseScope);
 	}
 	
 	
@@ -390,7 +376,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	/* 
 	 *  HELPERS
 	 */
-	
+
 	@Override
 	public Expression visitVariable(VariableContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
