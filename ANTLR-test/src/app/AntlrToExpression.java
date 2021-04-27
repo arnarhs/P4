@@ -23,6 +23,7 @@ import antlr.expressionParser.ReactionParameterContext;
 import antlr.expressionParser.ReactionParametersContext;
 import antlr.expressionParser.SubtractionExpressionContext;
 import antlr.expressionParser.VariableContext;
+import antlr.expressionParser.WhileStatementContext;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
@@ -40,6 +41,7 @@ import models.expressions.Number;
 import models.expressions.ReactionExpr;
 import models.expressions.Subtraction;
 import models.expressions.Variable;
+import models.expressions.WhileStatement;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
@@ -103,6 +105,15 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression right = visit(ctx.getChild(2));
 		return new Division(left, right);
 	}
+
+	@Override
+	public Expression visitWhileStatement(WhileStatementContext ctx) {
+		//WHILE "( Expr log Expr )" "{ stmts }"
+		Expression predicate = visit(ctx.getChild(2));
+		Expression scope = visit(ctx.getChild(4));
+		return new WhileStatement(predicate, scope);
+	}
+
 
 	@Override
 	public Expression visitNumberDecl(NumberDeclContext ctx) {
@@ -260,6 +271,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
 		return new Variable(id);
 	}
+	
 	
 	public void SemanticError(Integer line, Integer column, String error) {
 		semanticErrors.add("Error @ " + line + ":" + column + " : " + error);

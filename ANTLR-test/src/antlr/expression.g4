@@ -48,6 +48,7 @@ expr
     | reacExpr 
     | opExpr
     | ifStmt
+    | whileStmt
      //methExpr                                      
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
@@ -75,7 +76,7 @@ opExpr
     ;    
 
 whileStmt
-	: WHILE '(' pred ')' scope
+	: WHILE '(' pred ')' scope  			#WhileStatement
 	;
 	
 ifStmt
