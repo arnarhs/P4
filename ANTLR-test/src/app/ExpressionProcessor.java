@@ -11,12 +11,11 @@ import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
 import models.expressions.Bracket;
 import models.expressions.Division;
-import models.expressions.ElseIfStatement;
-import models.expressions.ElseStatement;
 import models.expressions.Expression;
-import models.expressions.IfStatement;
+import models.expressions.LogicalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
+import models.expressions.RelationalOperator;
 import models.expressions.Subtraction;
 import models.expressions.Variable;
 
@@ -34,19 +33,17 @@ public class ExpressionProcessor {
 		List<String> evaluations = new ArrayList<>();
 		
 		for (Statement e : list) {
-			if(e instanceof VariableDeclaration) {
+			if (e instanceof VariableDeclaration) {
 				VariableDeclaration decl = (VariableDeclaration) e;
-				values.put(decl.id, decl.value);
+				values.put(decl.id, decl);
 			}
-			else if(e instanceof ListDeclaration) {
+			else if (e instanceof ListDeclaration) {
 				ListDeclaration listDecl = (ListDeclaration) e;
-				for(int i = 0; i < listDecl.Length(); i++) {
-					values.put(listDecl.id, listDecl.Get(i));
-				}
-			}
+				values.put(listDecl.id, listDecl);
+			} 
 			else {
 				String input = e.toString();
-				int result = getEvalResult(e);
+				double result = getEvalResult(e);
 				evaluations.add(input + " = " + result);
 			}
 		}
@@ -54,55 +51,88 @@ public class ExpressionProcessor {
 		return evaluations;
 	}
 	
-	private int getEvalResult(Statement e) {
-		int result = 0;
+	private double getEvalResult(Statement e) {
 		
-		if(e instanceof Number) {
+		if (e instanceof Number) {
 			Number num = (Number) e;
-			result = num.num;
+			return Double.parseDouble(num.num);
 		} 
 		else if (e instanceof Variable) {
 			Variable var = (Variable) e;
-			result = getEvalResult(values.get(var.ID));
+			Expression varDecl = values.get(var.ID);
+			
+			if (varDecl instanceof VariableDeclaration) {
+				return getEvalResult(((VariableDeclaration) varDecl).value);
+			} else {
+				return 0;
+			}
 		}
 		else if (e instanceof Bracket) {
-			result = getEvalResult(((Bracket) e).expr);
+			return getEvalResult(((Bracket) e).expr);
 		}
 		else if (e instanceof Addition) {
 			Addition add = (Addition) e;
-			int left = getEvalResult(add.left);
-			int right = getEvalResult(add.right);
-			result = left + right;
+			double left = getEvalResult(add.left);
+			double right = getEvalResult(add.right);
+			return left + right;
 		}
 		else if (e instanceof Multiplication) {
 			Multiplication add = (Multiplication) e;
-			int left = getEvalResult(add.left);
-			int right = getEvalResult(add.right);
-			result = left * right;
+			double left = getEvalResult(add.left);
+			double right = getEvalResult(add.right);
+			return left * right;
 		}
 		else if (e instanceof Division) {
 			Division add = (Division) e;
-			int left = getEvalResult(add.left);
-			int right = getEvalResult(add.right);
-			result = left / right;
+			double left = getEvalResult(add.left);
+			double right = getEvalResult(add.right);
+			return left / right;
 		}
 		else if (e instanceof Subtraction) {
 			Subtraction add = (Subtraction) e;
-			int left = getEvalResult(add.left);
-			int right = getEvalResult(add.right);
-			result = left - right;
+			double left = getEvalResult(add.left);
+			double right = getEvalResult(add.right);
+			return left - right;
 		}
-		/*
-		else if (e instanceof IfStatement) {
+		else if (e instanceof LogicalOperator) {
+			LogicalOperator log = (LogicalOperator) e;
+			boolean left = BoolCheck(log.left);
+			boolean right = BoolCheck(log.right);
 			
+			switch(log.operator) {
+				case "||" : 
+					return (left || right) ? 1 : 0;
+				case "&&" : 
+					return (left && right) ? 1 : 0;
+			}
 		}
-		else if (e instanceof ElseIfStatement) {
+		else if (e instanceof RelationalOperator) {
+			RelationalOperator rel = (RelationalOperator) e;
+			double left = getEvalResult(rel.left);
+			double right = getEvalResult(rel.right);
 			
+			switch(rel.operator) {
+				case "<" : 
+					return (left < right) ? 1 : 0;
+				case "<=" : 
+					return (left <= right) ? 1 : 0;
+				case ">" : 
+					return (left > right) ? 1 : 0;
+				case ">=" : 
+					return (left >= right) ? 1 : 0;
+				case "==" : 
+					return (left == right) ? 1 : 0;
+				case "!=" : 
+					return (left != right) ? 1 : 0;
+			}
 		}
-		else if (e instanceof ElseStatement) {
+
+		return 0;
+	}
 	
-		}
-		*/
-		return result;
+	public boolean BoolCheck(Expression e) {
+		if (e.toString().equals("true")) return true;
+		if (e.toString().equals("false")) return false;
+		return (getEvalResult(e) != 0) ? true : false;
 	}
 }

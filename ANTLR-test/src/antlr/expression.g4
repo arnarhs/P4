@@ -5,13 +5,18 @@ grammar expression;
 }
 
 prog
-    : (decl | expr )+ EOF                        # Program
+    : ( decl | expr )+ EOF                        	# Program
     ;
- 
-decl
-    : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
-    | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
-    | INT ID ( ':' opExpr )?                         # IntDecl                                  
+
+scope
+    :  '{' ( decl | expr )+ '}'                   	# ScopeDecl
+    ;
+
+decl 
+    : KEYWORD ID ( ':' reacExpr )?                  # ReacDecl                                 
+    | LIST ID ( ':'  '{' reacParams '}' )?          # ListDecl         
+    | NUMT ID ( ':' opExpr )?                       # NumberDecl
+    | BOOLT ID ( ':' pred )?						# BoolDecl
   //| KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'     # MethodDeclaration
     ;
 
@@ -22,9 +27,10 @@ formalParams
     ;
 */
 
+
 reacParams
-    : reacExpr ',' reacParams                   # ReactionParameters
-    | reacExpr                                  # ReactionParameter
+    : reacExpr ',' reacParams                   	# ReactionParameters
+    | reacExpr                                  	# ReactionParameter
     ;
 
 /*ssaParams
@@ -38,67 +44,76 @@ reacParams
     ;*/
 
 expr
-    : reacExpr 
+    : assign
+    | reacExpr 
     | opExpr
-    | ifStmt //methExpr                                      
+    | ifStmt
+    | pred
+     //methExpr                                      
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
 
+assign
+    : ID ':' reacExpr                   				# ReacAssign
+    | ID ':' opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
+    | ID ':' pred                       				# BoolAssign
+    | ID ':' '{' reacParams '}'         				# ListAssign
+    ;
+
 reacExpr
-    : opExpr '=>' opExpr '(' opExpr ')'           # ReactionExpressionConst
-    | opExpr '=>' opExpr                          # ReactionExpression
+    : opExpr '->' opExpr '(' opExpr ')'           		# ReactionExpressionConst
+    | opExpr '->' opExpr                          		# ReactionExpression
     ;
 
 opExpr
-    : '(' opExpr ')'						      # BracketExpression
-    | opExpr '*' opExpr                 # MultiplyExpression 
-    | opExpr '/' opExpr   				# DivisionExpression
-    | opExpr '-' opExpr                 # SubtractionExpression
-    | opExpr '+' opExpr                 # AdditionExpression
-    | value                                       # NumOrID
+    : '(' opExpr ')'						      		# BracketExpression
+    | opExpr '*' opExpr                         		# MultiplyExpression 
+    | opExpr '/' opExpr   				      			# DivisionExpression
+    | opExpr '-' opExpr                         		# SubtractionExpression
+    | opExpr '+' opExpr                         		# AdditionExpression
+    | value                                       		# NumOrID // hvor er den?
     ;    
 
 ifStmt
-    : KEYWORD '(' ifConds ')' '{' expr '}' els                  # IfStatement
+    : IF '(' pred ')' scope								# IfStatement
+    | IF '(' pred ')' scope ELSE scope        			# IfElseStatement
     ;
 
-els
-    : (elseifStmt)* elseStmt?
+pred
+    : '(' pred ')' 										# PBracketExpression
+    | pred LOGOP pred                                   # LogicalOperator
+    | relExpr                                           # BooleanExpr
     ;
 
-elseifStmt
-    : KEYWORD KEYWORD '(' ifConds ')' '{' expr '}'                 # ElseIfStatement
-    ;
-
-elseStmt
-    : KEYWORD '{' expr '}'                                         # ElseStatement
-    ;
-
-ifConds
-    : logicExpr LOGOP ifConds                                       # LogicalOperator
-    | logicExpr                                                     # BooleanExpr
-    ;
-
-logicExpr
-    : BOOL                                                         # Boolean
-    | opExpr RELOP opExpr                                          # RelationalOperator
+relExpr
+    : opExpr RELOP opExpr                               # RelationalOperator
+    | BOOL                                              # Boolean
     ;
 
 value
-    : NUM                                        # Number
+    : NUM                                        # Number // fix visitor + klasse
     | ID                                         # Variable
     ;
 
-KEYWORD: 'species' | 'solution' | 'reaction' | 'print' | 'while' | 'if' | 'else' ;
-INT: 'int' ;
+
+KEYWORD: 'print' | 'while' ;
+NUMT: 'int' | 'double' | 'species' ;
+REACTION: 'reaction' ; 
+SOLUTION: 'solution' ;
 SSA: 'ssa' ;
 LIST: 'list' ;
-RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
-LOGOP: '||' | '&&' ;
+
+IF: 'if' ;
+ELSE: 'else' ;
+
+BOOLT: 'bool' ;
 BOOL: 'true' | 'false' ;
 
+RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
+LOGOP: '||' | '&&' ;
+
 ID: [a-z][a-zA-Z0-9_]* ;
-NUM: '0' | '-'?[1-9][0-9]* ;  
+NUM: '-'?([0-9]+)('.'[0-9]+)?;
 COMMENT: '//' ~[\r\n]* -> skip ;
 WS: [ \r\t\n]+ -> channel(HIDDEN) ;
