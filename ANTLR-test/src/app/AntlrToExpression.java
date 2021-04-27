@@ -13,6 +13,7 @@ import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
 import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
+import antlr.expressionParser.SsaAlgContext;
 import antlr.expressionParser.MultiplyExpressionContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.NumberDeclContext;
@@ -36,6 +37,7 @@ import models.expressions.Expression;
 import models.expressions.IfStatement;
 import models.expressions.ListExpr;
 import models.expressions.RelationalOperator;
+import models.expressions.SsaAlg;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.ReactionExpr;
@@ -105,6 +107,19 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression right = visit(ctx.getChild(2));
 		return new Division(left, right);
 	}
+
+	
+	
+	@Override
+	public Expression visitSsaAlg(SsaAlgContext ctx) {
+		//[0][1] [2] [3][4] [5] [6]
+		//ID '.' SSA '('ID ',' value')' 
+		Expression solution = visit(ctx.getChild(0));
+		Expression reacList = visit(ctx.getChild(4));
+		Expression loops = visit(ctx.getChild(6));
+		return new SsaAlg(solution, reacList, loops);
+	}
+
 
 	@Override
 	public Expression visitWhileStatement(WhileStatementContext ctx) {

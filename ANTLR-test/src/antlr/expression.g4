@@ -13,7 +13,7 @@ scope
     ;
 
 decl 
-    : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
+    : REACTION ID ( ':' reacExpr )?                   # ReacDecl                                 
     | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
     | NUMT ID ( ':' opExpr )?                        # NumberDecl
     | BOOLT ID ( ':' BOOL )?                        # BoolDecl
@@ -26,7 +26,9 @@ formalParams
     | KEYWORD ID                                //# Param
     ;
 */
-
+ssaCall
+	: ID '.' SSA '(' ID ',' value ')' 			#SsaAlg
+	;
 
 reacParams
     : reacExpr ',' reacParams                   # ReactionParameters
@@ -109,7 +111,6 @@ value
     : NUM                                        # Number // fix visitor + klasse
     | ID                                         # Variable
     ;
-
 
 
 KEYWORD: 'print' | 'if' | 'else' ;
