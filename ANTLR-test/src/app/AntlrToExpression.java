@@ -17,6 +17,9 @@ import antlr.expressionParser.IfElseStatementContext;
 import antlr.expressionParser.ListAssignContext;
 import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
+import antlr.expressionParser.SolutionDeclarationContext;
+import antlr.expressionParser.SpeciesDeclContext;
+import antlr.expressionParser.SpeciesDeclsContext;
 import antlr.expressionParser.MultiplyExpressionContext;
 import antlr.expressionParser.NumberAssignContext;
 import antlr.expressionParser.NumberContext;
@@ -161,17 +164,21 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new VariableDeclaration(id, vars.get(id), value);
 	}
 	
+
+	//One reaction parameter
+
 	@Override
 	public Expression visitNumber(NumberContext ctx) {
 		String numText = ctx.getChild(0).getText();
 		return new Number(numText);
 	}
+
   
   
 	/*
 	 *  LISTS
 	 */
-	
+
 	@Override
 	public Expression visitListDecl(ListDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
@@ -238,6 +245,49 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new Bracket(visit(ctx.getChild(1)));
 	}
 	
+
+	//Multiple declarations
+	@Override
+	public Expression visitSpeciesDecls(SpeciesDeclsContext ctx) {
+		ListExpr list = new ListExpr();
+		Expression specDecl = visit(ctx.declList());
+		list.Add(specDecl);		
+		list.Combine((ListExpr) visit(ctx.declList()));
+		return list;
+	}
+
+	//One declaration of species
+	@Override
+	public Expression visitSpeciesDecl(SpeciesDeclContext ctx) {
+		ListExpr list = new ListExpr();		
+		list.Add(visitChildren(ctx));
+		return list;
+	}
+
+
+	@Override
+	public Expression visitSolutionDeclaration(SolutionDeclarationContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		ListExpr specList = new ListExpr();
+		
+		if(ctx.getChildCount() > 2) {
+			specList = (ListExpr) visit(ctx.declList());	
+		}
+		
+		if (vars.contains(id)) {
+			SemanticError(line, column, "list '" + id + "' already declared.");
+		} else {
+			vars.add(id);
+		}		
+		 	
+		return new ListDeclaration(id, type, specList.list);
+	}
+
 	@Override
 	public Expression visitAdditionExpression(AdditionExpressionContext ctx) {
 		Expression left = visit(ctx.getChild(0));

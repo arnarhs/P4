@@ -1,0 +1,19 @@
+solution sol1 : {
+    species a: 30,
+    species b: 40,
+    species c: 50
+}
+
+int k : 2
+
+list reactions : {
+   a -> b (k),
+   b -> c (k)
+}
+
+int count : 5
+
+sol1.ssa(reactions, count)
+ssa ( sol1, reactions, count )
+2 * a -> b
+a + a -> b
