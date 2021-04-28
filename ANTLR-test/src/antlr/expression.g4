@@ -17,7 +17,8 @@ decl
     | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
     | NUMT ID ( ':' opExpr )?                        # NumberDecl
     | BOOLT ID ( ':' pred )?                        # BoolDecl
-  //| KEYWORD ID '(' (formalParams | WS*) ')' '{' (decl | expr)* '}'     # MethodDeclaration
+    | SOLUTION ID '(' ListParams ')' '{' (decl | expr)* '}'     #SolutionDeclaration
+   // | SOLUTION ID '(' ( reacParams | ID ',')? ')' '{' (decl | expr)* '}'     # MethodDeclaration //id for the list
     ;
 
 /*
@@ -32,6 +33,9 @@ reacParams
     : reacExpr ',' reacParams                   # ReactionParameters
     | reacExpr                                  # ReactionParameter
     ;
+
+listParams
+	: 
 
 /*ssaParams
     : '{' ssaList '}' ',' ID
