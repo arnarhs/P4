@@ -16,6 +16,9 @@ import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
 import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
+import antlr.expressionParser.SolutionDeclarationContext;
+import antlr.expressionParser.SpeciesDeclContext;
+import antlr.expressionParser.SpeciesDeclsContext;
 import antlr.expressionParser.MultiplyExpressionContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.NumberDeclContext;
@@ -151,7 +154,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		list.Combine((ListExpr) visit(ctx.reacParams()));
 		return list;
 	}
-
+	
 	//One reaction parameter
 	@Override
 	public ListExpr visitReactionParameter(ReactionParameterContext ctx) {
@@ -159,6 +162,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		list.Add(visitChildren(ctx));
 		return list;
 	}
+	
 
 	@Override
 	public Expression visitListDecl(ListDeclContext ctx) {
@@ -196,6 +200,48 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression right = visit(ctx.getChild(2));
 		Expression constant = visit(ctx.getChild(4));
 		return new ReactionExpr(left, right, constant);
+	}
+	
+	//Multiple declarations
+	@Override
+	public Expression visitSpeciesDecls(SpeciesDeclsContext ctx) {
+		ListExpr list = new ListExpr();
+		Expression specDecl = visit(ctx.declList());
+		list.Add(specDecl);		
+		list.Combine((ListExpr) visit(ctx.declList()));
+		return list;
+	}
+
+	//One declaration of species
+	@Override
+	public Expression visitSpeciesDecl(SpeciesDeclContext ctx) {
+		ListExpr list = new ListExpr();		
+		list.Add(visitChildren(ctx));
+		return list;
+	}
+
+
+	@Override
+	public Expression visitSolutionDeclaration(SolutionDeclarationContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		ListExpr specList = new ListExpr();
+		
+		if(ctx.getChildCount() > 2) {
+			specList = (ListExpr) visit(ctx.declList());	
+		}
+		
+		if (vars.contains(id)) {
+			SemanticError(line, column, "list '" + id + "' already declared.");
+		} else {
+			vars.add(id);
+		}		
+		 	
+		return new ListDeclaration(id, type, specList.list);
 	}
 
 	@Override
