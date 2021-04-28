@@ -1,13 +1,12 @@
 package models.expressions;
 
 public class IfStatement extends Expression {
-	String type;
+
 	Expression condition;
 	Expression thenExpr;
 	Expression elseExpr = null;
 	
-	public IfStatement(String type, Expression condition, Expression thenExpr, Expression elseExpr) {
-		this.type = type;
+	public IfStatement(Expression condition, Expression thenExpr, Expression elseExpr) {
 		this.condition = condition;
 		this.thenExpr = thenExpr;
 		this.elseExpr = elseExpr;
@@ -15,7 +14,6 @@ public class IfStatement extends Expression {
 	
 	@Override
 	public String toString() {
-		return type.toString() + '(' + condition.toString() + ')' 
-				+ '{' + thenExpr.toString() + '}' + elseExpr.toString();
+		return "If Statement";	
 	}
 }

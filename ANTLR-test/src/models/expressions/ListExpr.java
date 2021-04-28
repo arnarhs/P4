@@ -11,7 +11,7 @@ public class ListExpr extends Expression{
 	}
 	
 	public ListExpr() {
-		this.list = new ArrayList();
+		this.list = new ArrayList<Expression>();
 	}
 	
 	@Override

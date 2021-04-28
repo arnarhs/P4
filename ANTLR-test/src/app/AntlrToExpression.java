@@ -1,7 +1,8 @@
 package app;
  
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import org.antlr.v4.runtime.Token;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
@@ -11,18 +12,20 @@ import antlr.expressionParser.BooleanContext;
 import antlr.expressionParser.LogicalOperatorContext;
 import antlr.expressionParser.BracketExpressionContext;
 import antlr.expressionParser.DivisionExpressionContext;
-import antlr.expressionParser.ElseIfStatementContext;
-import antlr.expressionParser.ElseStatementContext;
 import antlr.expressionParser.IfStatementContext;
+import antlr.expressionParser.IfElseStatementContext;
+import antlr.expressionParser.ListAssignContext;
 import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
 import antlr.expressionParser.SolutionDeclarationContext;
 import antlr.expressionParser.SpeciesDeclContext;
 import antlr.expressionParser.SpeciesDeclsContext;
 import antlr.expressionParser.MultiplyExpressionContext;
+import antlr.expressionParser.NumberAssignContext;
 import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.NumberDeclContext;
 import antlr.expressionParser.PBracketExpressionContext;
+import antlr.expressionParser.ReacAssignContext;
 import antlr.expressionParser.ReacDeclContext;
 import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
@@ -37,8 +40,6 @@ import models.expressions.BoolExpr;
 import models.expressions.Bracket;
 import models.expressions.LogicalOperator;
 import models.expressions.Division;
-import models.expressions.ElseIfStatement;
-import models.expressions.ElseStatement;
 import models.expressions.Expression;
 import models.expressions.IfStatement;
 import models.expressions.ListExpr;
@@ -51,24 +52,17 @@ import models.expressions.Variable;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
-	private List<String> vars; //A list that stores all the declared variables.
+	private Map<String, String> vars; //A map that stores all the declared variables and their types.
 	private List<String> semanticErrors; //A list that stores all the semantic errors.
 
 	public AntlrToExpression(List<String> semanticErrors) {
-		vars = new ArrayList<>();
 		this.semanticErrors = semanticErrors;
-	}
-
-	
-	public Integer TryParseInt(String someText) {
-		   try {
-		      return Integer.parseInt(someText);
-		   } catch (NumberFormatException ex) {
-		      return null;
-		   }
-		}
+	}	
 	
 	
+	/* 
+	 *  REACTIONS
+	 */
 	
 	@Override
 	public Expression visitReacDecl(ReacDeclContext ctx) {
@@ -84,41 +78,50 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			value = visitChildren(ctx); 
 		}
 		
-		if (vars.contains(id)) {
+		if (vars.get(id) != null) {
 			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
-			vars.add(id);
+			vars.put(id, type);
 		}
 
 		return new VariableDeclaration(id, type, value);
 	}
-
-	@Override
-	public Expression visitBracketExpression(BracketExpressionContext ctx) {
-		return new Bracket(visit(ctx.getChild(1)));
+  
+  @Override
+	public Expression visitReacAssign(ReacAssignContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		Expression value = visit(ctx.getChild(2));		
+		
+		if (vars.get(id) == null) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new VariableDeclaration(id, vars.get(id), value);
 	}
 	
+	@Override
+	public Expression visitReactionExpression(ReactionExpressionContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new ReactionExpr(left, right, null);
+	}
 	
-
 	@Override
-	public Expression visitPBracketExpression(PBracketExpressionContext ctx) {
-		return new Bracket(visit(ctx.getChild(1)));
-	}
-
-
-	@Override
-	public Expression visitSubtractionExpression(SubtractionExpressionContext ctx) {
+	public Expression visitReactionExpressionConst(ReactionExpressionConstContext ctx) {
 		Expression left = visit(ctx.getChild(0));
 		Expression right = visit(ctx.getChild(2));
-		return new Subtraction(left, right);
+		Expression constant = visit(ctx.getChild(4));
+		return new ReactionExpr(left, right, constant);
 	}
+  
 
-	@Override
-	public Expression visitDivisionExpression(DivisionExpressionContext ctx) {
-		Expression left = visit(ctx.getChild(0));
-		Expression right = visit(ctx.getChild(2));
-		return new Division(left, right);
-	}
+	/*
+	 *  NUMBERS (INT, DOUBLE & SPECIES)
+	 */
 
 	@Override
 	public Expression visitNumberDecl(NumberDeclContext ctx) {
@@ -134,35 +137,47 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			value = visitChildren(ctx); 
 		}	
 		
-		if (vars.contains(id)) {
+		if (vars.get(id) != null) {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
-		} else if(type.equals("int") && TryParseInt(value.toString()) == null) {
-			SemanticError(line, column, value.toString() + " is not a valid " + type);
+		//} else if(type.equals("int") && TryParseInt(value.toString()) == null) {
+		//	SemanticError(line, column, value.toString() + " is not a valid " + type);
 		} else {
-			vars.add(id);
+			vars.put(id, type);
 		}
 		
 		return new VariableDeclaration(id, type, value);
 	}
+ 
+	@Override
+	public Expression visitNumberAssign(NumberAssignContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		Expression value = visit(ctx.getChild(2));		
+		
+		if (vars.get(id) == null) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new VariableDeclaration(id, vars.get(id), value);
+	}
 	
 
-	//Multiple reaction parameters
-	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
-		ListExpr list = new ListExpr();
-		Expression reac = visit(ctx.reacExpr());
-		list.Add(reac);		
-		list.Combine((ListExpr) visit(ctx.reacParams()));
-		return list;
-	}
-	
 	//One reaction parameter
+
 	@Override
-	public ListExpr visitReactionParameter(ReactionParameterContext ctx) {
-		ListExpr list = new ListExpr();		
-		list.Add(visitChildren(ctx));
-		return list;
+	public Expression visitNumber(NumberContext ctx) {
+		String numText = ctx.getChild(0).getText();
+		return new Number(numText);
 	}
-	
+
+  
+  
+	/*
+	 *  LISTS
+	 */
 
 	@Override
 	public Expression visitListDecl(ListDeclContext ctx) {
@@ -178,30 +193,59 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			reacParams = (ListExpr) visit(ctx.reacParams());	
 		}
 		
-		if (vars.contains(id)) {
+		if (vars.get(id) != null) {
 			SemanticError(line, column, "list '" + id + "' already declared.");
 		} else {
-			vars.add(id);
+			vars.put(id, type);
 		}		
 		 	
 		return new ListDeclaration(id, type, reacParams.list);
 	}
+  
+  	@Override
+	public Expression visitListAssign(ListAssignContext ctx) {
+  		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		ListExpr value = (ListExpr) visit(ctx.reacParams());		
+		
+		if (vars.get(id) == null) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new ListDeclaration(id, vars.get(id), value.list);
+	}
+	
+	//Multiple reaction parameters
+	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
+		ListExpr list = new ListExpr();
+		Expression reac = visit(ctx.reacExpr());
+		list.Add(reac);		
+		list.Combine((ListExpr) visit(ctx.reacParams()));
+		return list;
+	}
 
+	//One reaction parameter
 	@Override
-	public Expression visitReactionExpression(ReactionExpressionContext ctx) {
-		Expression left = visit(ctx.getChild(0));
-		Expression right = visit(ctx.getChild(2));
-		return new ReactionExpr(left, right, null);
+	public ListExpr visitReactionParameter(ReactionParameterContext ctx) {
+		ListExpr list = new ListExpr();		
+		list.Add(visitChildren(ctx));
+		return list;
 	}
+
+	
+	/*
+	 *  ARITHMETIC
+	 */
 	
 	@Override
-	public Expression visitReactionExpressionConst(ReactionExpressionConstContext ctx) {
-		Expression left = visit(ctx.getChild(0));
-		Expression right = visit(ctx.getChild(2));
-		Expression constant = visit(ctx.getChild(4));
-		return new ReactionExpr(left, right, constant);
+	public Expression visitBracketExpression(BracketExpressionContext ctx) {
+		return new Bracket(visit(ctx.getChild(1)));
 	}
 	
+
 	//Multiple declarations
 	@Override
 	public Expression visitSpeciesDecls(SpeciesDeclsContext ctx) {
@@ -250,6 +294,13 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression right = visit(ctx.getChild(2));
 		return new Addition(left, right);
 	}
+	
+	@Override
+	public Expression visitSubtractionExpression(SubtractionExpressionContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new Subtraction(left, right);
+	}
 
 	@Override
 	public Expression visitMultiplyExpression(MultiplyExpressionContext ctx) {
@@ -257,31 +308,69 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression right =  visit(ctx.getChild(2));
 		return new Multiplication(left, right);
 	}
-
+	
 	@Override
-	public Expression visitIfStatement(IfStatementContext ctx) {
+	public Expression visitDivisionExpression(DivisionExpressionContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new Division(left, right);
+	}
+	
+	
+	/*
+	 *  BOOLS
+	 */
+	
+	@Override
+	public Expression visitBoolDecl(BoolDeclContext ctx) {		
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+	
 		String type = ctx.getChild(0).getText();
-		Expression condition = visit(ctx.getChild(2));
-		Expression thenExpr = visit(ctx.getChild(5));
-		Expression elseExpr = visitChildren(ctx); //Check this again
-		return new IfStatement(type, condition, thenExpr, elseExpr);
+		String id = ctx.getChild(1).getText();
+		Expression value = null; 
+		
+		if (ctx.getChildCount() > 2) {
+			value = visitChildren(ctx); 
+		}	
+		
+		if (vars.get(id) != null) {
+			SemanticError(line, column, "variable '" + id + "' already declared.");
+		} else {
+			vars.put(id, type);
+		}
+		
+		return new VariableDeclaration(id, type, value);
 	}
-
+	
 	@Override
-	public Expression visitElseIfStatement(ElseIfStatementContext ctx) {
-		String typeElse = ctx.getChild(0).getText();
-		String typeIf = ctx.getChild(1).getText();
-		Expression condition = visit(ctx.getChild(3));
-		Expression thenExpr = visit(ctx.getChild(6));
-		return new ElseIfStatement(typeElse, typeIf, condition, thenExpr);
-	}
-
+	public Expression visitBoolAssign(BoolAssignContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+		
+		String id = ctx.getChild(0).getText();
+		Expression value = visitChildren(ctx); 	
+		
+		if (vars.get(id) == null) {
+			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
+		}
+		
+		return new VariableDeclaration(id, vars.get(id), value);
+	}	
+	
 	@Override
-	public Expression visitElseStatement(ElseStatementContext ctx) {
-		String typeElse = ctx.getChild(0).getText();
-		Expression thenExpr = visit(ctx.getChild(2));
-		return new ElseStatement(typeElse, thenExpr);
+	public Expression visitBoolean(BooleanContext ctx) {	
+		String strValue = ctx.getChild(0).toString();
+		boolean value = strValue.equals("true");
+		return new BoolExpr(value);
 	}
+	
+	
+	/*
+	 *  PREDICATES
+	 */
 
 	@Override
 	public Expression visitLogicalOperator(LogicalOperatorContext ctx) {
@@ -298,48 +387,45 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		Expression right =  visit(ctx.getChild(2));
 		return new RelationalOperator(left, operator, right);
 	}
-
-	@Override
-	public Expression visitNumber(NumberContext ctx) {
-		String numText = ctx.getChild(0).getText();
-		return new Number(numText);
-	}
- 
-	@Override
-	public Expression visitBoolDecl(BoolDeclContext ctx) {		
-		Token idToken = ctx.ID().getSymbol();
-		int line = idToken.getLine();
-		int column = idToken.getCharPositionInLine() + 1;
 	
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
-		Expression value = null; 
-		
-		if (ctx.getChildCount() > 2) {
-			value = visitChildren(ctx); 
-		}	
-		
-		if (vars.contains(id)) {
-			SemanticError(line, column, "variable '" + id + "' already declared.");
-		} else {
-			vars.add(id);
-		}
-		
-		return new VariableDeclaration(id, type, value);
-	}
-
-
 	@Override
-	public Expression visitBoolAssign(BoolAssignContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitBoolAssign(ctx);
+	public Expression visitPBracketExpression(PBracketExpressionContext ctx) {
+		return new Bracket(visit(ctx.getChild(1)));
 	}
-
-
+	
+	
+	/*
+	 *  IF STATEMENT
+	 */
+	
 	@Override
-	public Expression visitBoolean(BooleanContext ctx) {	
-		return new BoolExpr(ctx.getChild(0).toString());
+	public Expression visitIfStatement(IfStatementContext ctx) {
+		Expression condition = visit(ctx.getChild(2));
+		Expression thenScope = visit(ctx.getChild(4));
+		return new IfStatement(condition, thenScope, null);
 	}
+	
+	@Override
+	public Expression visitIfElseStatement(IfElseStatementContext ctx) {
+		Expression condition = visit(ctx.getChild(2));
+		Expression thenScope = visit(ctx.getChild(4));
+		Expression elseScope = visit(ctx.getChild(6));
+		return new IfStatement(condition, thenScope, elseScope);
+	}
+	
+	
+	/*
+	 *  WHILE STATEMENT
+	 */
+
+	//////////////////
+	/////////////////
+	////////////////
+	
+
+	/* 
+	 *  HELPERS
+	 */
 
 	@Override
 	public Expression visitVariable(VariableContext ctx) {
@@ -348,16 +434,22 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		int column = idToken.getCharPositionInLine() + 1;
  
 		String id = ctx.getChild(0).getText();
-		if (!vars.contains(id)) {
+		if (vars.get(id) == null) {
 			SemanticError(line, column, "variable '" + id + "' not declared.");
 		}
  
 		return new Variable(id);
 	}
 	
-	
-	
 	public void SemanticError(Integer line, Integer column, String error) {
 		semanticErrors.add("Error @ " + line + ":" + column + " : " + error);
+	}
+	
+	public Integer TryParseInt(String someText) {
+	   try {
+	      return Integer.parseInt(someText);
+	   } catch (NumberFormatException ex) {
+	      return null;
+	   }
 	}
 }
