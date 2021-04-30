@@ -235,14 +235,30 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return list;
 	}
 
-	
-	/*
-	 *  ARITHMETIC
-	 */
-	
 	@Override
-	public Expression visitBracketExpression(BracketExpressionContext ctx) {
-		return new Bracket(visit(ctx.getChild(1)));
+	public Expression visitSolutionDeclaration(SolutionDeclarationContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		ListExpr speciList = new ListExpr();
+		
+		
+		if(ctx.getChildCount() > 2) {
+			speciList = (ListExpr) visit(ctx.declList());
+		}
+		
+		if (vars.get(id) != null) {
+			SemanticError(line, column, "list '" + id + "' already declared.");
+		} else {
+			vars.put(id, type);
+		}
+		System.out.println(speciList.list);
+		
+		return new ListDeclaration(id, type, speciList.list);
+		
 	}
 	
 
@@ -250,8 +266,16 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitSpeciesDecls(SpeciesDeclsContext ctx) {
 		ListExpr list = new ListExpr();
-		Expression specDecl = visit(ctx.declList());
-		list.Add(specDecl);		
+		//Expression specDecl = visit(ctx.declList());
+		
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		Expression value = null;
+		if(ctx.getChildCount() > 4) {
+			value = visit(ctx.getChild(3));
+		}
+		VariableDeclaration species = new VariableDeclaration(type, id, value);
+		list.Add(species);		
 		list.Combine((ListExpr) visit(ctx.declList()));
 		return list;
 	}
@@ -264,29 +288,16 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return list;
 	}
 
-
+	
+	/*
+	 *  ARITHMETIC
+	 */
+	
 	@Override
-	public Expression visitSolutionDeclaration(SolutionDeclarationContext ctx) {
-		Token idToken = ctx.ID().getSymbol();
-		int line = idToken.getLine();
-		int column = idToken.getCharPositionInLine() + 1;
-
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
-		ListExpr specList = new ListExpr();
-		
-		if(ctx.getChildCount() > 2) {
-			specList = (ListExpr) visit(ctx.declList());	
-		}
-		
-		if (vars.contains(id)) {
-			SemanticError(line, column, "list '" + id + "' already declared.");
-		} else {
-			vars.add(id);
-		}		
-		 	
-		return new ListDeclaration(id, type, specList.list);
+	public Expression visitBracketExpression(BracketExpressionContext ctx) {
+		return new Bracket(visit(ctx.getChild(1)));
 	}
+
 
 	@Override
 	public Expression visitAdditionExpression(AdditionExpressionContext ctx) {

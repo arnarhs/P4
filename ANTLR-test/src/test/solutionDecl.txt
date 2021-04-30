@@ -13,7 +13,3 @@ list reactions : {
 
 int count : 5
 
-sol1.ssa(reactions, count)
-ssa ( sol1, reactions, count )
-2 * a -> b
-a + a -> b
