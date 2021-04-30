@@ -1,5 +1,6 @@
 package app;
  
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +22,9 @@ import antlr.expressionParser.SolutionDeclarationContext;
 import antlr.expressionParser.SpeciesDeclContext;
 import antlr.expressionParser.SpeciesDeclsContext;
 import antlr.expressionParser.MultiplyExpressionContext;
+import antlr.expressionParser.NumDeclContext;
 import antlr.expressionParser.NumberAssignContext;
 import antlr.expressionParser.NumberContext;
-import antlr.expressionParser.NumberDeclContext;
 import antlr.expressionParser.PBracketExpressionContext;
 import antlr.expressionParser.ReacAssignContext;
 import antlr.expressionParser.ReacDeclContext;
@@ -52,7 +53,7 @@ import models.expressions.Variable;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
-	private Map<String, String> vars; //A map that stores all the declared variables and their types.
+	private Map<String, String> vars = new HashMap<>(); //A map that stores all the declared variables and their types.
 	private List<String> semanticErrors; //A list that stores all the semantic errors.
 
 	public AntlrToExpression(List<String> semanticErrors) {
@@ -122,9 +123,9 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	/*
 	 *  NUMBERS (INT, DOUBLE & SPECIES)
 	 */
-
+ 
 	@Override
-	public Expression visitNumberDecl(NumberDeclContext ctx) {
+	public Expression visitNumDecl(NumDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
 		int line = idToken.getLine();
 		int column = idToken.getCharPositionInLine() + 1;
@@ -147,7 +148,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		
 		return new VariableDeclaration(id, type, value);
 	}
- 
+
+
 	@Override
 	public Expression visitNumberAssign(NumberAssignContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
@@ -235,14 +237,29 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return list;
 	}
 
-	
-	/*
-	 *  ARITHMETIC
-	 */
-	
 	@Override
-	public Expression visitBracketExpression(BracketExpressionContext ctx) {
-		return new Bracket(visit(ctx.getChild(1)));
+	public Expression visitSolutionDeclaration(SolutionDeclarationContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		ListExpr speciList = new ListExpr();
+		
+		
+		if(ctx.getChildCount() > 2) {
+			speciList = (ListExpr) visit(ctx.declList());
+		}
+		
+		if (vars.get(id) != null) {
+			SemanticError(line, column, "solution '" + id + "' already declared.");
+		} else {
+			vars.put(id, type);
+		}
+		
+		return new ListDeclaration(id, type, speciList.list);
+		
 	}
 	
 
@@ -250,8 +267,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitSpeciesDecls(SpeciesDeclsContext ctx) {
 		ListExpr list = new ListExpr();
-		Expression specDecl = visit(ctx.declList());
-		list.Add(specDecl);		
+		Expression reac = visit(ctx.numDecl());
+		list.Add(reac);		
 		list.Combine((ListExpr) visit(ctx.declList()));
 		return list;
 	}
@@ -264,29 +281,16 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return list;
 	}
 
-
+	
+	/*
+	 *  ARITHMETIC
+	 */
+	
 	@Override
-	public Expression visitSolutionDeclaration(SolutionDeclarationContext ctx) {
-		Token idToken = ctx.ID().getSymbol();
-		int line = idToken.getLine();
-		int column = idToken.getCharPositionInLine() + 1;
-
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
-		ListExpr specList = new ListExpr();
-		
-		if(ctx.getChildCount() > 2) {
-			specList = (ListExpr) visit(ctx.declList());	
-		}
-		
-		if (vars.contains(id)) {
-			SemanticError(line, column, "list '" + id + "' already declared.");
-		} else {
-			vars.add(id);
-		}		
-		 	
-		return new ListDeclaration(id, type, specList.list);
+	public Expression visitBracketExpression(BracketExpressionContext ctx) {
+		return new Bracket(visit(ctx.getChild(1)));
 	}
+
 
 	@Override
 	public Expression visitAdditionExpression(AdditionExpressionContext ctx) {

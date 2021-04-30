@@ -15,11 +15,15 @@ scope
 decl 
     : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
     | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
-    | NUMT ID ( ':' opExpr )?                        # NumberDecl
+    | numDecl                            			 # NumberDecl
     | BOOLT ID ( ':' pred )?                         # BoolDecl
-    | SOLUTION ID ':' '{' declList '}'                  # SolutionDeclaration
-   // | SOLUTION ID '(' ( reacParams | ID ',')? ')' '{' (decl | expr)* '}'     # MethodDeclaration //id for the list
+    | SOLUTION ID ( ':' '{' declList '}' )?                 # SolutionDeclaration
     ;
+
+numDecl
+	: NUMT ID ( ':' opExpr )?                       
+	;
+
 
 /*
 formalParams                                   
@@ -35,8 +39,8 @@ reacParams
     ;
 
 declList
-	: NUMT ID ':' opExpr ',' declList				# SpeciesDecls
-	| NUMT ID ':' opExpr							# SpeciesDecl
+	: numDecl ',' declList				# SpeciesDecls
+	| numDecl							# SpeciesDecl
 	;
 
 /*ssaParams
