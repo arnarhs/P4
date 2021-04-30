@@ -1,5 +1,6 @@
 package app;
  
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +22,9 @@ import antlr.expressionParser.SolutionDeclarationContext;
 import antlr.expressionParser.SpeciesDeclContext;
 import antlr.expressionParser.SpeciesDeclsContext;
 import antlr.expressionParser.MultiplyExpressionContext;
+import antlr.expressionParser.NumDeclContext;
 import antlr.expressionParser.NumberAssignContext;
 import antlr.expressionParser.NumberContext;
-import antlr.expressionParser.NumberDeclContext;
 import antlr.expressionParser.PBracketExpressionContext;
 import antlr.expressionParser.ReacAssignContext;
 import antlr.expressionParser.ReacDeclContext;
@@ -52,7 +53,7 @@ import models.expressions.Variable;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
-	private Map<String, String> vars; //A map that stores all the declared variables and their types.
+	private Map<String, String> vars = new HashMap<>(); //A map that stores all the declared variables and their types.
 	private List<String> semanticErrors; //A list that stores all the semantic errors.
 
 	public AntlrToExpression(List<String> semanticErrors) {
@@ -122,9 +123,9 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	/*
 	 *  NUMBERS (INT, DOUBLE & SPECIES)
 	 */
-
+ 
 	@Override
-	public Expression visitNumberDecl(NumberDeclContext ctx) {
+	public Expression visitNumDecl(NumDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
 		int line = idToken.getLine();
 		int column = idToken.getCharPositionInLine() + 1;
@@ -147,7 +148,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		
 		return new VariableDeclaration(id, type, value);
 	}
- 
+
+
 	@Override
 	public Expression visitNumberAssign(NumberAssignContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
@@ -251,11 +253,10 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		}
 		
 		if (vars.get(id) != null) {
-			SemanticError(line, column, "list '" + id + "' already declared.");
+			SemanticError(line, column, "solution '" + id + "' already declared.");
 		} else {
 			vars.put(id, type);
 		}
-		System.out.println(speciList.list);
 		
 		return new ListDeclaration(id, type, speciList.list);
 		
@@ -266,16 +267,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitSpeciesDecls(SpeciesDeclsContext ctx) {
 		ListExpr list = new ListExpr();
-		//Expression specDecl = visit(ctx.declList());
-		
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
-		Expression value = null;
-		if(ctx.getChildCount() > 4) {
-			value = visit(ctx.getChild(3));
-		}
-		VariableDeclaration species = new VariableDeclaration(type, id, value);
-		list.Add(species);		
+		Expression reac = visit(ctx.numDecl());
+		list.Add(reac);		
 		list.Combine((ListExpr) visit(ctx.declList()));
 		return list;
 	}
