@@ -18,6 +18,7 @@ import antlr.expressionParser.IfElseStatementContext;
 import antlr.expressionParser.ListAssignContext;
 import antlr.expressionParser.ListDeclContext;
 import antlr.expressionParser.RelationalOperatorContext;
+import antlr.expressionParser.SsaAlgContext;
 import antlr.expressionParser.SolutionDeclarationContext;
 import antlr.expressionParser.SpeciesDeclContext;
 import antlr.expressionParser.SpeciesDeclsContext;
@@ -34,6 +35,7 @@ import antlr.expressionParser.ReactionParameterContext;
 import antlr.expressionParser.ReactionParametersContext;
 import antlr.expressionParser.SubtractionExpressionContext;
 import antlr.expressionParser.VariableContext;
+import antlr.expressionParser.WhileStatementContext;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
@@ -45,11 +47,13 @@ import models.expressions.Expression;
 import models.expressions.IfStatement;
 import models.expressions.ListExpr;
 import models.expressions.RelationalOperator;
+import models.expressions.SsaAlg;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.ReactionExpr;
 import models.expressions.Subtraction;
 import models.expressions.Variable;
+import models.expressions.WhileStatement;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
@@ -60,7 +64,21 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		this.semanticErrors = semanticErrors;
 	}	
 	
-	
+	/* SSA CAll
+   *
+   */
+  	@Override
+	public Expression visitSsaAlg(SsaAlgContext ctx) {
+		//[0][1] [2] [3][4] [5] [6]
+		//ID '.' SSA '('ID ',' value')' 
+		Expression solution = visit(ctx.getChild(0));
+		Expression reacList = visit(ctx.getChild(4));
+		Expression loops = visit(ctx.getChild(6));
+		return new SsaAlg(solution, reacList, loops);
+	}
+
+  
+  
 	/* 
 	 *  REACTIONS
 	 */
@@ -119,7 +137,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new ReactionExpr(left, right, constant);
 	}
   
-
+	
+	
 	/*
 	 *  NUMBERS (INT, DOUBLE & SPECIES)
 	 */
@@ -421,6 +440,13 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	/*
 	 *  WHILE STATEMENT
 	 */
+	@Override
+	public Expression visitWhileStatement(WhileStatementContext ctx) {
+		//WHILE "( Expr log Expr )" "{ stmts }"
+		Expression predicate = visit(ctx.getChild(2));
+		Expression scope = visit(ctx.getChild(4));
+		return new WhileStatement(predicate, scope);
+	}
 
 	//////////////////
 	/////////////////
@@ -444,6 +470,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
 		return new Variable(id);
 	}
+	
 	
 	public void SemanticError(Integer line, Integer column, String error) {
 		semanticErrors.add("Error @ " + line + ":" + column + " : " + error);

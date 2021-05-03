@@ -13,7 +13,7 @@ scope
     ;
 
 decl 
-    : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
+    : REACTION ID ( ':' reacExpr )?                   # ReacDecl                                 
     | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
     | numDecl                            			 # NumberDecl
     | BOOLT ID ( ':' pred )?                         # BoolDecl
@@ -31,7 +31,9 @@ formalParams
     | KEYWORD ID                                //# Param
     ;
 */
-
+ssaCall
+	: ID '.' SSA '(' ID ',' value ')'			#SsaAlg
+	;
 
 reacParams
     : reacExpr ',' reacParams                   	# ReactionParameters
@@ -54,11 +56,14 @@ declList
     ;*/
 
 expr
-    : assign
+    : ssaCall
+    | assign
     | reacExpr 
     | opExpr
     | ifStmt
+    | whileStmt
     | pred
+    
      //methExpr                                      
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
@@ -85,6 +90,10 @@ opExpr
     | value                                       		# NumOrID // hvor er den?
     ;    
 
+whileStmt
+	: WHILE '(' pred ')' scope  			#WhileStatement
+	;
+	
 ifStmt
     : IF '(' pred ')' scope								# IfStatement
     | IF '(' pred ')' scope ELSE scope        			# IfElseStatement
@@ -107,10 +116,13 @@ value
     ;
 
 
+
+
 KEYWORD: 'print' | 'while' ;
 NUMT: 'int' | 'double' | 'species' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;
+WHILE: 'while' ;
 SSA: 'ssa' ;
 LIST: 'list' ;
 
