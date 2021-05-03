@@ -9,43 +9,43 @@ prog
     ;
 
 scope
-    :  '{' ( decl | expr )+ '}'                   	# ScopeDecl
+    :  OPEN_BRAC ( decl | expr )+ CLOSE_BRAC                   	# ScopeDecl
     ;
 
 decl 
-    : KEYWORD ID ( ':' reacExpr )?                   # ReacDecl                                 
-    | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
-    | NUMT ID ( ':' opExpr )?                        # NumberDecl
-    | BOOLT ID ( ':' pred )?                         # BoolDecl
-    | SOLUTION ID ( ':' '{' declList '}' )?                 # SolutionDeclaration
-   // | SOLUTION ID '(' ( reacParams | ID ',')? ')' '{' (decl | expr)* '}'     # MethodDeclaration //id for the list
+    : KEYWORD ID ( COLON reacExpr )?                   # ReacDecl                                 
+    | LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?           # ListDecl         
+    | NUMT ID ( COLON opExpr )?                        # NumberDecl
+    | BOOLT ID ( COLON pred )?                         # BoolDecl
+    | SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?                 # SolutionDeclaration
+   // | SOLUTION ID OPEN_PAR ( reacParams | ID COMMA)? CLOSE_PAR OPEN_BRAC (decl | expr)* CLOSE_BRAC     # MethodDeclaration //id for the list
     ;
 
 /*
 formalParams                                   
-    : KEYWORD ID ',' formalParams               //# ParamList
+    : KEYWORD ID COMMA formalParams               //# ParamList
     | KEYWORD ID                                //# Param
     ;
 */
 
 
 reacParams
-    : reacExpr ',' reacParams                   	# ReactionParameters
+    : reacExpr COMMA reacParams                   	# ReactionParameters
     | reacExpr                                  	# ReactionParameter
     ;
 
 declList
-	: NUMT ID ( ':' opExpr )? ',' declList				# SpeciesDecls
-	| NUMT ID ( ':' opExpr )?							# SpeciesDecl
+	: NUMT ID ( COLON opExpr )? COMMA declList				# SpeciesDecls
+	| NUMT ID ( COLON opExpr )?							# SpeciesDecl
 	;
 
 /*ssaParams
-    : '{' ssaList '}' ',' ID
+    : OPEN_BRAC ssaList CLOSE_BRAC COMMA ID
     | ID
     ;
 */
 /*ssaList
-    : ID ',' ssaList  
+    : ID COMMA ssaList  
     | ID
     ;*/
 
@@ -56,38 +56,38 @@ expr
     | ifStmt
     | pred
      //methExpr                                      
-    //| ID '(' (exprParams | WS*) ')'                     # MethodCall
-    //| SSA '(' ssaParams ')'                             # GillespieCall
+    //| ID OPEN_PAR (exprParams | WS*) CLOSE_PAR                     # MethodCall
+    //| SSA OPEN_PAR ssaParams CLOSE_PAR                             # GillespieCall
     ;
 
 assign
-    : ID ':' reacExpr                   				# ReacAssign
-    | ID ':' opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
-    | ID ':' pred                       				# BoolAssign
-    | ID ':' '{' reacParams '}'         				# ListAssign
+    : ID COLON reacExpr                   				# ReacAssign
+    | ID COLON opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
+    | ID COLON pred                       				# BoolAssign
+    | ID COLON OPEN_BRAC reacParams CLOSE_BRAC         				# ListAssign
     ;
 
 reacExpr
-    : opExpr '->' opExpr '(' opExpr ')'           		# ReactionExpressionConst
-    | opExpr '->' opExpr                          		# ReactionExpression
+    : opExpr RIGHT_ARROW opExpr OPEN_PAR opExpr CLOSE_PAR          		# ReactionExpressionConst
+    | opExpr RIGHT_ARROW opExpr                          		# ReactionExpression
     ;
 
 opExpr
-    : '(' opExpr ')'						      		# BracketExpression
-    | opExpr '*' opExpr                         		# MultiplyExpression 
-    | opExpr '/' opExpr   				      			# DivisionExpression
-    | opExpr '-' opExpr                         		# SubtractionExpression
-    | opExpr '+' opExpr                         		# AdditionExpression
+    : OPEN_PAR opExpr CLOSE_PAR						      		# BracketExpression
+    | opExpr MULT opExpr                         		# MultiplyExpression 
+    | opExpr DIV opExpr   				      			# DivisionExpression
+    | opExpr SUB opExpr                         		# SubtractionExpression
+    | opExpr ADD opExpr                         		# AdditionExpression
     | value                                       		# NumOrID // hvor er den?
     ;    
 
 ifStmt
-    : IF '(' pred ')' scope								# IfStatement
-    | IF '(' pred ')' scope ELSE scope        			# IfElseStatement
+    : IF OPEN_PAR pred CLOSE_PAR scope								# IfStatement
+    | IF OPEN_PAR pred CLOSE_PAR scope ELSE scope        			# IfElseStatement
     ;
-
+// Er else if forsvundet?
 pred
-    : '(' pred ')' 										# PBracketExpression
+    : OPEN_PAR pred CLOSE_PAR 										# PBracketExpression
     | pred LOGOP pred                                   # LogicalOperator
     | relExpr                                           # BooleanExpr
     ;
@@ -118,6 +118,19 @@ BOOL: 'true' | 'false' ;
 
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
 LOGOP: '||' | '&&' ;
+
+MULT: '*' ;
+DIV: '/' ;
+SUB: '-' ;
+ADD: '+' ;
+
+OPEN_PAR: '(' ;
+CLOSE_PAR: ')' ;
+OPEN_BRAC: '{' ;
+CLOSE_BRAC: '}' ;
+RIGHT_ARROW: '->' ;
+COLON: ':' ;
+COMMA: ',' ;
 
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '-'?([0-9]+)('.'[0-9]+)?;
