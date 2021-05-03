@@ -8,6 +8,9 @@ public class Addition extends Expression {
         this.left = left;
         this.right = right;
     }
+    
+    public Addition() {
+	}
 
     @Override
     public String toString() {

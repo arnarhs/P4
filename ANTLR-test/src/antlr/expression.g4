@@ -122,4 +122,4 @@ LOGOP: '||' | '&&' ;
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '-'?([0-9]+)('.'[0-9]+)?;
 COMMENT: '//' ~[\r\n]* -> skip ;
-WS: [ \r\t\n]+ -> channel(HIDDEN) ;
+WS: [ \r\t\n]+ -> skip ;

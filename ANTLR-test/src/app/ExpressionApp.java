@@ -49,6 +49,7 @@ public class ExpressionApp {
 			CharStream input = CharStreams.fromFileName(filename);
 			expressionLexer lexer = new expressionLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
+			
 			parser = new expressionParser(tokens);
 			//Add our own personal syntax error listener 
 			parser.removeErrorListeners();
