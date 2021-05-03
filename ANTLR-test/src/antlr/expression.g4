@@ -27,7 +27,7 @@ formalParams
     ;
 */
 ssaCall
-	: ID '.' SSA '(' ID ',' value ')' 			#SsaAlg
+	: ID '.' SSA '(' ID ',' value ')'			#SsaAlg
 	;
 
 reacParams
@@ -46,7 +46,8 @@ reacParams
     ;*/
 
 expr
-    : assign
+    : ssaCall
+    | assign
     | reacExpr 
     | opExpr
     | ifStmt
