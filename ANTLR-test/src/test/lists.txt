@@ -4,6 +4,6 @@ int c : 3
 int d : 4
 int k : 5
 int g : 6 
+species f : 5
 
-
-list myList : { a => b (2) , c => d (k), 2 + 3 => 3 + a (g) }
+list myList : { a -> b (2) , c -> d (k), 2 + 3 -> 3 + a (g) }
