@@ -1,7 +1,7 @@
 package models.declarations;
 
 import models.expressions.Expression;
-//HVIS KLASSEN SKAL NEDAVRE FRA EXPRESSION GIV TEAM VIPER BESKED
+//HVIS KLASSEN SKAL NEDARVE FRA EXPRESSION GIV TEAM VIPER BESKED
 public class VariableDeclaration extends Expression{
 	public String id;
 	public String type;

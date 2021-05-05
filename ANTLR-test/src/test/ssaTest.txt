@@ -1,0 +1,26 @@
+//ssa ( sol1, reactions, count )
+//[Name].SSA('List?','loops')
+//Missing Solution?
+
+//Version 1
+reaction chemRun1: 1 -> 2
+
+list chemRun1List:{2 -> 4, 5 -> 10, 2 -> 20}
+//Solution replaced with reacExpr
+//ssa(chemRun1, chemRun1List, 10)
+
+chemRun1.ssa(chemRun1List, 10)
+
+
+//Version 2 declares Run times outside of method call.
+
+//int runs : 10
+
+//Chemicals
+//reaction naOh : 2 -> 42
+//reaction h2O : 5 -> 10
+//reaction cO2 : 2 -> 20
+//chemRun2: 1 -> 2
+//chemRun2List:{naOh, h2O, cO2}
+//Solution replaced with reacExpr
+//ssa(chemRun2, chemRun2List, runs)
