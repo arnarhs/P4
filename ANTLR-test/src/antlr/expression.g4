@@ -118,7 +118,7 @@ value
 
 
 
-KEYWORD: 'print' | 'while' ;
+KEYWORD: 'print' ;
 NUMT: 'int' | 'double' | 'species' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;
