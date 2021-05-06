@@ -16,8 +16,10 @@ import models.expressions.LogicalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.RelationalOperator;
+import models.expressions.SsaAlg;
 import models.expressions.Subtraction;
 import models.expressions.Variable;
+import GillespieSSA.*;
 
 /*visitor pattern is a better choice to evaluate our data*/
 public class ExpressionProcessor {
@@ -125,6 +127,12 @@ public class ExpressionProcessor {
 				case "!=" : 
 					return (left != right) ? 1 : 0;
 			}
+		}
+		else if (e instanceof SsaAlg) {
+			SsaAlg ssa = (SsaAlg) e;
+			
+			StateSet solution = new StateSet()
+			Simulator simulation = new Simulator(getEvalResult(ssa.loops) , ssa.solution, ssa.reacList);
 		}
 
 		return 0;
