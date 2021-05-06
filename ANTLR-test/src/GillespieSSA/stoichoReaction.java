@@ -17,11 +17,11 @@ public class stoichoReaction {
 		this.internalState = set;
 	}
 	
-	public double CalculatePropensity() {
+	public double CalculatePropensity(StateSet set) {
         double val = 1;
         for (ReactionPair elem : Prey) {        	
             for (int i = 0; i < elem.multiplier; i++) {
-                double concentration = internalState.species.get(elem.species);
+                double concentration = set.species.get(elem.species);
                 val = val * concentration;
                 internalState.species.put(elem.species, concentration - 1);
             }
