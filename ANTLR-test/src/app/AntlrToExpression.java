@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.antlr.v4.runtime.Token;
+
+import GillespieSSA.ReactionPair;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.AdditionExpressionContext;
 import antlr.expressionParser.BoolAssignContext;
@@ -29,8 +31,11 @@ import antlr.expressionParser.NumberContext;
 import antlr.expressionParser.PBracketExpressionContext;
 import antlr.expressionParser.ReacAssignContext;
 import antlr.expressionParser.ReacDeclContext;
-import antlr.expressionParser.ReactionExpressionConstContext;
 import antlr.expressionParser.ReactionExpressionContext;
+import antlr.expressionParser.ReactionPairContext;
+import antlr.expressionParser.ReactionPairListContext;
+import antlr.expressionParser.ReactionPairMultiplierContext;
+import antlr.expressionParser.ReactionPairSingleContext;
 import antlr.expressionParser.ReactionParameterContext;
 import antlr.expressionParser.ReactionParametersContext;
 import antlr.expressionParser.SubtractionExpressionContext;
@@ -71,10 +76,10 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	public Expression visitSsaAlg(SsaAlgContext ctx) {
 		//[0][1] [2] [3][4] [5] [6]
 		//ID '.' SSA '('ID ',' value')' 
-		Expression solution = visit(ctx.getChild(0));
-		Expression reacList = visit(ctx.getChild(4));
+		String solution = ctx.getChild(0).toString();
+		String reactions = ctx.getChild(4).toString();
 		Expression loops = visit(ctx.getChild(6));
-		return new SsaAlg(solution, reacList, loops);
+		return new SsaAlg(solution, reactions, loops);
 	}
 
   
@@ -124,25 +129,44 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	
 	@Override
 	public Expression visitReactionExpression(ReactionExpressionContext ctx) {
-		Expression left = visit(ctx.getChild(0));
-		Expression right = visit(ctx.getChild(2));
-		return new ReactionExpr(left, right, null);
-	}
-	
-	@Override
-	public Expression visitReactionExpressionConst(ReactionExpressionConstContext ctx) {
-		Expression left = visit(ctx.getChild(0));
-		Expression right = visit(ctx.getChild(2));
+		ListExpr left = (ListExpr) visit(ctx.getChild(0));
+		ListExpr right = (ListExpr) visit(ctx.getChild(2));
 		Expression constant = visit(ctx.getChild(4));
 		return new ReactionExpr(left, right, constant);
 	}
-  
+	
+	@Override
+	public Expression visitReactionPairList(ReactionPairListContext ctx) {
+		ListExpr list = new ListExpr();
+		Expression pair = visit(ctx.reacPair());
+		list.Add(pair);		
+		list.Combine((ListExpr) visit(ctx.reacPairList()));
+		return list;
+	}
+
+	@Override
+	public Expression visitReactionPairSingle(ReactionPairSingleContext ctx) {
+		ListExpr list = new ListExpr();		
+		list.Add(visitChildren(ctx));
+		return list;
+	}
+
+	@Override
+	public Expression visitReactionPairMultiplier(ReactionPairMultiplierContext ctx) {
+		return new ReactionPair(ctx.ID().toString(), Integer.parseInt(ctx.NUM().toString()));
+	}
+
+	@Override
+	public Expression visitReactionPair(ReactionPairContext ctx) {
+		return new ReactionPair(ctx.ID().toString());
+	}
 	
 	
 	/*
 	 *  NUMBERS (INT, DOUBLE & SPECIES)
 	 */
  
+
 	@Override
 	public Expression visitNumDecl(NumDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
@@ -278,7 +302,6 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		}
 		
 		return new ListDeclaration(id, type, speciList.list);
-		
 	}
 	
 
