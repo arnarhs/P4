@@ -46,6 +46,43 @@ public class ExpressionProcessor {
 				ListDeclaration listDecl = (ListDeclaration) e;
 				values.put(listDecl.id, listDecl);
 			} 
+			else if (e instanceof SsaAlg) {
+				SsaAlg ssa = (SsaAlg) e;
+				
+				ListDeclaration sol = (ListDeclaration) values.get(ssa.solution);
+				Map<String, Double> species = new HashMap<String,Double>();
+				
+				for(Expression l : sol.list) {
+					VariableDeclaration num = (VariableDeclaration) l;
+					Double value = getEvalResult(num.value);
+					species.put(num.id, value);
+				}
+				StateSet stateSet = new StateSet(species, 0);
+				
+				ListDeclaration reactions = (ListDeclaration) values.get(ssa.reacList);
+				List<stoichoReaction> reactionSet = new ArrayList<stoichoReaction>();
+				
+				for(Expression r : reactions.list) {
+					ReactionExpr reac = (ReactionExpr) r;
+					
+					ListExpr left = (ListExpr) reac.left;
+					List<ReactionPair> prey = new ArrayList<ReactionPair>();
+					for(Expression p : left.list) {
+						prey.add((ReactionPair) p);
+					}
+					
+					ListExpr right = (ListExpr) reac.right;
+					List<ReactionPair> predator = new ArrayList<ReactionPair>();
+					for(Expression p : right.list) {
+						predator.add((ReactionPair) p);
+					}
+					
+					reactionSet.add(new stoichoReaction(prey, predator, getEvalResult(reac.constant), new StateSet(stateSet)));
+				}		
+				
+				Simulator s = new Simulator((int) getEvalResult(ssa.loops), stateSet, reactionSet);
+				s.Simulate();
+			}
 			else {
 				String input = e.toString();
 				double result = getEvalResult(e);
@@ -131,42 +168,7 @@ public class ExpressionProcessor {
 					return (left != right) ? 1 : 0;
 			}
 		}
-		else if (e instanceof SsaAlg) {
-			SsaAlg ssa = (SsaAlg) e;
-			
-			ListDeclaration sol = (ListDeclaration) ssa.solution;
-			Map<String, Double> species = new HashMap<String,Double>();
-			
-			for(Expression l : sol.list) {
-				VariableDeclaration num = (VariableDeclaration) l;
-				Double value = getEvalResult(num.value);
-				species.put(num.id, value);
-			}
-			
-			ListDeclaration reactions = (ListDeclaration) ssa.reacList;
-			List<stoichoReaction> reactionSet = new ArrayList<stoichoReaction>();
-			
-			for(Expression r : reactions.list) {
-				ReactionExpr reac = (ReactionExpr) r;
-				
-				ListExpr left = (ListExpr) reac.left;
-				List<ReactionPair> prey = new ArrayList<ReactionPair>();
-				for(Expression p : left.list) {
-					prey.add((ReactionPair) p);
-				}
-				
-				ListExpr right = (ListExpr) reac.right;
-				List<ReactionPair> predator = new ArrayList<ReactionPair>();
-				for(Expression p : right.list) {
-					predator.add((ReactionPair) p);
-				}
-				
-				reactionSet.add(new stoichoReaction(prey, predator, getEvalResult(reac.constant)));
-			}		
-			
-			Simulator simulation = new Simulator((int) getEvalResult(ssa.loops), new StateSet(species, 0), reactionSet);
-		}
-
+		
 		return 0;
 	}
 	

@@ -76,10 +76,10 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	public Expression visitSsaAlg(SsaAlgContext ctx) {
 		//[0][1] [2] [3][4] [5] [6]
 		//ID '.' SSA '('ID ',' value')' 
-		Expression solution = visit(ctx.getChild(0));
-		Expression reacList = visit(ctx.getChild(4));
+		String solution = ctx.getChild(0).toString();
+		String reactions = ctx.getChild(4).toString();
 		Expression loops = visit(ctx.getChild(6));
-		return new SsaAlg(solution, reacList, loops);
+		return new SsaAlg(solution, reactions, loops);
 	}
 
   
@@ -302,7 +302,6 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		}
 		
 		return new ListDeclaration(id, type, speciList.list);
-		
 	}
 	
 
