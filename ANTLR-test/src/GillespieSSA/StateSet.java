@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StateSet {
-	Map<String, Double> species = new HashMap<String, Double>();
+	public Map<String, Double> species = new HashMap<String, Double>();
 	double time;
 	
 	public StateSet(Map<String, Double> species, double time) {

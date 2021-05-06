@@ -2,7 +2,6 @@ package app;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -81,7 +80,10 @@ public class ExpressionProcessor {
 				}		
 				
 				Simulator s = new Simulator((int) getEvalResult(ssa.loops), stateSet, reactionSet);
-				s.Simulate();
+				List<StateSet> results = s.Simulate();
+				for(StateSet ss : results) {
+					System.out.println("ss " + ss.species.toString());
+				}
 			}
 			else {
 				String input = e.toString();
