@@ -13,6 +13,7 @@ import models.expressions.Addition;
 import models.expressions.Bracket;
 import models.expressions.Division;
 import models.expressions.Expression;
+import models.expressions.ListExpr;
 import models.expressions.LogicalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
@@ -142,21 +143,28 @@ public class ExpressionProcessor {
 				species.put(num.id, value);
 			}
 			
-			
 			ListDeclaration reactions = (ListDeclaration) ssa.reacList;
-			ReactionSet reacSet = new ReactionSet();
+			List<stoichoReaction> reactionSet = new ArrayList<stoichoReaction>();
 			
 			for(Expression r : reactions.list) {
 				ReactionExpr reac = (ReactionExpr) r;
 				
-				stoichoReaction sr = new stoichoReaction();
-				sr.
+				ListExpr left = (ListExpr) reac.left;
+				List<ReactionPair> prey = new ArrayList<ReactionPair>();
+				for(Expression p : left.list) {
+					prey.add((ReactionPair) p);
+				}
 				
-
+				ListExpr right = (ListExpr) reac.right;
+				List<ReactionPair> predator = new ArrayList<ReactionPair>();
+				for(Expression p : right.list) {
+					predator.add((ReactionPair) p);
+				}
+				
+				reactionSet.add(new stoichoReaction(prey, predator, getEvalResult(reac.constant)));
 			}		
-					
 			
-			Simulator simulation = new Simulator((int) getEvalResult(ssa.loops), new StateSet(species, 0), reacSet);
+			Simulator simulation = new Simulator((int) getEvalResult(ssa.loops), new StateSet(species, 0), reactionSet);
 		}
 
 		return 0;

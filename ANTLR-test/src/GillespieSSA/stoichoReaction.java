@@ -9,17 +9,25 @@ public class stoichoReaction {
 	double ReactionConstant;
 	double currentPropensity;
 	
-	public double CalculatePropensity(StateSet set) {
-		double val = 1;
-		for(ReactionPair elem : Prey) {
-			for(int i = 0; i<elem.multiplier; i++) {
-				double concentration = set.species.get(elem.species) - i;
-				val = val * concentration;
-			}
-		}
-		
-		currentPropensity = val * ReactionConstant;
-		return currentPropensity;
+	public stoichoReaction(List<ReactionPair> prey, List<ReactionPair> predator, double constant) {
+		this.Prey = prey;
+		this.Predator = predator;
+		this.ReactionConstant = constant;
 	}
+	
+	public double CalculatePropensity(StateSet set) {
+        StateSet internalState = set; 
+        double val = 1;
+        for(ReactionPair elem : Prey) {
+            for(int i = 0; i<elem.multiplier; i++) {
+                double concentration = set.species.get(elem.species);
+                val = val * concentration;
+                internalState.species.put(elem.species, concentration - 1);
+            }
+        }
+
+        currentPropensity = val * ReactionConstant;
+        return currentPropensity;
+    }
 	
 }

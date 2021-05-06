@@ -77,9 +77,18 @@ assign
     ;
 
 reacExpr
-    : opExpr '->' opExpr '(' opExpr ')'           		# ReactionExpressionConst
-    | opExpr '->' opExpr                          		# ReactionExpression
+    :   reacPairList '->' reacPairList '(' opExpr ')'   # ReactionExpression
     ;
+
+reacPairList
+	: reacPair '+' reacPairList							# ReactionPairList
+	| reacPair											# ReactionPairSingle
+	;
+
+reacPair
+	: NUM '*' ID   										# ReactionPairMultiplier
+	| ID 												# ReactionPair
+	;
 
 opExpr
     : '(' opExpr ')'						      		# BracketExpression

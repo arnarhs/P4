@@ -8,9 +8,9 @@ import java.util.Set;
 public class Simulator {
 	int turns;
 	List<StateSet> states;
-	ReactionSet reactionSet;
+	List<stoichoReaction> reactionSet;
 	
-	public Simulator(int nrturns, StateSet initialState, ReactionSet reactionset) {
+	public Simulator(int nrturns, StateSet initialState, List<stoichoReaction> reactionset) {
 		turns = nrturns;
 		states = new ArrayList<StateSet>();
 		states.add(initialState);
@@ -53,22 +53,22 @@ public class Simulator {
 		
 	}
 	
-	private stoichoReaction PickReaction(double a0, double r2, ReactionSet reactions) {
+	private stoichoReaction PickReaction(double a0, double r2, List<stoichoReaction> reactions) {
 		stoichoReaction reaction;
 		
 		
 		if(r2 > 0) {
 			int i = 0;
-			double propensity = reactions.set.get(i).currentPropensity;
+			double propensity = reactions.get(i).currentPropensity;
 			double currentReaction = propensity/a0;
 			
-			while(r2 < currentReaction && i < reactions.set.size()-1) {
+			while(r2 < currentReaction && i < reactions.size()-1) {
 				i++;
-				propensity = propensity + reactions.set.get(i).currentPropensity;
+				propensity = propensity + reactions.get(i).currentPropensity;
 				currentReaction = propensity/a0;
 			}
 			
-			return reactions.set.get(i);
+			return reactions.get(i);
 			
 		}
 		
@@ -80,9 +80,9 @@ public class Simulator {
 			return 1/ComputeA0(set)*Math.log(1/r1);
 	}
 	
-	private ReactionSet ComputePropensities(ReactionSet reactionset, StateSet state) {
-		ReactionSet set = reactionSet;
-		for(stoichoReaction elem : reactionset.set) {
+	private List<stoichoReaction> ComputePropensities(List<stoichoReaction> reactionset, StateSet state) {
+		List<stoichoReaction> set = reactionSet;
+		for(stoichoReaction elem : reactionset) {
 			elem.CalculatePropensity(state);
 		}
 		return reactionSet;
@@ -91,7 +91,7 @@ public class Simulator {
 	private double ComputeA0(StateSet set) {
 		double val = 0; 
 		
-		for(stoichoReaction elem : reactionSet.set) {
+		for(stoichoReaction elem : reactionSet) {
 			val = val + elem.currentPropensity;
 		}
 		
