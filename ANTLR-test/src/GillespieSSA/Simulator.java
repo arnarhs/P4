@@ -35,7 +35,7 @@ public class Simulator {
 		double r2 = random.nextFloat();
 		
 		//Compute propensities for all reactions given the state at time t (current state)
-		reactionSet = ComputePropensities(reactionSet, set);
+		reactionSet = ComputePropensities(reactionSet);
 		
 		//Compute a0
 		double a0 = ComputeA0(set);
@@ -80,10 +80,10 @@ public class Simulator {
 			return 1/ComputeA0(set)*Math.log(1/r1);
 	}
 	
-	private List<stoichoReaction> ComputePropensities(List<stoichoReaction> reactionset, StateSet state) {
+	private List<stoichoReaction> ComputePropensities(List<stoichoReaction> reactionset) {
 		List<stoichoReaction> set = reactionSet;
 		for(stoichoReaction elem : reactionset) {
-			elem.CalculatePropensity(state);
+			elem.CalculatePropensity();
 		}
 		return reactionSet;
 	}
