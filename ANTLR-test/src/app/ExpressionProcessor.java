@@ -82,7 +82,7 @@ public class ExpressionProcessor {
 				Simulator s = new Simulator((int) getEvalResult(ssa.loops), stateSet, reactionSet);
 				List<StateSet> results = s.Simulate();
 				for(StateSet ss : results) {
-					System.out.println("ss " + ss.species.toString());
+					System.out.println("ss " + ss.species.toString() + " " + ss.time);
 				}
 			}
 			else {

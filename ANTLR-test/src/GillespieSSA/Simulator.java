@@ -3,7 +3,6 @@ package GillespieSSA;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class Simulator {
 	int turns;
@@ -19,11 +18,9 @@ public class Simulator {
 	
 	public List<StateSet> Simulate() {
 		Random random = new Random();
-		StateSet nextState;
-		
-		for(int i = 0; i<turns; i++) {
-			nextState = Step(random, states.get(i));
-			states.add(nextState);
+	
+		for(int i = 0; i < turns; i++) {
+			states.add(Step(random, states.get(i)));
 		}
 		
 		return states;
@@ -48,15 +45,11 @@ public class Simulator {
 		
 		//Update state
 		StateSet state = new StateSet(set, dt, reaction);
-		
+				
 		return state;
-		
 	}
 	
 	private stoichoReaction PickReaction(double a0, double r2, List<stoichoReaction> reactions) {
-		stoichoReaction reaction;
-		
-		
 		if(r2 > 0) {
 			int i = 0;
 			double propensity = reactions.get(i).currentPropensity;
@@ -69,11 +62,10 @@ public class Simulator {
 			}
 			
 			return reactions.get(i);
-			
 		}
-		
-		else {return null;}
-		
+		else {
+			return null;
+		}
 	}
 	
 	private double PickTime(double r1, StateSet set) {
@@ -81,9 +73,8 @@ public class Simulator {
 	}
 	
 	private List<stoichoReaction> ComputePropensities(List<stoichoReaction> reactionset, StateSet state) {
-		List<stoichoReaction> set = reactionSet;
 		for(stoichoReaction elem : reactionset) {
-			elem.CalculatePropensity(state);
+			elem.CalculatePropensity();
 		}
 		return reactionSet;
 	}

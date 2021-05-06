@@ -1,10 +1,13 @@
 solution sol  : {
 	species a : 10,
-	species b : 2
+	species b : 0,
+	species c : 50,
+	species d : 0
 }
 
 list reactions : {
-	2 * a   +   2 * b  + a  ->   3 * a + 2 * b (1)
+	c  ->  d (1),
+	a  ->  b (1)
 }
 
-sol.ssa(reactions, 3)
+sol.ssa(reactions, 50)

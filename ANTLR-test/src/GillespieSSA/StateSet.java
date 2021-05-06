@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class StateSet {
 	public Map<String, Double> species = new HashMap<String, Double>();
-	double time;
+	public double time;
 	
 	public StateSet(Map<String, Double> species, double time) {
 		this.species = species;
@@ -18,20 +18,20 @@ public class StateSet {
 	}
 	
 	public StateSet(StateSet previousState, double timeIncrement, stoichoReaction reaction) {
-		time = previousState.time + timeIncrement;
-		species = previousState.species;
+		this.time = previousState.time + timeIncrement;
+		this.species = new HashMap<String, Double>(previousState.species);
 		
 		//If a reaction was selected update the state populations.
 		if(reaction != null) {
 			for(ReactionPair elem : reaction.Prey) {
-				double value = species.get(elem.species) - elem.multiplier;
-				species.put(elem.species, value);
+				double value = this.species.get(elem.species) - elem.multiplier;
+				this.species.put(elem.species, value);
 			}
 			
 			for(ReactionPair elem : reaction.Predator) {
-				double value = species.get(elem.species) + elem.multiplier;
-				species.put(elem.species, value);
+				double value = this.species.get(elem.species) + elem.multiplier;
+				this.species.put(elem.species, value);
 			}
-		}
+		} 
 	}
 }
