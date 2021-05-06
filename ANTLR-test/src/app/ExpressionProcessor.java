@@ -2,6 +2,7 @@ package app;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import models.expressions.Expression;
 import models.expressions.LogicalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
+import models.expressions.ReactionExpr;
 import models.expressions.RelationalOperator;
 import models.expressions.SsaAlg;
 import models.expressions.Subtraction;
@@ -131,8 +133,30 @@ public class ExpressionProcessor {
 		else if (e instanceof SsaAlg) {
 			SsaAlg ssa = (SsaAlg) e;
 			
-			StateSet solution = new StateSet()
-			Simulator simulation = new Simulator(getEvalResult(ssa.loops) , ssa.solution, ssa.reacList);
+			ListDeclaration sol = (ListDeclaration) ssa.solution;
+			Map<String, Double> species = new HashMap<String,Double>();
+			
+			for(Expression l : sol.list) {
+				VariableDeclaration num = (VariableDeclaration) l;
+				Double value = getEvalResult(num.value);
+				species.put(num.id, value);
+			}
+			
+			
+			ListDeclaration reactions = (ListDeclaration) ssa.reacList;
+			ReactionSet reacSet = new ReactionSet();
+			
+			for(Expression r : reactions.list) {
+				ReactionExpr reac = (ReactionExpr) r;
+				
+				stoichoReaction sr = new stoichoReaction();
+				sr.
+				
+
+			}		
+					
+			
+			Simulator simulation = new Simulator((int) getEvalResult(ssa.loops), new StateSet(species, 0), reacSet);
 		}
 
 		return 0;

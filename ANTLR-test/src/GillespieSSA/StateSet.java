@@ -1,15 +1,17 @@
 package GillespieSSA;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class StateSet {
-	Hashtable<Species, Double> species = new Hashtable<Species, Double>();
+	Map<String, Double> species = new HashMap<String, Double>();
 	double time;
 	
-	public StateSet(Hashtable<Species, Double> species, double time) {
+	public StateSet(Map<String, Double> species, double time) {
 		this.species = species;
 		this.time = time;
 	}
@@ -22,12 +24,12 @@ public class StateSet {
 		if(reaction != null) {
 			for(ReactionPair elem : reaction.Prey) {
 				double value = species.get(elem.species) - elem.multiplier;
-				species.replace(elem.species, value);
+				species.put(elem.species, value);
 			}
 			
 			for(ReactionPair elem : reaction.Predator) {
 				double value = species.get(elem.species) + elem.multiplier;
-				species.replace(elem.species, value);
+				species.put(elem.species, value);
 			}
 		}
 	}
