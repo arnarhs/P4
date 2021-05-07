@@ -55,7 +55,7 @@ public class Simulator {
 			double propensity = reactions.get(i).currentPropensity;
 			double currentReaction = propensity/a0;
 			
-			while(r2 < currentReaction && i < reactions.size()-1) {
+			while(r2 > currentReaction && i < reactions.size()-1) {
 				i++;
 				propensity = propensity + reactions.get(i).currentPropensity;
 				currentReaction = propensity/a0;
