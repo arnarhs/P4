@@ -10,6 +10,8 @@ public class StateSet {
 	public StateSet(Map<String, Double> species, double time) {
 		this.species = species;
 		this.time = time;
+		
+	
 	}
 	
 	public StateSet(StateSet other) {

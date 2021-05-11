@@ -31,6 +31,8 @@ public class Simulator {
 		double r1 = random.nextFloat();
 		double r2 = random.nextFloat();
 		
+		System.out.print("r1: " + r1+". " + "r2: " + r2 + "\n");
+		
 		//Compute propensities for all reactions given the state at time t (current state)
 		reactionSet = ComputePropensities(reactionSet, set);
 		

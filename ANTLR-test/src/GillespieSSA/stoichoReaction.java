@@ -23,11 +23,11 @@ public class stoichoReaction {
             for (int i = 0; i < elem.multiplier; i++) {
                 double concentration = internalState.species.get(elem.species);
                 val = val * concentration;
-                internalState.species.put(elem.species, concentration - 1);
+                if(concentration != 0) {
+                	internalState.species.put(elem.species, concentration - 1);
+                }
             }
-        }
-
-        
+        }       
         currentPropensity = val * ReactionConstant;
         return currentPropensity;
     }
