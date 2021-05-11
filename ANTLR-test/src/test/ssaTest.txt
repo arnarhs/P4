@@ -6,8 +6,9 @@ solution sol  : {
 }
 
 list reactions : {
-	c  ->  d (1),
-	a  ->  b (1)
+	c  ->  d (0.1),
+	a  ->  b (0.1),
+	b + d -> a + c (0.2)
 }
 
-sol.ssa(reactions, 50)
+sol.ssa(reactions, 200)

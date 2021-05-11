@@ -6,6 +6,7 @@ import java.util.Map;
 public class StateSet {
 	public Map<String, Double> species = new HashMap<String, Double>();
 	public double time;
+	//public Map<String, Double> specMean = new HashMap<String, Double>();
 	
 	public StateSet(Map<String, Double> species, double time) {
 		this.species = species;
@@ -34,4 +35,6 @@ public class StateSet {
 			}
 		} 
 	}
+	
+	
 }

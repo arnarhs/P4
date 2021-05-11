@@ -8,6 +8,7 @@ public class Simulator {
 	int turns;
 	List<StateSet> states;
 	List<stoichoReaction> reactionSet;
+	//MeanGraph mean = new MeanGraph();
 	
 	public Simulator(int nrturns, StateSet initialState, List<stoichoReaction> reactionset) {
 		turns = nrturns;

@@ -81,6 +81,12 @@ public class ExpressionProcessor {
 				
 				Simulator s = new Simulator((int) getEvalResult(ssa.loops), stateSet, reactionSet);
 				List<StateSet> results = s.Simulate();
+				MeanGraph Mean = new MeanGraph();
+				Mean.createMeanList(results);
+				
+				System.out.println(Mean.meanList);
+				
+				
 				for(StateSet ss : results) {
 					System.out.println("ss " + ss.species.toString() + " " + ss.time);
 				}
