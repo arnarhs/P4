@@ -5,33 +5,48 @@ import java.util.List;
 import java.util.Random;
 
 public class Simulator {
-	int turns;
-	List<StateSet> states;
+	int turns; //number of reactions for the individual simulation
+	int times = 1; //number of simulations
+	List<List<StateSet>> states;
 	List<stoichoReaction> reactionSet;
+	StateSet initialState;
 	
 	public Simulator(int nrturns, StateSet initialState, List<stoichoReaction> reactionset) {
+		this.initialState = initialState;
 		turns = nrturns;
-		states = new ArrayList<StateSet>();
-		states.add(initialState);
+		states = new ArrayList<List<StateSet>>();
 		reactionSet = reactionset;
 	}
 	
-	public List<StateSet> Simulate() {
+	public Simulator(int nrtimes, int nrturns, StateSet initialState, List<stoichoReaction> reactionset) {
+		this(nrturns, initialState, reactionset);
+		times = nrtimes;
+	}
+
+	public List<SSAResult> Simulate() {
 		Random random = new Random();
-	
-		for(int i = 0; i < turns; i++) {
-			states.add(Step(random, states.get(i)));
+		List<SSAResult> simulationResult = new ArrayList<SSAResult>();
+		for (int n = 0; n < times; n++) {
+			ArrayList<StateSet> nextList = new ArrayList<StateSet>();
+			nextList.add(initialState);
+			states.add(nextList);
+			SSAResult result = new SSAResult(n+1);
+			
+			for(int i = 0; i < turns; i++) {
+				StateSet nextState = Step(random, nextList.get(i));
+				nextList.add(nextState);
+			}
+			result.stateSets = nextList;
+			simulationResult.add(result);
 		}
 		
-		return states;
+		return simulationResult;
 	}
 	
 	private StateSet Step(Random random, StateSet set) {
 		//Select two random variables, uniformly distributed.
 		double r1 = random.nextFloat();
 		double r2 = random.nextFloat();
-		
-		System.out.print("r1: " + r1+". " + "r2: " + r2 + "\n");
 		
 		//Compute propensities for all reactions given the state at time t (current state)
 		reactionSet = ComputePropensities(reactionSet, set);

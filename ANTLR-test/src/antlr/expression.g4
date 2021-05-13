@@ -63,11 +63,15 @@ expr
     | ifStmt
     | whileStmt
     | pred
-    
-     //methExpr                                      
+    | print
+    //methExpr                                      
     //| ID '(' (exprParams | WS*) ')'                     # MethodCall
     //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
+
+print
+	: KEYWORD'('(ID|ssaCall|reacExpr|opExpr|pred)')' # PrintExpr
+    ;	
 
 assign
     : ID ':' reacExpr                   				# ReacAssign
