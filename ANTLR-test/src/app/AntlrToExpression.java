@@ -1,5 +1,6 @@
 package app;
  
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import org.antlr.v4.runtime.Token;
 import GillespieSSA.ReactionPair;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.*;
+import models.Statement;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
@@ -19,6 +21,7 @@ import models.expressions.Expression;
 import models.expressions.IfStatement;
 import models.expressions.ListExpr;
 import models.expressions.RelationalOperator;
+import models.expressions.Scope;
 import models.expressions.SsaAlg;
 import models.expressions.Multiplication;
 import models.expressions.Number;
@@ -36,9 +39,27 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		this.semanticErrors = semanticErrors;
 	}	
 	
+	
+	/* Scope 
+	 * 
+	 */
+	
+	@Override
+	public Expression visitScopeDecl(ScopeDeclContext ctx) {
+		List<Statement> stmts = new ArrayList<Statement>();
+		for(int i = 1; i < ctx.getChildCount() - 1; i++) {  // Visit every child but opening and closing brackets
+			stmts.add(visit(ctx.getChild(i)));
+		}
+		
+		return new Scope(stmts);
+	}
+	
+	
+	
 	/* SSA CAll
    *
    */
+	
   	@Override
 	public Expression visitSsaAlg(SsaAlgContext ctx) {
 		//[0][1] [2] [3][4] [5] [6]
@@ -54,7 +75,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	/* 
 	 *  REACTIONS
 	 */
-	
+
 	@Override
 	public Expression visitReacDecl(ReacDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
@@ -385,8 +406,9 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	 *  PREDICATES
 	 */
 
+
 	@Override
-	public Expression visitLogicalOperator(LogicalOperatorContext ctx) {
+	public Expression visitLogicalExpr(LogicalExprContext ctx) {
 		Expression left = visit(ctx.getChild(0));
 		String operator = ctx.getChild(1).toString();
 		Expression right =  visit(ctx.getChild(2));
@@ -414,15 +436,15 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitIfStatement(IfStatementContext ctx) {
 		Expression condition = visit(ctx.getChild(2));
-		Expression thenScope = visit(ctx.getChild(4));
+		Scope thenScope = (Scope) visit(ctx.getChild(4));
 		return new IfStatement(condition, thenScope, null);
 	}
 	
 	@Override
 	public Expression visitIfElseStatement(IfElseStatementContext ctx) {
 		Expression condition = visit(ctx.getChild(2));
-		Expression thenScope = visit(ctx.getChild(4));
-		Expression elseScope = visit(ctx.getChild(6));
+		Scope thenScope = (Scope) visit(ctx.getChild(4));
+		Scope elseScope = (Scope) visit(ctx.getChild(6));
 		return new IfStatement(condition, thenScope, elseScope);
 	}
 	
@@ -430,17 +452,14 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	/*
 	 *  WHILE STATEMENT
 	 */
+	
 	@Override
 	public Expression visitWhileStatement(WhileStatementContext ctx) {
 		//WHILE "( Expr log Expr )" "{ stmts }"
 		Expression predicate = visit(ctx.getChild(2));
-		Expression scope = visit(ctx.getChild(4));
+		Scope scope = (Scope) visit(ctx.getChild(4));
 		return new WhileStatement(predicate, scope);
 	}
-
-	//////////////////
-	/////////////////
-	////////////////
 	
 
 	/* 

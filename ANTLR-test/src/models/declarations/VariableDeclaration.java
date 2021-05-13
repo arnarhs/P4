@@ -1,7 +1,7 @@
 package models.declarations;
 
 import models.expressions.Expression;
-//HVIS KLASSEN SKAL NEDARVE FRA EXPRESSION GIV TEAM VIPER BESKED
+ 
 public class VariableDeclaration extends Expression{
 	public String id;
 	public String type;
@@ -11,6 +11,12 @@ public class VariableDeclaration extends Expression{
 		this.id = id;
 		this.type = type;
 		this.value = value;
+	}
+	
+	public VariableDeclaration(VariableDeclaration other) {
+		this.id = other.id;
+		this.type = other.type;
+		this.value = other.value;
 	}
 	
 	@Override

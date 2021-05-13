@@ -1,6 +1,9 @@
-int a : 100
-int b : 2
-//Parser den paramtre tilbage efter scope run.
-while ( a >= b ){
-	b : b + 50
+int a : 5
+
+while ( a > 0 ) {
+
+	a : a - 1
+	
+	a
+	
 }
