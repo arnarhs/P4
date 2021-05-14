@@ -5,19 +5,19 @@ grammar expression;
 }
 
 prog
-    : ( decl | expr )+ EOF                        	# Program
+    : ( decl | expr )+ EOF                        		# Program
     ;
 
 scope
-    :  '{' ( decl | expr )+ '}'                   	# ScopeDecl
+    :  '{' ( decl | expr )+ '}'                   		# ScopeDecl
     ;
 
 decl 
-    : REACTION ID ( ':' reacExpr )?                   # ReacDecl                                 
-    | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
-    | numDecl                            			 # NumberDecl
-    | BOOLT ID ( ':' pred )?                         # BoolDecl
-    | SOLUTION ID ( ':' '{' declList '}' )?                 # SolutionDeclaration
+    : REACTION ID ( ':' reacExpr )?                   	# ReacDecl                                 
+	| LIST ID ( ':'  '{' reacParams '}' )?         	  	# ListDecl         
+    | numDecl                            			 	# NumberDecl
+    | BOOLT ID ( ':' pred )?                         	# BoolDecl
+| SOLUTION ID ( ':' '{' declList '}' )?                 # SolutionDeclaration
     ;
 
 numDecl
@@ -32,17 +32,17 @@ formalParams
     ;
 */
 ssaCall
-	: ID '.' SSA '(' ID ',' value ')'			#SsaAlg
+	: ID '.' SSA '(' ID ',' value ')'					#SsaAlg
 	;
 
 reacParams
-    : reacExpr ',' reacParams                   	# ReactionParameters
-    | reacExpr                                  	# ReactionParameter
+    : reacExpr ',' reacParams                   		# ReactionParameters
+    | reacExpr                                  		# ReactionParameter
     ;
 
 declList
-	: numDecl ',' declList				# SpeciesDecls
-	| numDecl							# SpeciesDecl
+	: numDecl ',' declList								# SpeciesDecls
+	| numDecl											# SpeciesDecl
 	;
 
 /*ssaParams
@@ -65,8 +65,8 @@ expr
     | pred
     
      //methExpr                                      
-    //| ID '(' (exprParams | WS*) ')'                     # MethodCall
-    //| SSA '(' ssaParams ')'                             # GillespieCall
+    //| ID '(' (exprParams | WS*) ')'                   # MethodCall
+//| SSA '(' ssaParams ')'                               # GillespieCall
     ;
 
 assign
@@ -96,11 +96,11 @@ opExpr
     | opExpr '/' opExpr   				      			# DivisionExpression
     | opExpr '-' opExpr                         		# SubtractionExpression
     | opExpr '+' opExpr                         		# AdditionExpression
-    | value                                       		# NumOrID // hvor er den?
+    | value                                       		# NumOrID
     ;    
 
 whileStmt
-	: WHILE '(' pred ')' scope  			#WhileStatement
+	: WHILE '(' pred ')' scope  						#WhileStatement
 	;
 	
 ifStmt
@@ -110,18 +110,14 @@ ifStmt
 
 pred
     : '(' pred ')' 										# PBracketExpression
-    | pred LOGOP pred                                   # LogicalOperator
-    | relExpr                                           # BooleanExpr
-    ;
-
-relExpr
-    : opExpr RELOP opExpr                               # RelationalOperator
-    | BOOL                                              # Boolean
+    | pred LOGOP pred                                   # LogicalExpr
+    | opExpr RELOP opExpr                               # RelationalOperator
+    | BOOL												# Boolean
     ;
 
 value
-    : NUM                                        # Number // fix visitor + klasse
-    | ID                                         # Variable
+    : NUM                                        		# Number
+    | ID                                         		# Variable
     ;
 
 

@@ -2,19 +2,30 @@ package models.expressions;
 
 public class WhileStatement extends Expression {
 	
-	public Expression predicate;
-	public Expression scope;
+	private Expression _predicate;
+	private Scope _scope;
 	
-	public WhileStatement(Expression predicate, Expression scope) {
-		this.predicate = predicate;
-		this.scope = scope;
+	public void setPredicate(Expression predicate) {
+		predicate = _predicate;
+	}
+	public Expression getPredicate() {
+		return _predicate;
+	}
+	
+	public void setScope(Scope scope) {
+		_scope = scope;
+	}
+	public Scope getScope() {
+		return _scope;
+	}
+	
+	public WhileStatement(Expression predicate, Scope scope) {
+		_predicate = predicate;
+		_scope = scope;
 	}
 	
 	@Override
 	public String toString() {
-		return predicate.toString() + scope.toString();
-		//Takes While as stmt (keyword) 
-		//cant remember and the scope
+		return _predicate.toString() + _scope.toString();
 	}
-
 }

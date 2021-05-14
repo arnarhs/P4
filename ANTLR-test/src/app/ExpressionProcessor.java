@@ -12,53 +12,73 @@ import models.expressions.Addition;
 import models.expressions.Bracket;
 import models.expressions.Division;
 import models.expressions.Expression;
+import models.expressions.IfStatement;
 import models.expressions.ListExpr;
 import models.expressions.LogicalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
 import models.expressions.ReactionExpr;
 import models.expressions.RelationalOperator;
+import models.expressions.Scope;
 import models.expressions.SsaAlg;
 import models.expressions.Subtraction;
 import models.expressions.Variable;
+import models.expressions.WhileStatement;
 import GillespieSSA.*;
 
 /*visitor pattern is a better choice to evaluate our data*/
 public class ExpressionProcessor {
-	List<Statement> list;
-	public Map<String, Expression> values;
+	private List<Statement> _list;
+	private Map<String, Expression> _values;
+	private List<String> _evaluations = new ArrayList<>();
 	
-	public ExpressionProcessor(List<Statement> list) {
-		this.list = list;
-		values = new HashMap<>();
+	public Map<String, Expression> getValues() {
+		return _values;
 	}
 	
-	public List<String> getEvaluationResults() {
-		List<String> evaluations = new ArrayList<>();
+	public ExpressionProcessor(List<Statement> list, Map<String, Expression> values, List<String> evaluations) {
+		_list = list;
+		_values = values;
+		_evaluations = evaluations;
+	}
+	
+	public ExpressionProcessor(List<Statement> list) {
+		_list = list;
+		_values = new HashMap();
+		_evaluations = new ArrayList<>();
+	}
+	
+	public List<String> ProcessStatements() {
 		
-		for (Statement e : list) {
+		for (Statement e : _list) {
 			if (e instanceof VariableDeclaration) {
-				VariableDeclaration decl = (VariableDeclaration) e;
-				values.put(decl.id, decl);
+				VariableDeclaration decl = new VariableDeclaration((VariableDeclaration) e);
+				
+				if(!(decl.value instanceof Number)) {
+					String stringValue = String.valueOf(EvaluateExpression(decl.value));
+					decl.value = new Number(stringValue);
+				}	
+				
+				_values.put(decl.id, decl);
 			}
 			else if (e instanceof ListDeclaration) {
 				ListDeclaration listDecl = (ListDeclaration) e;
-				values.put(listDecl.id, listDecl);
+				_values.put(listDecl.id, listDecl);
 			} 
 			else if (e instanceof SsaAlg) {
 				SsaAlg ssa = (SsaAlg) e;
 				
-				ListDeclaration sol = (ListDeclaration) values.get(ssa.solution);
+				ListDeclaration sol = (ListDeclaration) _values.get(ssa.solution);
 				Map<String, Double> species = new HashMap<String,Double>();
 				
 				for(Expression l : sol.list) {
 					VariableDeclaration num = (VariableDeclaration) l;
-					Double value = getEvalResult(num.value);
+					Double value = EvaluateExpression(num.value);
 					species.put(num.id, value);
 				}
 				StateSet stateSet = new StateSet(species, 0);
 				
-				ListDeclaration reactions = (ListDeclaration) values.get(ssa.reacList);
+				ListDeclaration reactions = (ListDeclaration) _values.get(ssa.reacList);
 				List<stoichoReaction> reactionSet = new ArrayList<stoichoReaction>();
 				
 				for(Expression r : reactions.list) {
@@ -76,107 +96,139 @@ public class ExpressionProcessor {
 						predator.add((ReactionPair) p);
 					}
 					
-					reactionSet.add(new stoichoReaction(prey, predator, getEvalResult(reac.constant), new StateSet(stateSet)));
+					reactionSet.add(new stoichoReaction(prey, predator, EvaluateExpression(reac.constant), new StateSet(stateSet)));
 				}		
 				
-				Simulator s = new Simulator((int) getEvalResult(ssa.loops), stateSet, reactionSet);
+				Simulator s = new Simulator((int) EvaluateExpression(ssa.loops), stateSet, reactionSet);
 				List<StateSet> results = s.Simulate();
 				for(StateSet ss : results) {
 					System.out.println("ss " + ss.species.toString() + " " + ss.time);
 				}
 			}
+			else if (e instanceof IfStatement) {
+				IfStatement ifStmt = (IfStatement) e;
+				boolean condition = EvaluatePredicate(ifStmt.getPredicate());
+				
+				if (condition) {
+					ProcessScope((Scope) ifStmt.getThenScope());
+				} else  {
+					ProcessScope((Scope) ifStmt.getElseScope());
+				}
+			}
+			else if (e instanceof WhileStatement) {
+				WhileStatement whileStmt = (WhileStatement) e;
+			
+				while(EvaluatePredicate(whileStmt.getPredicate())) {
+					ProcessScope(whileStmt.getScope());	
+				}
+			}
 			else {
 				String input = e.toString();
-				double result = getEvalResult(e);
-				evaluations.add(input + " = " + result);
+				double result = EvaluateExpression(e);
+				_evaluations.add(input + " = " + result);
 			}
 		}
 		
-		return evaluations;
+		return _evaluations;
 	}
 	
-	private double getEvalResult(Statement e) {
-		
+	private void ProcessScope(Scope scope) {
+		if(scope != null) {
+			ExpressionProcessor ep = new ExpressionProcessor(scope.stmts, _values, _evaluations);
+			ep.ProcessStatements();
+		}
+	}
+	
+	private double EvaluateExpression(Statement e) {
+				
 		if (e instanceof Number) {
 			Number num = (Number) e;
 			return Double.parseDouble(num.num);
 		} 
 		else if (e instanceof Variable) {
 			Variable var = (Variable) e;
-			Expression varDecl = values.get(var.ID);
+			Expression varDecl = _values.get(var.ID);
 			
 			if (varDecl instanceof VariableDeclaration) {
-				return getEvalResult(((VariableDeclaration) varDecl).value);
+				return EvaluateExpression(((VariableDeclaration) varDecl).value);
 			} else {
 				return 0;
 			}
 		}
 		else if (e instanceof Bracket) {
-			return getEvalResult(((Bracket) e).expr);
+			return EvaluateExpression(((Bracket) e).expr);
 		}
 		else if (e instanceof Addition) {
 			Addition add = (Addition) e;
-			double left = getEvalResult(add.left);
-			double right = getEvalResult(add.right);
+			double left = EvaluateExpression(add.left);
+			double right = EvaluateExpression(add.right);
 			return left + right;
 		}
 		else if (e instanceof Multiplication) {
 			Multiplication add = (Multiplication) e;
-			double left = getEvalResult(add.left);
-			double right = getEvalResult(add.right);
+			double left = EvaluateExpression(add.left);
+			double right = EvaluateExpression(add.right);
 			return left * right;
 		}
 		else if (e instanceof Division) {
 			Division add = (Division) e;
-			double left = getEvalResult(add.left);
-			double right = getEvalResult(add.right);
+			double left = EvaluateExpression(add.left);
+			double right = EvaluateExpression(add.right);
 			return left / right;
 		}
 		else if (e instanceof Subtraction) {
 			Subtraction add = (Subtraction) e;
-			double left = getEvalResult(add.left);
-			double right = getEvalResult(add.right);
+			double left = EvaluateExpression(add.left);
+			double right = EvaluateExpression(add.right);
 			return left - right;
-		}
-		else if (e instanceof LogicalOperator) {
-			LogicalOperator log = (LogicalOperator) e;
-			boolean left = BoolCheck(log.left);
-			boolean right = BoolCheck(log.right);
-			
-			switch(log.operator) {
-				case "||" : 
-					return (left || right) ? 1 : 0;
-				case "&&" : 
-					return (left && right) ? 1 : 0;
-			}
-		}
-		else if (e instanceof RelationalOperator) {
-			RelationalOperator rel = (RelationalOperator) e;
-			double left = getEvalResult(rel.left);
-			double right = getEvalResult(rel.right);
-			
-			switch(rel.operator) {
-				case "<" : 
-					return (left < right) ? 1 : 0;
-				case "<=" : 
-					return (left <= right) ? 1 : 0;
-				case ">" : 
-					return (left > right) ? 1 : 0;
-				case ">=" : 
-					return (left >= right) ? 1 : 0;
-				case "==" : 
-					return (left == right) ? 1 : 0;
-				case "!=" : 
-					return (left != right) ? 1 : 0;
-			}
 		}
 		
 		return 0;
 	}
 	
-	public boolean BoolCheck(Expression e) {
-		if (e.toString().equals("true")) return true;
-		if (e.toString().equals("false")) return false;
-		return (getEvalResult(e) != 0) ? true : false;
+	private boolean EvaluatePredicate(Expression p) {
+		if (p instanceof Bracket) {
+			return EvaluatePredicate(((Bracket) p).expr);
+		}
+		else if (p.toString().equals("true")) {
+			return true;
+		}
+		else if (p.toString().equals("false")) {
+			return false;
+		}
+		else if (p instanceof LogicalOperator) {
+			LogicalOperator log = (LogicalOperator) p;
+			boolean left = EvaluatePredicate(log.left);
+			boolean right = EvaluatePredicate(log.right);
+			
+			switch(log.operator) {
+				case "||" : 
+					return left || right;
+				case "&&" : 
+					return left && right;
+			}
+		}
+		else if (p instanceof RelationalOperator) {
+			RelationalOperator rel = (RelationalOperator) p;
+			double left = EvaluateExpression(rel.left);
+			double right = EvaluateExpression(rel.right);
+			
+			switch(rel.operator) {
+				case "<" : 
+					return left < right;
+				case "<=" : 
+					return left <= right;
+				case ">" : 
+					return left > right;
+				case ">=" : 
+					return left >= right;
+				case "==" : 
+					return left == right;
+				case "!=" : 
+					return left != right;
+			}
+		}
+		
+		return false;
 	}
 }
