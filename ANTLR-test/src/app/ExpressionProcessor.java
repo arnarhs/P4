@@ -213,7 +213,7 @@ public class ExpressionProcessor {
 		
 		for(StateSet state : result.stateSets) {
 			for(GraphData graph : graphData) {
-				graph.add(state.species.get(graph.Name), state.time);
+				graph.add(state.time, state.species.get(graph.Name));
 			}
 		}
 		
