@@ -85,20 +85,9 @@ public class ExpressionProcessor {
 					
 					for(List<GraphData> iteration : graphs){
 						for(GraphData graph : iteration) {
-							evaluations.add(graph.toString());
+							_evaluations.add(graph.toString());
 						}
 					}
-					
-					reactionSet.add(new stoichoReaction(prey, predator, EvaluateExpression(reac.constant), new StateSet(stateSet)));
-				}		
-				
-				Simulator s = new Simulator((int) EvaluateExpression(ssa.loops), stateSet, reactionSet);
-				List<StateSet> results = s.Simulate();
-				MeanGraph Mean = new MeanGraph(results);
-				Mean.createMeanList(results);
-				System.out.println(Mean.gd);
-				for(StateSet ss : results) {
-					System.out.println("ss " + ss.species.toString() + " " + ss.time);
 				}
 			}
 			else if (e instanceof IfStatement) {
@@ -232,17 +221,17 @@ public class ExpressionProcessor {
 	}
 
 	private List<SSAResult> getSsaResults(SsaAlg alg) {
-		ListDeclaration sol = (ListDeclaration) values.get(alg.solution);
+		ListDeclaration sol = (ListDeclaration) _values.get(alg.solution);
 		Map<String, Double> species = new HashMap<String,Double>();
 		
 		for(Expression l : sol.list) {
 			VariableDeclaration num = (VariableDeclaration) l;
-			Double value = getEvalResult(num.value);
+			Double value = EvaluateExpression(num.value);
 			species.put(num.id, value);
 		}
 		StateSet stateSet = new StateSet(species, 0);
 		
-		ListDeclaration reactions = (ListDeclaration) values.get(alg.reacList);
+		ListDeclaration reactions = (ListDeclaration) _values.get(alg.reacList);
 		List<stoichoReaction> reactionSet = new ArrayList<stoichoReaction>();
 		
 		for(Expression r : reactions.list) {
@@ -260,10 +249,10 @@ public class ExpressionProcessor {
 				predator.add((ReactionPair) p);
 			}
 			
-			reactionSet.add(new stoichoReaction(prey, predator, getEvalResult(reac.constant), new StateSet(stateSet)));
+			reactionSet.add(new stoichoReaction(prey, predator, EvaluateExpression(reac.constant), new StateSet(stateSet)));
 		}		
 		
-		Simulator s = new Simulator((int) getEvalResult(alg.loops), stateSet, reactionSet);
+		Simulator s = new Simulator((int) EvaluateExpression(alg.loops), stateSet, reactionSet);
 		return s.Simulate();
 	}
 

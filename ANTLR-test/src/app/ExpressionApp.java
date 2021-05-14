@@ -52,8 +52,8 @@ public class ExpressionApp {
 		
 		if(progVisitor.semanticErrors.isEmpty()) {
 			ExpressionProcessor ep = new ExpressionProcessor(prog.statements);
-      for(String evaluation: ep.ProcessStatements()) {
-				output.Send(evaluation);
+	        for(String evaluation: ep.ProcessStatements()) {
+				output.Log(evaluation);
 			}
 			graphs = ep.fetchGraphData();
 		} else {
