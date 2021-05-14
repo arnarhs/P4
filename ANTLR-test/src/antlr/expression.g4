@@ -63,11 +63,15 @@ expr
     | ifStmt
     | whileStmt
     | pred
-    
-     //methExpr                                      
-    //| ID '(' (exprParams | WS*) ')'                   # MethodCall
-//| SSA '(' ssaParams ')'                               # GillespieCall
+    | print
+    //methExpr                                      
+    //| ID '(' (exprParams | WS*) ')'                     # MethodCall
+    //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
+
+print
+	: KEYWORD'('(ID|ssaCall|reacExpr|opExpr|pred)')' # PrintExpr
+    ;	
 
 assign
     : ID ':' reacExpr                   				# ReacAssign
@@ -109,7 +113,7 @@ ifStmt
     ;
 
 pred
-    : '(' pred ')' 										# PBracketExpression
+    : '(' pred ')' 										                  # PBracketExpression
     | pred LOGOP pred                                   # LogicalExpr
     | opExpr RELOP opExpr                               # RelationalOperator
     | BOOL												# Boolean

@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -25,7 +26,7 @@ public class GraphPanel extends JPanel {
 	  UpdateGraph(seeker);
 	}
 
-	private XYDataset createDataset(ArrayList<GraphData> dataset) {
+	private XYDataset createDataset(List<GraphData> dataset) {
 	    XYSeriesCollection collection = new XYSeriesCollection();
 	    dataset.forEach((set) -> {
 	    	XYSeries series = new XYSeries(set.Name);
