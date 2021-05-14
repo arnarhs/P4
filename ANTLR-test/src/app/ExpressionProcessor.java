@@ -12,12 +12,16 @@ import models.expressions.Addition;
 import models.expressions.Bracket;
 import models.expressions.Division;
 import models.expressions.Expression;
+import models.expressions.ListExpr;
 import models.expressions.LogicalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
+import models.expressions.ReactionExpr;
 import models.expressions.RelationalOperator;
+import models.expressions.SsaAlg;
 import models.expressions.Subtraction;
 import models.expressions.Variable;
+import GillespieSSA.*;
 
 /*visitor pattern is a better choice to evaluate our data*/
 public class ExpressionProcessor {
@@ -41,6 +45,49 @@ public class ExpressionProcessor {
 				ListDeclaration listDecl = (ListDeclaration) e;
 				values.put(listDecl.id, listDecl);
 			} 
+			else if (e instanceof SsaAlg) {
+				SsaAlg ssa = (SsaAlg) e;
+				
+				ListDeclaration sol = (ListDeclaration) values.get(ssa.solution);
+				Map<String, Double> species = new HashMap<String,Double>();
+				
+				for(Expression l : sol.list) {
+					VariableDeclaration num = (VariableDeclaration) l;
+					Double value = getEvalResult(num.value);
+					species.put(num.id, value);
+				}
+				StateSet stateSet = new StateSet(species, 0);
+				
+				ListDeclaration reactions = (ListDeclaration) values.get(ssa.reacList);
+				List<stoichoReaction> reactionSet = new ArrayList<stoichoReaction>();
+				
+				for(Expression r : reactions.list) {
+					ReactionExpr reac = (ReactionExpr) r;
+					
+					ListExpr left = (ListExpr) reac.left;
+					List<ReactionPair> prey = new ArrayList<ReactionPair>();
+					for(Expression p : left.list) {
+						prey.add((ReactionPair) p);
+					}
+					
+					ListExpr right = (ListExpr) reac.right;
+					List<ReactionPair> predator = new ArrayList<ReactionPair>();
+					for(Expression p : right.list) {
+						predator.add((ReactionPair) p);
+					}
+					
+					reactionSet.add(new stoichoReaction(prey, predator, getEvalResult(reac.constant), new StateSet(stateSet)));
+				}		
+				
+				Simulator s = new Simulator((int) getEvalResult(ssa.loops), stateSet, reactionSet);
+				List<StateSet> results = s.Simulate();
+				MeanGraph Mean = new MeanGraph(results);
+				Mean.createMeanList(results);
+				System.out.println(Mean.gd);
+				for(StateSet ss : results) {
+					System.out.println("ss " + ss.species.toString() + " " + ss.time);
+				}
+			}
 			else {
 				String input = e.toString();
 				double result = getEvalResult(e);
@@ -126,7 +173,7 @@ public class ExpressionProcessor {
 					return (left != right) ? 1 : 0;
 			}
 		}
-
+		
 		return 0;
 	}
 	
