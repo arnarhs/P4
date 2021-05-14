@@ -1,5 +1,6 @@
 package GUI;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ public class GraphData {
 	public int Iteration;
 	public String Name;
 	public Hashtable<Double, Double> Plots;
+	public HashMap<Double, Integer> points = new HashMap<Double, Integer>(); 
 	
 	public GraphData(String name) {
 		Name = name;
