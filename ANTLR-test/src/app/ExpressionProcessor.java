@@ -29,31 +29,29 @@ import models.expressions.Subtraction;
 import models.expressions.Variable;
 import models.expressions.WhileStatement;
 import GillespieSSA.*;
+import SymbolTable.Identifier;
+import SymbolTable.SymbolTableController;
 
 /*visitor pattern is a better choice to evaluate our data*/
 public class ExpressionProcessor {
 	private List<Statement> _list;
-	private Map<String, Expression> _values;
 	private List<String> _evaluations = new ArrayList<>();
 	private List<List<GraphData>> graphs;
+	private SymbolTableController symbolTable = SymbolTableController.GetInstance();
 	
-	public Map<String, Expression> getValues() {
-		return _values;
-	}
 	
-	public ExpressionProcessor(List<Statement> list, Map<String, Expression> values, List<String> evaluations) {
+	public ExpressionProcessor(List<Statement> list, List<String> evaluations) {
 		_list = list;
-		_values = values;
 		_evaluations = evaluations;
 	}
 	
 	public ExpressionProcessor(List<Statement> list) {
 		_list = list;
-		_values = new HashMap();
 		_evaluations = new ArrayList<>();
 	}
 	
 	public List<String> ProcessStatements() {
+		symbolTable.OpenScope();
 		
 		for (Statement e : _list) {
 			if (e instanceof VariableDeclaration) {
@@ -69,11 +67,12 @@ public class ExpressionProcessor {
 					decl.value = new Number(stringValue);
 				}	
 				
-				_values.put(decl.id, decl);
+				symbolTable.EnterSymbol(new Identifier(decl.id, decl)); 
+
 			}
 			else if (e instanceof ListDeclaration) {
 				ListDeclaration listDecl = (ListDeclaration) e;
-				_values.put(listDecl.id, listDecl);
+				symbolTable.EnterSymbol(new Identifier(listDecl.id, listDecl)); 
 			} 
 			else if (e instanceof SsaAlg) {
 				SsaAlg ssa = (SsaAlg) e;
@@ -120,7 +119,7 @@ public class ExpressionProcessor {
 				_evaluations.add(input + " = " + result);
 			}
 		}
-		
+		symbolTable.CloseScope();
 		return _evaluations;
 	}
 	
@@ -130,7 +129,7 @@ public class ExpressionProcessor {
 			
 	private void ProcessScope(Scope scope) {
 		if(scope != null) {
-			ExpressionProcessor ep = new ExpressionProcessor(scope.stmts, _values, _evaluations);
+			ExpressionProcessor ep = new ExpressionProcessor(scope.stmts, _evaluations);
 			ep.ProcessStatements();
 		}
 	}
@@ -142,7 +141,7 @@ public class ExpressionProcessor {
 		} 
 		else if (e instanceof Variable) {
 			Variable var = (Variable) e;
-			Expression declExpr = _values.get(var.ID);
+			Expression declExpr = symbolTable.RetrieveSymbol(var.ID).GetExpression();
 			
 			if (declExpr instanceof VariableDeclaration) {
 				VariableDeclaration varDecl = (VariableDeclaration) declExpr;
@@ -196,7 +195,8 @@ public class ExpressionProcessor {
 		else if (p instanceof Variable) {
 			
 			Variable boolID = (Variable) p;	
-			Expression declExpr = _values.get(boolID.ID);
+			Expression declExpr = symbolTable.RetrieveSymbol(boolID.ID).GetExpression();
+			
 			
 			if (declExpr instanceof VariableDeclaration) {
 				VariableDeclaration varDecl = (VariableDeclaration) declExpr;
@@ -253,7 +253,7 @@ public class ExpressionProcessor {
 	}
 
 	private List<SSAResult> getSsaResults(SsaAlg alg) {
-		ListDeclaration sol = (ListDeclaration) _values.get(alg.solution);
+		ListDeclaration sol = (ListDeclaration) symbolTable.RetrieveSymbol(alg.solution).GetExpression();
 		Map<String, Double> species = new HashMap<String,Double>();
 		
 		for(Expression l : sol.list) {
@@ -263,7 +263,7 @@ public class ExpressionProcessor {
 		}
 		StateSet stateSet = new StateSet(species, 0);
 		
-		ListDeclaration reactions = (ListDeclaration) _values.get(alg.reacList);
+		ListDeclaration reactions = (ListDeclaration) symbolTable.RetrieveSymbol(alg.reacList).GetExpression();
 		List<stoichoReaction> reactionSet = new ArrayList<stoichoReaction>();
 		
 		for(Expression r : reactions.list) {

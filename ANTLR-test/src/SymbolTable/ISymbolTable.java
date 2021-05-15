@@ -6,9 +6,9 @@ public interface ISymbolTable {
 
 	Identifier EnterSymbol(Identifier id);
 
-	Identifier RetrieveSymbol(Identifier id);
-
 	Boolean DeclaredLocally(Identifier id);
+
+	Identifier RetrieveSymbol(String id);
 
 	
 }

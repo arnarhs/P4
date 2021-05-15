@@ -8,6 +8,8 @@ import java.util.Map;
 import org.antlr.v4.runtime.Token;
 
 import GillespieSSA.ReactionPair;
+import SymbolTable.Identifier;
+import SymbolTable.SymbolTableController;
 import antlr.expressionBaseVisitor;
 import antlr.expressionParser.*;
 import models.Statement;
@@ -34,7 +36,7 @@ import models.expressions.WhileStatement;
  
 public class AntlrToExpression extends expressionBaseVisitor<Expression> {
  
-	private Map<String, String> vars = new HashMap<>(); //A map that stores all the declared variables and their types.
+	private SymbolTableController symbolTable = SymbolTableController.GetInstance();
 	private List<String> semanticErrors; //A list that stores all the semantic errors.
 
 	public AntlrToExpression(List<String> semanticErrors) {
@@ -95,14 +97,16 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		if (ctx.getChildCount() > 2) {
 			value = visitChildren(ctx); 
 		}
+
+		VariableDeclaration decl = new VariableDeclaration(id, type, value);
 		
-		if (vars.get(id) != null) {
+		if (symbolTable.RetrieveSymbol(id) != null) {
 			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
-			vars.put(id, type);
+			symbolTable.EnterSymbol(new Identifier(id, decl));
 		}
-
-		return new VariableDeclaration(id, type, value);
+		
+		return decl;
 	}
   
   @Override
@@ -114,11 +118,13 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		String id = ctx.getChild(0).getText();
 		Expression value = visit(ctx.getChild(2));		
 		
-		if (vars.get(id) == null) {
+		if (symbolTable.RetrieveSymbol(id) == null) {
 			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
 		}
+		String type = ((VariableDeclaration) symbolTable.RetrieveSymbol(id).GetExpression()).type;
+		return new VariableDeclaration(id, type , value);
 		
-		return new VariableDeclaration(id, vars.get(id), value);
+		
 	}
 	
 	@Override
@@ -175,15 +181,15 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			value = visitChildren(ctx); 
 		}	
 		
-		if (vars.get(id) != null) {
-			SemanticError(line, column, "variable '" + id + "' already declared.");
-		//} else if(type.equals("int") && TryParseInt(value.toString()) == null) {
-		//	SemanticError(line, column, value.toString() + " is not a valid " + type);
+		VariableDeclaration decl = new VariableDeclaration(id, type, value);
+		
+		if (symbolTable.RetrieveSymbol(id) != null) {
+			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
-			vars.put(id, type);
+			symbolTable.EnterSymbol(new Identifier(id, decl));
 		}
 		
-		return new VariableDeclaration(id, type, value);
+		return decl;
 	}
 
 
@@ -196,11 +202,11 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		String id = ctx.getChild(0).getText();
 		Expression value = visit(ctx.getChild(2));		
 		
-		if (vars.get(id) == null) {
+		if (symbolTable.RetrieveSymbol(id) == null) {
 			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
 		}
-		
-		return new VariableDeclaration(id, vars.get(id), value);
+		String type = ((VariableDeclaration) symbolTable.RetrieveSymbol(id).GetExpression()).type;
+		return new VariableDeclaration(id, type , value);
 	}
 	
 
@@ -232,13 +238,15 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			reacParams = (ListExpr) visit(ctx.reacParams());	
 		}
 		
-		if (vars.get(id) != null) {
-			SemanticError(line, column, "list '" + id + "' already declared.");
+		ListDeclaration decl = new ListDeclaration(id, type, reacParams.list);
+		
+		if (symbolTable.RetrieveSymbol(id) != null) {
+			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
-			vars.put(id, type);
-		}		
-		 	
-		return new ListDeclaration(id, type, reacParams.list);
+			symbolTable.EnterSymbol(new Identifier(id, decl));
+		}
+		
+		return decl;
 	}
   
   	@Override
@@ -250,11 +258,12 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		String id = ctx.getChild(0).getText();
 		ListExpr value = (ListExpr) visit(ctx.reacParams());		
 		
-		if (vars.get(id) == null) {
+		if (symbolTable.RetrieveSymbol(id) == null) {
 			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
 		}
 		
-		return new ListDeclaration(id, vars.get(id), value.list);
+		String type = ((ListDeclaration) symbolTable.RetrieveSymbol(id).GetExpression()).type;
+		return new ListDeclaration(id, type, value.list);
 	}
 	
 	//Multiple reaction parameters
@@ -289,13 +298,15 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			speciList = (ListExpr) visit(ctx.declList());
 		}
 		
-		if (vars.get(id) != null) {
-			SemanticError(line, column, "solution '" + id + "' already declared.");
+		ListDeclaration decl = new ListDeclaration(id, type, speciList.list);
+		
+		if (symbolTable.RetrieveSymbol(id) != null) {
+			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
-			vars.put(id, type);
+			symbolTable.EnterSymbol(new Identifier(id, decl));
 		}
 		
-		return new ListDeclaration(id, type, speciList.list);
+		return decl;
 	}
 	
 
@@ -375,13 +386,15 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 			value = visitChildren(ctx); 
 		}	
 				
-		if (vars.get(id) != null) {
-			SemanticError(line, column, "variable '" + id + "' already declared.");
+		VariableDeclaration decl = new VariableDeclaration(id, type, value);
+		
+		if (symbolTable.RetrieveSymbol(id) != null) {
+			SemanticError(line, column, "reaction '" + id + "' already declared.");
 		} else {
-			vars.put(id, type);
+			symbolTable.EnterSymbol(new Identifier(id, decl));
 		}
 		
-		return new VariableDeclaration(id, type, value);
+		return decl;
 	}
 	
 	@Override
@@ -393,11 +406,12 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		String id = ctx.getChild(0).getText();
 		Expression value = visitChildren(ctx); 	
 		
-		if (vars.get(id) == null) {
+
+		if (symbolTable.RetrieveSymbol(id) == null) {
 			SemanticError(line, column, "attempting to assign to undeclared id '" + id + "'");
 		}
-		
-		return new VariableDeclaration(id, vars.get(id), value);
+		String type = ((VariableDeclaration) symbolTable.RetrieveSymbol(id).GetExpression()).type;
+		return new VariableDeclaration(id, type , value);
 	}	
 	
 	@Override

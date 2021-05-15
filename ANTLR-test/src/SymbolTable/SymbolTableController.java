@@ -84,7 +84,7 @@ public class SymbolTableController implements ISymbolTable{
 
 
 	@Override
-	public Identifier RetrieveSymbol(Identifier id) {
+	public Identifier RetrieveSymbol(String id) {
 		Boolean test = false;
 		Identifier currentDeclaration;
 		while(!test) {

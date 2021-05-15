@@ -1,7 +1,7 @@
 package SymbolTable;
 
 import TypeChecker.TypeDescriptor;
-import TypeChecker.TypeWrapper;
+import models.expressions.Expression;
 
 enum IDType {
 	IDReference,
@@ -10,13 +10,17 @@ enum IDType {
 }
 
 public class Identifier {
-	IDType idType;
-	TypeDescriptor variableType;
-	Integer name;
+	Expression value;
+	String name;
+	
+	public Expression GetExpression() {
+		return value;
+	}
 	
 	public Identifier() {}
 	
-	public Identifier(IDType idtype, TypeDescriptor variableType, Integer name) {
-		
+	public Identifier(String name, Expression value) {
+		this.value = value;
+		this.name = name;
 	}
 }
