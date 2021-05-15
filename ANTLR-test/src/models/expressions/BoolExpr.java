@@ -2,14 +2,22 @@ package models.expressions;
 
 public class BoolExpr extends Expression {
 	
-	boolean value;
+	private String _value = "false";
 	
-	public BoolExpr (boolean value) {
-		this.value = value;
+	public String getValue() {
+		return _value;
+	}
+	
+	public void setValue(String value) {
+		_value = value;
+	}
+	
+	public BoolExpr (String value) {
+		this._value = value;
 	}
 	
 	@Override
 	public String toString() {
-		return String.valueOf(value);
+		return _value;
 	}
 }

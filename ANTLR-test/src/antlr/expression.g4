@@ -17,22 +17,16 @@ decl
 	| LIST ID ( ':'  '{' reacParams '}' )?         	  	# ListDecl         
     | numDecl                            			 	# NumberDecl
     | BOOLT ID ( ':' pred )?                         	# BoolDecl
-| SOLUTION ID ( ':' '{' declList '}' )?                 # SolutionDeclaration
+	| SOLUTION ID ( ':' '{' declList '}' )?             # SolutionDeclaration
     ;
 
 numDecl
 	: NUMT ID ( ':' opExpr )?                       
 	;
 
-
-/*
-formalParams                                   
-    : KEYWORD ID ',' formalParams               //# ParamList
-    | KEYWORD ID                                //# Param
-    ;
-*/
-ssaCall
-	: ID '.' SSA '(' ID ',' value ')'					#SsaAlg
+declList
+	: numDecl ',' declList								# SpeciesDecls
+	| numDecl											# SpeciesDecl
 	;
 
 reacParams
@@ -40,20 +34,6 @@ reacParams
     | reacExpr                                  		# ReactionParameter
     ;
 
-declList
-	: numDecl ',' declList								# SpeciesDecls
-	| numDecl											# SpeciesDecl
-	;
-
-/*ssaParams
-    : '{' ssaList '}' ',' ID
-    | ID
-    ;
-*/
-/*ssaList
-    : ID ',' ssaList  
-    | ID
-    ;*/
 
 expr
     : ssaCall
@@ -65,9 +45,12 @@ expr
     | pred
     | print
     //methExpr                                      
-    //| ID '(' (exprParams | WS*) ')'                     # MethodCall
-    //| SSA '(' ssaParams ')'                             # GillespieCall
+    //| ID '(' (exprParams | WS*) ')'                   # MethodCall
     ;
+    
+ssaCall
+	: ID '.' SSA '(' ID ',' value ')'					#SsaAlg
+	;
 
 print
 	: KEYWORD'('(ID|ssaCall|reacExpr|opExpr|pred)')' # PrintExpr
@@ -113,10 +96,11 @@ ifStmt
     ;
 
 pred
-    : '(' pred ')' 										                  # PBracketExpression
+    : '(' pred ')' 										# PBracketExpression
     | pred LOGOP pred                                   # LogicalExpr
     | opExpr RELOP opExpr                               # RelationalOperator
     | BOOL												# Boolean
+    | ID												# BooleanVariable
     ;
 
 value
@@ -139,7 +123,7 @@ IF: 'if' ;
 ELSE: 'else' ;
 
 BOOLT: 'bool' ;
-BOOL: 'true' | 'false' ;
+BOOL: 'true' | 'false' | 'random' ;
 
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
 LOGOP: '||' | '&&' ;

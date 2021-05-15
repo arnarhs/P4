@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.antlr.v4.runtime.Token;
 
 import GillespieSSA.ReactionPair;
@@ -373,7 +374,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		if (ctx.getChildCount() > 2) {
 			value = visitChildren(ctx); 
 		}	
-		
+				
 		if (vars.get(id) != null) {
 			SemanticError(line, column, "variable '" + id + "' already declared.");
 		} else {
@@ -402,8 +403,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitBoolean(BooleanContext ctx) {	
 		String strValue = ctx.getChild(0).toString();
-		boolean value = strValue.equals("true");
-		return new BoolExpr(value);
+		return new BoolExpr(strValue);
 	}
 	
 	
@@ -433,11 +433,26 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new Bracket(visit(ctx.getChild(1)));
 	}
 	
+	@Override
+	public Expression visitBooleanVariable(BooleanVariableContext ctx) {
+		Token idToken = ctx.ID().getSymbol();
+		int line = idToken.getLine();
+		int column = idToken.getCharPositionInLine() + 1;
+ 
+		String id = ctx.getChild(0).getText();
+		if (vars.get(id) == null) {
+			SemanticError(line, column, "variable '" + id + "' not declared.");
+		}
+ 
+		return new Variable(id);
+	}
+	
 	
 	/*
 	 *  IF STATEMENT
 	 */
 	
+
 	@Override
 	public Expression visitIfStatement(IfStatementContext ctx) {
 		Expression condition = visit(ctx.getChild(2));

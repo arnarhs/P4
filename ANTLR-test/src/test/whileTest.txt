@@ -1,9 +1,19 @@
-int a : 5
+int i : 20
+while (i > 0) {
 
-while ( a > 0 ) {
+	if (random && true) {
+		i
+	}
+	
+	i : i - 1
+}
 
-	a : a - 1
+
+i : 10
+while (i > 0) {
+
+	bool b : random
+	b
 	
-	a
-	
+	i : i - 1
 }

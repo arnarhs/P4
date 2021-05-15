@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import GUI.GraphData;
 import models.Statement;
 import models.declarations.ListDeclaration;
 import models.declarations.VariableDeclaration;
 import models.expressions.Addition;
+import models.expressions.BoolExpr;
 import models.expressions.Bracket;
 import models.expressions.Division;
 import models.expressions.Expression;
@@ -33,7 +35,7 @@ public class ExpressionProcessor {
 	private List<Statement> _list;
 	private Map<String, Expression> _values;
 	private List<String> _evaluations = new ArrayList<>();
-  private List<List<GraphData>> graphs;
+	private List<List<GraphData>> graphs;
 	
 	public Map<String, Expression> getValues() {
 		return _values;
@@ -57,7 +59,12 @@ public class ExpressionProcessor {
 			if (e instanceof VariableDeclaration) {
 				VariableDeclaration decl = new VariableDeclaration((VariableDeclaration) e);
 				
-				if(!(decl.value instanceof Number)) {
+				if(decl.type.equals("bool")) {
+					// Evalute predicates in bool declarations
+					boolean boolValue = EvaluatePredicate(decl.value);
+					decl.value = new BoolExpr(String.valueOf(boolValue));
+					
+				} else if(!(decl.value instanceof Number)) {
 					String stringValue = String.valueOf(EvaluateExpression(decl.value));
 					decl.value = new Number(stringValue);
 				}	
@@ -135,10 +142,18 @@ public class ExpressionProcessor {
 		} 
 		else if (e instanceof Variable) {
 			Variable var = (Variable) e;
-			Expression varDecl = _values.get(var.ID);
+			Expression declExpr = _values.get(var.ID);
 			
-			if (varDecl instanceof VariableDeclaration) {
-				return EvaluateExpression(((VariableDeclaration) varDecl).value);
+			if (declExpr instanceof VariableDeclaration) {
+				VariableDeclaration varDecl = (VariableDeclaration) declExpr;
+				
+				switch (varDecl.type) {
+					case "bool":
+						return EvaluatePredicate(varDecl.value) ? 1 : 0;
+					default:
+						return EvaluateExpression(varDecl.value);
+				}
+				
 			} else {
 				return 0;
 			}
@@ -178,11 +193,19 @@ public class ExpressionProcessor {
 		if (p instanceof Bracket) {
 			return EvaluatePredicate(((Bracket) p).expr);
 		}
-		else if (p.toString().equals("true")) {
-			return true;
-		}
-		else if (p.toString().equals("false")) {
-			return false;
+		else if (p instanceof Variable) {
+			
+			Variable boolID = (Variable) p;	
+			Expression declExpr = _values.get(boolID.ID);
+			
+			if (declExpr instanceof VariableDeclaration) {
+				VariableDeclaration varDecl = (VariableDeclaration) declExpr;
+				
+				switch (varDecl.type) {
+					case "bool":
+						return EvaluatePredicate(varDecl.value);
+				}
+			}
 		}
 		else if (p instanceof LogicalOperator) {
 			LogicalOperator log = (LogicalOperator) p;
@@ -215,6 +238,15 @@ public class ExpressionProcessor {
 				case "!=" : 
 					return left != right;
 			}
+		}
+		else if (p.toString().equals("true")) {
+			return true;
+		}
+		else if (p.toString().equals("false")) {
+			return false;
+		}
+		else if (p.toString().equals("random")) {
+		    return new Random().nextBoolean();
 		}
 		
 		return false;
