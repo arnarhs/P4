@@ -10,14 +10,14 @@ public class Simulator {
 	List<stoichoReaction> reactionSet;
 	StateSet initialState;
 	
-	public Simulator(double time, StateSet initialState, List<stoichoReaction> reactionset) {
+	public Simulator(double runTime, StateSet initialState, List<stoichoReaction> reactionset) {
 		this.initialState = initialState;
-		runTime = time;
+		this.runTime = runTime;
 		reactionSet = reactionset;
 	}
 	
-	public Simulator(int nrtimes, int nrturns, StateSet initialState, List<stoichoReaction> reactionset) {
-		this(nrturns, initialState, reactionset);
+	public Simulator(int nrtimes, double runTime, StateSet initialState, List<stoichoReaction> reactionset) {
+		this(runTime, initialState, reactionset);
 		times = nrtimes;
 	}
 
