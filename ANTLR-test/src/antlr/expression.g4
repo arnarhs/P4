@@ -27,6 +27,10 @@ numDecl
 declList
 	: numDecl ',' declList								# SpeciesDecls
 	| numDecl											# SpeciesDecl
+
+ssaCall
+	: ID '.' SSA '(' ID ',' value ')'			#SsaAlg
+	| ID '.' SSA '(' ID ',' value ',' value ')' #SsaAlgMult 
 	;
 
 reacParams

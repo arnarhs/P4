@@ -14,7 +14,7 @@ public class ChemTrailsRunner implements Runner{
 	public RunnerOutput Run(String code) {
 		ExpressionApp.parseString(code);
 		RunnerOutput output = new RunnerOutput();
-		output.Graphs = ExpressionApp.getGraphsFromParser().get(0);
+		output.Graphs = ExpressionApp.getGraphsFromParser();
 		return output;
 	}
 

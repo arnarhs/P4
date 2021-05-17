@@ -5,40 +5,52 @@ import java.util.List;
 import java.util.Random;
 
 public class Simulator {
-	int turns; //number of reactions for the individual simulation
+	double runTime; //running time for the individual simulation
 	int times = 1; //number of simulations
-	List<List<StateSet>> states;
 	List<stoichoReaction> reactionSet;
 	StateSet initialState;
 	
-	public Simulator(int nrturns, StateSet initialState, List<stoichoReaction> reactionset) {
+	public Simulator(double runTime, StateSet initialState, List<stoichoReaction> reactionset) {
 		this.initialState = initialState;
-		turns = nrturns;
-		states = new ArrayList<List<StateSet>>();
+		this.runTime = runTime;
 		reactionSet = reactionset;
 	}
 	
-	public Simulator(int nrtimes, int nrturns, StateSet initialState, List<stoichoReaction> reactionset) {
-		this(nrturns, initialState, reactionset);
+	public Simulator(int nrtimes, double runTime, StateSet initialState, List<stoichoReaction> reactionset) {
+		this(runTime, initialState, reactionset);
 		times = nrtimes;
 	}
 
 	public List<SSAResult> Simulate() {
 		Random random = new Random();
 		List<SSAResult> simulationResult = new ArrayList<SSAResult>();
+		
 		for (int n = 0; n < times; n++) {
-			ArrayList<StateSet> nextList = new ArrayList<StateSet>();
-			nextList.add(initialState);
-			states.add(nextList);
+			ArrayList<StateSet> statesets = new ArrayList<StateSet>();
+			statesets.add(initialState);
 			SSAResult result = new SSAResult(n+1);
-			
-			for(int i = 0; i < turns; i++) {
-				StateSet nextState = Step(random, nextList.get(i));
-				nextList.add(nextState);
+			int stateNum = 0; 
+			for(double i = 0; i < runTime; ) {
+				StateSet nextState = Step(random, statesets.get(stateNum));
+				if(nextState == null) {
+					nextState = new StateSet(statesets.get(statesets.size()-1).species, runTime);
+					nextState.globalTime = runTime;
+					statesets.add(nextState);
+					i = runTime;
+					break;
+				}
+				i += nextState.timeStep;
+				nextState.globalTime = i;
+				statesets.add(nextState);
+				stateNum++;
 			}
-			result.stateSets = nextList;
+			
+			result.stateSets = statesets;
 			simulationResult.add(result);
 		}
+		
+		
+		
 		
 		return simulationResult;
 	}
@@ -54,8 +66,14 @@ public class Simulator {
 		//Compute a0
 		double a0 = ComputeA0(set);
 		
+		
+		
 		//Pick time increment according to (1/a0) * ln[1/r1]
 		double dt = PickTime(r1, set);
+		
+		if(Double.isInfinite(dt)) {
+			return null;
+		}
 		
 		//Pick reaction
 		stoichoReaction reaction = PickReaction(a0, r2, reactionSet);

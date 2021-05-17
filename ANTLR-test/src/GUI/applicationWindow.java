@@ -25,12 +25,15 @@ import org.jfree.chart.ChartUtils;
 import javax.swing.JSplitPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 public class applicationWindow {
 	public Runner Runner;
 	
 	private JFrame frmChemtrails;
 	private JTextArea textAreaOutput;
+	private JScrollPane scrollPane;
 	
 	public JTextArea getTextAreaOutput() {
 		return textAreaOutput;
@@ -38,6 +41,7 @@ public class applicationWindow {
 
 	private void setTextAreaOutput(JTextArea textAreaOutput) {
 		this.textAreaOutput = textAreaOutput;
+		scrollPane.setViewportView(textAreaOutput);
 	}
 
 	public void show() {
@@ -57,23 +61,24 @@ public class applicationWindow {
 	private void initialize() {
 		frmChemtrails = new JFrame();
 		frmChemtrails.setTitle("ChemTrails");
-		frmChemtrails.setBounds(100, 100, 950, 645);
+		frmChemtrails.setBounds(100, 100, 1012, 645);
 		frmChemtrails.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JButton btnNewButton = new JButton("Run");
 		
 		JTextArea textAreaInput = new JTextArea();
+		textAreaInput.setText("//example ChemTrails\r\nsolution sol  : {\r\n\tspecies a : 10,\r\n\tspecies b : 0,\r\n\tspecies c : 50,\r\n\tspecies d : 0\r\n}\r\n\r\nlist reactions : {\r\n\tc  ->  d (1),\r\n\ta  ->  b (1)\r\n}\r\n\r\nprint(sol.ssa(reactions, 50))");
 		textAreaInput.setTabSize(2);
 		textAreaInput.setLineWrap(true);
-		
-		setTextAreaOutput(new JTextArea());
-		textAreaOutput.setEditable(false);
-		textAreaOutput.setTabSize(2);
-		textAreaOutput.setLineWrap(true);
 		
 		GraphPanel chartPanel = new GraphPanel();
 		
 		JButton btnExportGraph = new JButton("Export");
+
+		scrollPane = new JScrollPane();
+		
+		JButton btnBuild = new JButton("Build");
+		
 		GroupLayout groupLayout = new GroupLayout(frmChemtrails.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -81,16 +86,18 @@ public class applicationWindow {
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(textAreaInput, GroupLayout.PREFERRED_SIZE, 449, GroupLayout.PREFERRED_SIZE)
+							.addComponent(textAreaInput, GroupLayout.PREFERRED_SIZE, 457, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(textAreaOutput)
-								.addComponent(chartPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)))
+								.addComponent(chartPanel, GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
+								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(btnNewButton)
-							.addPreferredGap(ComponentPlacement.RELATED, 798, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnBuild, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 792, Short.MAX_VALUE)
 							.addComponent(btnExportGraph)))
-					.addContainerGap())
+					.addGap(13))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -98,16 +105,22 @@ public class applicationWindow {
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnNewButton)
+						.addComponent(btnBuild)
 						.addComponent(btnExportGraph))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(chartPanel, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+							.addComponent(chartPanel, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(textAreaOutput, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
-						.addComponent(textAreaInput, GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE))
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+						.addComponent(textAreaInput, GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE))
 					.addContainerGap())
 		);
+		
+		setTextAreaOutput(new JTextArea());
+		textAreaOutput.setEditable(false);
+		textAreaOutput.setTabSize(2);
+		textAreaOutput.setLineWrap(true);
 		
 		btnNewButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
@@ -143,6 +156,13 @@ public class applicationWindow {
 					textAreaOutput.setText(ex.getMessage());
 				}
 			  } 
+		});
+		
+		btnBuild.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { 
+				//get code
+				//export code  check line 144-154
+			}
 		});
 		
 		frmChemtrails.getContentPane().setLayout(groupLayout);
