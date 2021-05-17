@@ -1,6 +1,22 @@
-int a : 100
-int b : 2
-//Parser den paramtre tilbage efter scope run.
-while ( a >= b ){
-	b : b + 50
+int i : 100
+int trueCount : 0
+int falseCount : 0
+bool b
+
+while (i > 0) {
+
+	b : random
+
+	if (b) {
+		trueCount : trueCount + 1
+	} else {
+		falseCount : falseCount + 1
+	}
+	
+	i : i - 1
+		
 }
+
+trueCount
+falseCount
+b

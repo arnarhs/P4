@@ -5,56 +5,39 @@ grammar expression;
 }
 
 prog
-    : ( decl | expr )+ EOF                        	# Program
+    : ( decl | expr )+ EOF                        		# Program
     ;
 
 scope
-    :  '{' ( decl | expr )+ '}'                   	# ScopeDecl
+    :  '{' ( decl | expr )+ '}'                   		# ScopeDecl
     ;
 
 decl 
-    : REACTION ID ( ':' reacExpr )?                   # ReacDecl                                 
-    | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
-    | numDecl                            			 # NumberDecl
-    | BOOLT ID ( ':' pred )?                         # BoolDecl
-    | SOLUTION ID ( ':' '{' declList '}' )?                 # SolutionDeclaration
+    : REACTION ID ( ':' reacExpr )?                   	# ReacDecl                                 
+	| LIST ID ( ':'  '{' reacParams '}' )?         	  	# ListDecl         
+    | numDecl                            			 	# NumberDecl
+    | BOOLT ID ( ':' pred )?                         	# BoolDecl
+	| SOLUTION ID ( ':' '{' declList '}' )?             # SolutionDeclaration
     ;
 
 numDecl
 	: NUMT ID ( ':' opExpr )?                       
 	;
 
+declList
+	: numDecl ',' declList								# SpeciesDecls
+	| numDecl											# SpeciesDecl
 
-/*
-formalParams                                   
-    : KEYWORD ID ',' formalParams               //# ParamList
-    | KEYWORD ID                                //# Param
-    ;
-*/
 ssaCall
 	: ID '.' SSA '(' ID ',' value ')'			#SsaAlg
 	| ID '.' SSA '(' ID ',' value ',' value ')' #SsaAlgMult 
 	;
 
 reacParams
-    : reacExpr ',' reacParams                   	# ReactionParameters
-    | reacExpr                                  	# ReactionParameter
+    : reacExpr ',' reacParams                   		# ReactionParameters
+    | reacExpr                                  		# ReactionParameter
     ;
 
-declList
-	: numDecl ',' declList				# SpeciesDecls
-	| numDecl							# SpeciesDecl
-	;
-
-/*ssaParams
-    : '{' ssaList '}' ',' ID
-    | ID
-    ;
-*/
-/*ssaList
-    : ID ',' ssaList  
-    | ID
-    ;*/
 
 expr
     : ssaCall
@@ -66,9 +49,12 @@ expr
     | pred
     | print
     //methExpr                                      
-    //| ID '(' (exprParams | WS*) ')'                     # MethodCall
-    //| SSA '(' ssaParams ')'                             # GillespieCall
+    //| ID '(' (exprParams | WS*) ')'                   # MethodCall
     ;
+    
+ssaCall
+	: ID '.' SSA '(' ID ',' value ')'					#SsaAlg
+	;
 
 print
 	: KEYWORD'('(ID|ssaCall|reacExpr|opExpr|pred)')' # PrintExpr
@@ -101,32 +87,28 @@ opExpr
     | opExpr '/' opExpr   				      			# DivisionExpression
     | opExpr '-' opExpr                         		# SubtractionExpression
     | opExpr '+' opExpr                         		# AdditionExpression
-    | value                                       		# NumOrID // hvor er den?
+    | value                                       		# NumOrID
     ;    
 
 whileStmt
-	: WHILE '(' pred ')' scope  			#WhileStatement
+	: WHILE '(' pred ')' scope  						#WhileStatement
 	;
 	
 ifStmt
-    : IF '(' pred ')' scope								# IfStatement
-    | IF '(' pred ')' scope ELSE scope        			# IfElseStatement
+    : IF '(' pred ')' scope	(ELSE scope)?				# IfStatement
     ;
 
 pred
     : '(' pred ')' 										# PBracketExpression
-    | pred LOGOP pred                                   # LogicalOperator
-    | relExpr                                           # BooleanExpr
-    ;
-
-relExpr
-    : opExpr RELOP opExpr                               # RelationalOperator
-    | BOOL                                              # Boolean
+    | pred LOGOP pred                                   # LogicalExpr
+    | opExpr RELOP opExpr                               # RelationalOperator
+    | BOOL												# Boolean
+    | ID												# BooleanVariable
     ;
 
 value
-    : NUM                                        # Number // fix visitor + klasse
-    | ID                                         # Variable
+    : NUM                                        		# Number
+    | ID                                         		# Variable
     ;
 
 
@@ -144,7 +126,7 @@ IF: 'if' ;
 ELSE: 'else' ;
 
 BOOLT: 'bool' ;
-BOOL: 'true' | 'false' ;
+BOOL: 'true' | 'false' | 'random' ;
 
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
 LOGOP: '||' | '&&' ;
