@@ -18,7 +18,7 @@ import models.Program;
 public class ExpressionApp {
 	
 	private static Output output;
-	private static List<List<GraphData>> graphs;
+	private static List<GraphData> graphs;
 
 	public static void main(String[] args) {
 		if (args.length != 1) {
@@ -37,7 +37,7 @@ public class ExpressionApp {
 		runParser(parser);
 	}
 	
-	public static List<List<GraphData>> getGraphsFromParser() {
+	public static List<GraphData> getGraphsFromParser() {
 		return graphs;
 	}
 	

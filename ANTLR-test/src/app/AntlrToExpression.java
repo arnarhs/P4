@@ -59,12 +59,25 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		return new SsaAlg(solution, reactions, loops);
 	}
 
-  
+  	
   
 	/* 
 	 *  REACTIONS
 	 */
 	
+	@Override
+	public Expression visitSsaAlgMult(SsaAlgMultContext ctx) {
+		// TODO Auto-generated method stub
+		
+		String solution = ctx.getChild(0).toString();
+		String reactions = ctx.getChild(4).toString();
+		Expression loops = visit(ctx.getChild(6));
+		Expression simulationNumber = visit(ctx.getChild(8));
+		return super.visitSsaAlgMult(ctx);
+	}
+
+
+
 	@Override
 	public Expression visitReacDecl(ReacDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();

@@ -18,4 +18,8 @@ public class RunnerOutput {
 		HorizontalName = "Time";
 		VerticalName = "Concentration";
 	}
+	
+	public void AddGraphs(RunnerOutput output) {
+		Graphs.addAll(output.Graphs);
+	}
 }

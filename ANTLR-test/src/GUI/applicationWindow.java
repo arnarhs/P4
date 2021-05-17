@@ -67,6 +67,7 @@ public class applicationWindow {
 		JButton btnNewButton = new JButton("Run");
 		
 		JTextArea textAreaInput = new JTextArea();
+		textAreaInput.setText("//example ChemTrails\r\nsolution sol  : {\r\n\tspecies a : 10,\r\n\tspecies b : 0,\r\n\tspecies c : 50,\r\n\tspecies d : 0\r\n}\r\n\r\nlist reactions : {\r\n\tc  ->  d (1),\r\n\ta  ->  b (1)\r\n}\r\n\r\nprint(sol.ssa(reactions, 50))");
 		textAreaInput.setTabSize(2);
 		textAreaInput.setLineWrap(true);
 		
@@ -83,20 +84,20 @@ public class applicationWindow {
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(textAreaInput, GroupLayout.PREFERRED_SIZE, 457, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(chartPanel, GroupLayout.PREFERRED_SIZE, 508, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 508, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(chartPanel, GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
+								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(btnNewButton)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnBuild, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 792, Short.MAX_VALUE)
 							.addComponent(btnExportGraph)))
-					.addContainerGap(13, Short.MAX_VALUE))
+					.addGap(13))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -107,9 +108,9 @@ public class applicationWindow {
 						.addComponent(btnBuild)
 						.addComponent(btnExportGraph))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-							.addComponent(chartPanel, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(chartPanel, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
 						.addComponent(textAreaInput, GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE))

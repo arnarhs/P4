@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SSAResult {
-	int iterationNr;
+	public int iterationNr;
 	public List<StateSet> stateSets;
 	
 	public SSAResult(int nr) {

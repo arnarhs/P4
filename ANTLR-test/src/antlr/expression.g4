@@ -33,6 +33,7 @@ formalParams
 */
 ssaCall
 	: ID '.' SSA '(' ID ',' value ')'			#SsaAlg
+	| ID '.' SSA '(' ID ',' value ',' value ')' #SsaAlgMult 
 	;
 
 reacParams

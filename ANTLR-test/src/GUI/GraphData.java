@@ -1,22 +1,28 @@
 package GUI;
 
-import java.util.Hashtable;
+import java.awt.Color;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class GraphData {
 	public int Iteration;
 	public String Name;
-	public Hashtable<Double, Double> Plots;
+	public LinkedHashMap<Double, Double> Plots;
+	public Color Color;
 	
 	public GraphData(String name) {
 		Name = name;
-		Plots = new Hashtable<Double, Double>();
+		Plots = new LinkedHashMap<Double, Double>();
 	}
 	
 	public GraphData(String name, int iteration) {
-		Name = name;
-		Plots = new Hashtable<Double, Double>();
+		this(name);
 		Iteration = iteration;
+	}
+	
+	public GraphData(String name, int iteration, Color color) {
+		this(name, iteration); 
+		Color = color;
 	}
 	
 	public void add(Double x, Double y) {
@@ -28,7 +34,7 @@ public class GraphData {
 		String result = Name + " " + "Iteration" + " " + Iteration + "\n";
 		
 		for(Map.Entry<Double, Double> entry : Plots.entrySet()) {
-			result += "\t" + "p: " + entry.getKey() + ", " + "t: " + entry.getValue() + "\n";
+			result += "\t" + "p: " + entry.getValue() + ", " + "t: " + entry.getKey() + "\n";
 		}
 		
 		return result;
