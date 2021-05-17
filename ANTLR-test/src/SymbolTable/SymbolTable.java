@@ -6,17 +6,16 @@ import java.util.Hashtable;
 
 public class SymbolTable implements ISymbolTable{
 	
-	Hashtable<String, SymbolTableEntry> entries = new Hashtable<>();
+	Hashtable<String, Identifier> entries = new Hashtable<>();
 	
 	@Override
-	public Identifier EnterSymbol(Identifier id) {
-		entries.put(id.name, new SymbolTableEntry(id));
-		return id;
+	public void EnterSymbol(Identifier id) {
+		entries.put(id.GetID(), id);
 	}
 
 	@Override
 	public Identifier RetrieveSymbol(String id) {
-		return entries.get(id).Id;
+		return entries.get(id);
 	}
 
 	@Override
@@ -27,6 +26,4 @@ public class SymbolTable implements ISymbolTable{
 		
 		else {return false;}
 	}
-	
-
 }

@@ -4,11 +4,10 @@ import TypeChecker.TypeDescriptor;
 
 public interface ISymbolTable {
 
-	Identifier EnterSymbol(Identifier id);
-
-	Boolean DeclaredLocally(Identifier id);
+	void EnterSymbol(Identifier id);
 
 	Identifier RetrieveSymbol(String id);
-
 	
+	Boolean DeclaredLocally(Identifier id);
+
 }

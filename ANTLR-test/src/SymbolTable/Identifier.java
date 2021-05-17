@@ -10,17 +10,19 @@ enum IDType {
 }
 
 public class Identifier {
-	Expression value;
-	String name;
 	
-	public Expression GetExpression() {
-		return value;
+	private String _id;
+	private Expression _expression;
+	
+	public String GetID() {
+		return _id;
 	}
-	
-	public Identifier() {}
-	
-	public Identifier(String name, Expression value) {
-		this.value = value;
-		this.name = name;
+	public Expression GetExpression() {
+		return _expression;
+	}
+		
+	public Identifier(String id, Expression expression) {
+		this._id = id;
+		this._expression = expression;
 	}
 }

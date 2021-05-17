@@ -28,16 +28,22 @@ public class SymbolTableController implements ISymbolTable{
 	//Private constructor
 	private SymbolTableController() {
 		symbolTables = new Stack<SymbolTable>();
-		tempMemory = new Stack<SymbolTable>();
-		symbolTables.push(new SymbolTable());
 		nameSpace = new ArrayList<String>();
 	}
 	
 	//Class fields
-	private Stack<SymbolTable> symbolTables;
-	private Stack<SymbolTable> tempMemory;
-	
+	private Stack<SymbolTable> symbolTables;	
 	private List<String> nameSpace; 
+	
+	class STSearchResult {
+		public SymbolTable st;
+		public Identifier id;
+		
+		public STSearchResult(SymbolTable st, Identifier id) {
+			this.st = st;
+			this.id = id;
+		}
+	}
 	
 	
 	/**
@@ -55,57 +61,38 @@ public class SymbolTableController implements ISymbolTable{
 	}
 
 	@Override
-	public Identifier EnterSymbol(Identifier id) {
-		Boolean test = DeclaredLocally(id);
-
-		if(id.idType == IDType.Declaration) {
-			if(test) {
-				return new Identifier(IDType.errorType, new TypeDescriptor<ErrorTypes>(ErrorTypes.AllreadyDeclared), id.name);
-			}
-			else {
-				return symbolTables.peek().EnterSymbol(id);
-			}
-		}
+	public void EnterSymbol(Identifier id) {
+		STSearchResult result = SearchSymbolTables(id.GetID());
 		
-		else if(id.idType == IDType.IDReference){
-			if(test) {
-				return symbolTables.peek().EnterSymbol(id);
-			}
-			
-			else {
-				return new Identifier(IDType.errorType, new TypeDescriptor<ErrorTypes>(ErrorTypes.NotDeclared), id.name);
-			}
-		}
-		
-		else {
-			throw new IllegalArgumentException("IDType not valid for SymbolTable"); 
+		if (result == null) {
+			// Declaration
+			symbolTables.peek().EnterSymbol(id);
+		} else {
+			// Assignment
+			result.st.EnterSymbol(id);
 		}
 	}
 
-
 	@Override
 	public Identifier RetrieveSymbol(String id) {
-		Boolean test = false;
-		Identifier currentDeclaration;
-		while(!test) {
-			if(!symbolTables.empty()) {
-				currentDeclaration = symbolTables.peek().RetrieveSymbol(id);
-				if(currentDeclaration != null) {
-					ResetStack();
-					return currentDeclaration;
-				}
-				
-				tempMemory.push(symbolTables.pop());
-			}
-			
-			else {
-				test = true;
-				ResetStack();				
-			}
+		STSearchResult result = SearchSymbolTables(id);
+		if (result != null) {
+			return result.id;
 		}
 		
 		return null;
 	}
+	
+	public STSearchResult SearchSymbolTables(String id) {
+		for (SymbolTable st : symbolTables) {
+			Identifier identifier = st.RetrieveSymbol(id);
+			if(identifier != null) {
+				return new STSearchResult(st, identifier);
+			}
+		}
+		return null;
+	}
+
 
 	/*Checks whether a variable is declared within the current innermost scope*/
 	@Override
@@ -118,7 +105,7 @@ public class SymbolTableController implements ISymbolTable{
 	 * Names will always be referenced by the name space. Comparison of names can be done by comparing integers.  
 	 * */
 	private Integer EnterSymbolName(String string) {
-		if(!nameSpace.contains(string)) {
+		if (!nameSpace.contains(string)) {
 			nameSpace.add(string);
 			return nameSpace.size()-1;
 		}
@@ -127,13 +114,5 @@ public class SymbolTableController implements ISymbolTable{
 			return null;
 		}
 	}
-	
-	
-	private void ResetStack() {
-		for(SymbolTable elem : tempMemory) {
-			symbolTables.push(tempMemory.pop());
-		}
-	}
-	
-	
+
 }

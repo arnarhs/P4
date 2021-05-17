@@ -91,8 +91,7 @@ whileStmt
 	;
 	
 ifStmt
-    : IF '(' pred ')' scope								# IfStatement
-    | IF '(' pred ')' scope ELSE scope        			# IfElseStatement
+    : IF '(' pred ')' scope	(ELSE scope)?				# IfStatement
     ;
 
 pred

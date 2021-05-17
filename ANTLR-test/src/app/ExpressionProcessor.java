@@ -98,9 +98,8 @@ public class ExpressionProcessor {
 			}
 			else if (e instanceof IfStatement) {
 				IfStatement ifStmt = (IfStatement) e;
-				boolean condition = EvaluatePredicate(ifStmt.getPredicate());
 				
-				if (condition) {
+				if (EvaluatePredicate(ifStmt.getPredicate())) {
 					ProcessScope((Scope) ifStmt.getThenScope());
 				} else  {
 					ProcessScope((Scope) ifStmt.getElseScope());
@@ -193,10 +192,8 @@ public class ExpressionProcessor {
 			return EvaluatePredicate(((Bracket) p).expr);
 		}
 		else if (p instanceof Variable) {
-			
 			Variable boolID = (Variable) p;	
 			Expression declExpr = symbolTable.RetrieveSymbol(boolID.ID).GetExpression();
-			
 			
 			if (declExpr instanceof VariableDeclaration) {
 				VariableDeclaration varDecl = (VariableDeclaration) declExpr;
@@ -238,6 +235,9 @@ public class ExpressionProcessor {
 				case "!=" : 
 					return left != right;
 			}
+		}
+		else if (p == null) { // Uninitialized check
+			return false;
 		}
 		else if (p.toString().equals("true")) {
 			return true;
