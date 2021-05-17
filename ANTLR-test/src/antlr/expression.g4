@@ -27,6 +27,7 @@ numDecl
 declList
 	: numDecl ',' declList								# SpeciesDecls
 	| numDecl											# SpeciesDecl
+	;
 
 ssaCall
 	: ID '.' SSA '(' ID ',' value ')'			#SsaAlg
@@ -47,18 +48,7 @@ expr
     | ifStmt
     | whileStmt
     | pred
-    | print
-    //methExpr                                      
-    //| ID '(' (exprParams | WS*) ')'                   # MethodCall
     ;
-    
-ssaCall
-	: ID '.' SSA '(' ID ',' value ')'					#SsaAlg
-	;
-
-print
-	: KEYWORD'('(ID|ssaCall|reacExpr|opExpr|pred)')' # PrintExpr
-    ;	
 
 assign
     : ID ':' reacExpr                   				# ReacAssign
@@ -114,7 +104,6 @@ value
 
 
 
-KEYWORD: 'print' ;
 NUMT: 'int' | 'double' | 'species' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;

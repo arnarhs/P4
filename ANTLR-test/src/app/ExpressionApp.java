@@ -18,7 +18,7 @@ import models.Program;
 public class ExpressionApp {
 	
 	private static Output output;
-	private static List<GraphData> graphs;
+	private static List<GraphData> graphs = null;
 
 	public static void main(String[] args) {
 		if (args.length != 1) {

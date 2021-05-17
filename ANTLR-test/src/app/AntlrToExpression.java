@@ -27,7 +27,6 @@ import models.expressions.Scope;
 import models.expressions.SsaAlg;
 import models.expressions.Multiplication;
 import models.expressions.Number;
-import models.expressions.Print;
 import models.expressions.ReactionExpr;
 import models.expressions.Subtraction;
 import models.expressions.Variable;
@@ -42,10 +41,6 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		this.semanticErrors = semanticErrors;
 	}	
 	
-  @Override
-	public Expression visitPrintExpr(PrintExprContext ctx) {
-		return new Print(visit(ctx.getChild(2)));
-	}
   
   
 	/* Scope 

@@ -1,22 +1,36 @@
-int i : 100
-int trueCount : 0
-int falseCount : 0
-bool b
+if ( 3 <  4) { 
 
-while (i > 0) {
-
-	b : random
-
-	if (b) {
-		trueCount : trueCount + 1
-	} else {
-		falseCount : falseCount + 1
+	//example ChemTrails
+	
+	solution sol  : {
+	
+		species a : 10,
+	
+		species b : 0,
+	
+		species c : 50,
+	
+		species d : 0
+	
 	}
 	
-	i : i - 1
-		
-}
+	
+	
+	list reactions : {
+	
+		c  ->  d (1),
+	
+		a  ->  b (1)
+	
+	}
+	
+	
+	
+	
+	
+	sol.ssa(reactions, 50)
+	sol.ssa(reactions, 50)
+	sol.ssa(reactions, 50)
+	sol.ssa(reactions, 50)
 
-trueCount
-falseCount
-b
+}

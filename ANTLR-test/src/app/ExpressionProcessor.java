@@ -22,7 +22,6 @@ import models.expressions.ListExpr;
 import models.expressions.LogicalOperator;
 import models.expressions.Multiplication;
 import models.expressions.Number;
-import models.expressions.Print;
 import models.expressions.ReactionExpr;
 import models.expressions.RelationalOperator;
 import models.expressions.Scope;
@@ -38,19 +37,19 @@ import SymbolTable.SymbolTableController;
 public class ExpressionProcessor {
 	private List<Statement> _list;
 	private List<String> _evaluations = new ArrayList<>();
-	private List<GraphData> graphs;
+	private List<GraphData> _graphs = new ArrayList<GraphData>();
 	private SymbolTableController symbolTable = SymbolTableController.GetInstance();
+	private HashMap<String, Integer> _ssaMap = new HashMap<>();
 	
-	
-	public ExpressionProcessor(List<Statement> list, List<String> evaluations) {
+	public ExpressionProcessor(List<Statement> list, List<String> evaluations, List<GraphData> graphs, HashMap<String, Integer> ssaMap) {
 		_list = list;
 		_evaluations = evaluations;
+		_graphs = graphs;
+		_ssaMap = ssaMap;
 	}
 	
 	public ExpressionProcessor(List<Statement> list) {
 		_list = list;
-		_evaluations = new ArrayList<>();
-    graphs = new ArrayList<GraphData>();
 	}
 	
 	public List<String> ProcessStatements() {
@@ -61,7 +60,7 @@ public class ExpressionProcessor {
 				VariableDeclaration decl = new VariableDeclaration((VariableDeclaration) e);
 				
 				if(decl.type.equals("bool")) {
-					// Evalute predicates in bool declarations
+					// Evaluate predicates in bool declarations
 					boolean boolValue = EvaluatePredicate(decl.value);
 					decl.value = new BoolExpr(String.valueOf(boolValue));
 					
@@ -78,22 +77,20 @@ public class ExpressionProcessor {
 				symbolTable.EnterSymbol(new Identifier(listDecl.id, listDecl)); 
 			} 
 			else if (e instanceof SsaAlg) {
-				SsaAlg ssa = (SsaAlg) e;
-				getSsaResults(ssa);
-			}
-			else if(e instanceof Print) {
-				Print print = (Print) e;
-				if(print.printExpression instanceof SsaAlg) {
-					List<SSAResult> ssaResults = getSsaResults((SsaAlg) print.printExpression);
-					HashMap<String, Color> colorScheme = generateColorScheme(ssaResults.get(0).stateSets.get(0).species.keySet());
-					
-					for(SSAResult result : ssaResults) {
-						graphs.addAll(generateSSAGraphs(result, colorScheme));
-					}
-					
-					for(GraphData iteration : graphs){
-						evaluations.add(graphs.toString());
-					}
+				SsaAlg ssa = (SsaAlg) e;				
+
+				int count = 1;
+			
+				if(_ssaMap.containsKey(ssa.solution)) {
+					count = _ssaMap.get(ssa.solution) + 1;
+				}
+				_ssaMap.put(ssa.solution, count);
+				
+				List<SSAResult> ssaResults = getSsaResults(ssa);
+				HashMap<String, Color> colorScheme = generateColorScheme(ssaResults.get(0).stateSets.get(0).species.keySet());
+				
+				for (SSAResult result : ssaResults) {
+					_graphs.addAll(generateSSAGraphs(result, colorScheme, count));
 				}
 			}
 			else if (e instanceof IfStatement) {
@@ -270,12 +267,12 @@ public class ExpressionProcessor {
 	}
 
 	public List<GraphData> fetchGraphData() {
-		return graphs;
+		return _graphs;
 	}
 			
 	private void ProcessScope(Scope scope) {
 		if(scope != null) {
-			ExpressionProcessor ep = new ExpressionProcessor(scope.stmts, _evaluations);
+			ExpressionProcessor ep = new ExpressionProcessor(scope.stmts, _evaluations, _graphs, _ssaMap);
 			ep.ProcessStatements();
 		}
 	}
@@ -298,7 +295,6 @@ public class ExpressionProcessor {
 					default:
 						return EvaluateExpression(varDecl.value);
 				}
-				
 			} else {
 				return 0;
 			}
@@ -428,36 +424,34 @@ public class ExpressionProcessor {
 				predator.add((ReactionPair) p);
 			}
 			
-			reactionSet.add(new stoichoReaction(prey, predator, getEvalResult(reac.constant), new StateSet(stateSet)));
+			reactionSet.add(new stoichoReaction(prey, predator, EvaluateExpression(reac.constant), new StateSet(stateSet)));
 		}	
 		
 		
 		Simulator s;
 		if(alg.simulationNumber != null) {
-			int simulationNumber = (int) getEvalResult(alg.simulationNumber);
-			s = new Simulator(simulationNumber, (int) getEvalResult(alg.loops), stateSet, reactionSet);
+			int simulationNumber = (int) EvaluateExpression(alg.simulationNumber);
+			s = new Simulator(simulationNumber, (int) EvaluateExpression(alg.loops), stateSet, reactionSet);
 		}
 		else {
-			s = new Simulator((int) getEvalResult(alg.loops), stateSet, reactionSet);
+			s = new Simulator((int) EvaluateExpression(alg.loops), stateSet, reactionSet);
 		}
 		
 		return s.Simulate();
 	}
 
-	private List<GraphData> generateSSAGraphs(SSAResult result, HashMap<String, Color> colorscheme) {
+	private List<GraphData> generateSSAGraphs(SSAResult result, HashMap<String, Color> colorscheme, Integer count) {
 		List<GraphData> graphData = new ArrayList<GraphData>();
-		for(String species : result.stateSets.get(0).species.keySet()) {
-			graphData.add(new GraphData(species, result.iterationNr, colorscheme.get(species)));
+		for (String species : result.stateSets.get(0).species.keySet()) {
+			graphData.add(new GraphData(species, count, colorscheme.get(species)));
 		}
 		
-		for(StateSet state : result.stateSets) {
-			for(GraphData graph : graphData) {
-				System.out.print(state.timeStep + state.species.get(graph.Name));
+		for (StateSet state : result.stateSets) {
+			for (GraphData graph : graphData) {
 				graph.add(state.globalTime, state.species.get(graph.Name));
 			}
 		}
 		
 		return graphData;
-		
 	}
 }
