@@ -48,14 +48,14 @@ public class ExpressionApp {
 			return;
 		}
 		
-		if(progVisitor.semanticErrors.isEmpty()) {
+		if (progVisitor.semanticErrors.isEmpty()) {
 			ExpressionProcessor ep = new ExpressionProcessor(prog.statements);
-	        for(String evaluation: ep.ProcessStatements()) {
+	        for (String evaluation : ep.ProcessStatements()) {
 				output.Log(evaluation);
 			}
 			graphs = ep.fetchGraphData();
 		} else {
-			for(String err: progVisitor.semanticErrors) {
+			for (String err: progVisitor.semanticErrors) {
 				output.Log(err);
 			}
 		}
