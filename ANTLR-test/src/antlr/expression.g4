@@ -30,7 +30,7 @@ declList
 	;
 
 ssaCall
-	: SSA '(' ID ',' ID ',' value (',' value)? ')'		#SsaAlg
+	: SSA '(' ID ',' ID ',' value (',' value)? ')'		# SsaAlg
 	;
 
 reacParams
@@ -80,7 +80,7 @@ opExpr
     ;    
 
 whileStmt
-	: WHILE '(' pred ')' scope  						#WhileStatement
+	: WHILE '(' pred ')' scope  						# WhileStatement
 	;
 	
 ifStmt

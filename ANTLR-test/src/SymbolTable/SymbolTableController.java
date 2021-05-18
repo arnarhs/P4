@@ -36,8 +36,7 @@ public class SymbolTableController implements ISymbolTable{
 	private SymbolTableController() {
 		symbolTables = new Stack<SymbolTable>();
 	}
-
-	
+		
 	public void OpenScope() {
 		symbolTables.push(new SymbolTable());
 	}

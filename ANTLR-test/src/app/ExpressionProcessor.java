@@ -33,7 +33,6 @@ import GillespieSSA.*;
 import SymbolTable.Identifier;
 import SymbolTable.SymbolTableController;
 
-/*visitor pattern is a better choice to evaluate our data*/
 public class ExpressionProcessor {
 	private List<Statement> _list;
 	private List<String> _evaluations = new ArrayList<>();
