@@ -66,31 +66,20 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	
   	@Override
 	public Expression visitSsaAlg(SsaAlgContext ctx) {
-		//[0][1] [2] [3][4] [5] [6]
-		//ID '.' SSA '('ID ',' value')' 
-		String solution = ctx.getChild(0).toString();
+		String solution = ctx.getChild(2).toString();
 		String reactions = ctx.getChild(4).toString();
 		Expression loops = visit(ctx.getChild(6));
-		return new SsaAlg(solution, reactions, loops);
+		Expression repeat = null;
+		if (ctx.getChildCount() > 8) {
+			repeat = visit(ctx.getChild(8)); 
+		}
+		return new SsaAlg(solution, reactions, loops, repeat);
 	}
-
   	
   
 	/* 
 	 *  REACTIONS
 	 */
-
-	@Override
-	public Expression visitSsaAlgMult(SsaAlgMultContext ctx) {
-		// TODO Auto-generated method stub
-		
-		String solution = ctx.getChild(0).toString();
-		String reactions = ctx.getChild(4).toString();
-		Expression loops = visit(ctx.getChild(6));
-		Expression simulationNumber = visit(ctx.getChild(8));
-		return super.visitSsaAlgMult(ctx);
-	}
-
 
 
 	@Override
@@ -209,22 +198,26 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
   
   
 	/*
-	 *  LISTS
+	 *  Reaction Lists
 	 */
 
 	@Override
 	public Expression visitListDecl(ListDeclContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
-
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
 		ListExpr reacParams = new ListExpr();
 		
 		if(ctx.getChildCount() > 2) {
 			reacParams = (ListExpr) visit(ctx.reacParams());	
 		}
 		
-		ListDeclaration decl = new ListDeclaration(id, type, reacParams.list);
+		return visitListDecl(idToken, ctx, reacParams.list);
+	}
+	
+	private ListDeclaration visitListDecl(Token idToken, ParserRuleContext ctx, List<Expression> list) {
+		String type = ctx.getChild(0).getText();
+		String id = ctx.getChild(1).getText();
+		
+		ListDeclaration decl = new ListDeclaration(id, type, list);
 		
 		EnterSymbol(idToken, new Identifier(id, decl));
 		
@@ -234,16 +227,20 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
   	@Override
 	public Expression visitListAssign(ListAssignContext ctx) {
   		Token idToken = ctx.ID().getSymbol();	
+		ListExpr reacParams = (ListExpr) visit(ctx.reacParams());		
+		return visitListAssign(idToken, ctx, reacParams.list);
+	}
+  	
+  	public ListDeclaration visitListAssign(Token idToken, ParserRuleContext ctx, List<Expression> list) {
 		String id = ctx.getChild(0).getText();
-		ListExpr value = (ListExpr) visit(ctx.reacParams());		
 		
 		ListDeclaration oldListDecl = (ListDeclaration) RetrieveSymbol(idToken, id);
-		ListDeclaration newListDecl = new ListDeclaration(oldListDecl.id, oldListDecl.type, value.list);
+		ListDeclaration newListDecl = new ListDeclaration(oldListDecl.id, oldListDecl.type, list);
 		
 		UpdateSymbol(new Identifier(id, newListDecl));
 		
 		return newListDecl;
-	}
+  	}
 	
 	//Multiple reaction parameters
 	public ListExpr visitReactionParameters(ReactionParametersContext ctx) {
@@ -261,26 +258,32 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 		list.Add(visitChildren(ctx));
 		return list;
 	}
+	
+	
+	
+	/*
+	 *  Solutions
+	 */
 
 	@Override
 	public Expression visitSolutionDeclaration(SolutionDeclarationContext ctx) {
 		Token idToken = ctx.ID().getSymbol();
-
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
 		ListExpr speciList = new ListExpr();
 		
 		if(ctx.getChildCount() > 2) {
-			speciList = (ListExpr) visit(ctx.declList());
+			speciList = (ListExpr) visit(ctx.declList());	
 		}
 		
-		ListDeclaration decl = new ListDeclaration(id, type, speciList.list);
-		
-		EnterSymbol(idToken, new Identifier(id, decl));
-		
-		return decl;
+		return visitListDecl(idToken, ctx, speciList.list);
 	}
-	
+
+	@Override
+	public Expression visitSolutionAssign(SolutionAssignContext ctx) {
+		Token idToken = ctx.ID().getSymbol();	
+		ListExpr reacParams = (ListExpr) visit(ctx.declList());		
+		return visitListAssign(idToken, ctx, reacParams.list);
+	}
+
 
 	//Multiple declarations
 	@Override
@@ -309,7 +312,6 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	public Expression visitBracketExpression(BracketExpressionContext ctx) {
 		return new Bracket(visit(ctx.getChild(1)));
 	}
-
 
 	@Override
 	public Expression visitAdditionExpression(AdditionExpressionContext ctx) {
@@ -391,7 +393,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitLogicalExpr(LogicalExprContext ctx) {
 		Expression left = visit(ctx.getChild(0));
-		String operator = ctx.getChild(1).toString();
+		String operator = ctx.getChild(2).getText();
 		Expression right =  visit(ctx.getChild(2));
 		return new LogicalOperator(left, operator, right);
 	}
@@ -399,7 +401,7 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitRelationalOperator(RelationalOperatorContext ctx) {
 		Expression left = visit(ctx.getChild(0));
-		String operator = ctx.getChild(1).toString();
+		String operator = ctx.getChild(2).getText();
 		Expression right =  visit(ctx.getChild(2));
 		return new RelationalOperator(left, operator, right);
 	}

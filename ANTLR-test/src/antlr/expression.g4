@@ -13,11 +13,11 @@ scope
     ;
 
 decl 
-    : REACTION ID ( ':' reacExpr )?                   	# ReacDecl                                 
-	| LIST ID ( ':'  '{' reacParams '}' )?         	  	# ListDecl         
-    | numDecl                            			 	# NumberDecl
+    : numDecl                            			 	# NumberDecl
     | BOOLT ID ( ':' pred )?                         	# BoolDecl
-	| SOLUTION ID ( ':' '{' declList '}' )?             # SolutionDeclaration
+    | REACTION ID ( ':' reacExpr )?                   	# ReacDecl                                 
+	| LIST ID ( ':'  '{' reacParams '}' )?         	  	# ListDecl   
+	| SOLUTION ID ( ':' '{' declList '}' )?             # SolutionDeclaration      
     ;
 
 numDecl
@@ -30,15 +30,13 @@ declList
 	;
 
 ssaCall
-	: ID '.' SSA '(' ID ',' value ')'			#SsaAlg
-	| ID '.' SSA '(' ID ',' value ',' value ')' #SsaAlgMult 
+	: SSA '(' ID ',' ID ',' value (',' value)? ')'		#SsaAlg
 	;
 
 reacParams
     : reacExpr ',' reacParams                   		# ReactionParameters
     | reacExpr                                  		# ReactionParameter
     ;
-
 
 expr
     : ssaCall
@@ -55,10 +53,11 @@ assign
     | ID ':' opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
     | ID ':' pred                       				# BoolAssign
     | ID ':' '{' reacParams '}'         				# ListAssign
+    | ID ':' '{' declList '}'         				    # SolutionAssign
     ;
 
 reacExpr
-    :   reacPairList '->' reacPairList '(' opExpr ')'   # ReactionExpression
+    : reacPairList '->' reacPairList '(' opExpr ')'     # ReactionExpression
     ;
 
 reacPairList
@@ -105,14 +104,14 @@ value
 
 
 NUMT: 'int' | 'double' | 'species' ;
+LIST: 'list' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;
-WHILE: 'while' ;
 SSA: 'ssa' ;
-LIST: 'list' ;
 
 IF: 'if' ;
 ELSE: 'else' ;
+WHILE: 'while' ;
 
 BOOLT: 'bool' ;
 BOOL: 'true' | 'false' | 'random' ;

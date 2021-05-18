@@ -77,20 +77,29 @@ public class ExpressionProcessor {
 				symbolTable.EnterSymbol(new Identifier(listDecl.id, listDecl)); 
 			} 
 			else if (e instanceof SsaAlg) {
-				SsaAlg ssa = (SsaAlg) e;				
-
-				int count = 1;
-			
-				if(_ssaMap.containsKey(ssa.solution)) {
-					count = _ssaMap.get(ssa.solution) + 1;
+				SsaAlg ssa = (SsaAlg) e;	
+				int repeats = 1;
+				
+				if (ssa.repeats != null) {
+					repeats = (int) EvaluateExpression(ssa.repeats);
 				}
-				_ssaMap.put(ssa.solution, count);
 				
-				List<SSAResult> ssaResults = getSsaResults(ssa);
-				HashMap<String, Color> colorScheme = generateColorScheme(ssaResults.get(0).stateSets.get(0).species.keySet());
-				
-				for (SSAResult result : ssaResults) {
-					_graphs.addAll(generateSSAGraphs(result, colorScheme, count));
+				while (repeats > 0) {
+					int count = 1;
+					
+					if(_ssaMap.containsKey(ssa.solution)) {
+						count = _ssaMap.get(ssa.solution) + 1;
+					}
+					_ssaMap.put(ssa.solution, count);
+					
+					List<SSAResult> ssaResults = getSsaResults(ssa);
+					HashMap<String, Color> colorScheme = generateColorScheme(ssaResults.get(0).stateSets.get(0).species.keySet());
+					
+					for (SSAResult result : ssaResults) {
+						_graphs.addAll(generateSSAGraphs(result, colorScheme, count));
+					}
+					
+					repeats--;
 				}
 			}
 			else if (e instanceof IfStatement) {
@@ -399,7 +408,7 @@ public class ExpressionProcessor {
 		ListDeclaration sol = (ListDeclaration) symbolTable.RetrieveSymbol(alg.solution).GetExpression();
 		Map<String, Double> species = new HashMap<String,Double>();
 		
-		for(Expression l : sol.list) {
+		for (Expression l : sol.list) {
 			VariableDeclaration num = (VariableDeclaration) l;
 			Double value = EvaluateExpression(num.value);
 			species.put(num.id, value);
@@ -409,34 +418,25 @@ public class ExpressionProcessor {
 		ListDeclaration reactions = (ListDeclaration) symbolTable.RetrieveSymbol(alg.reacList).GetExpression();
 		List<stoichoReaction> reactionSet = new ArrayList<stoichoReaction>();
 		
-		for(Expression r : reactions.list) {
+		for (Expression r : reactions.list) {
 			ReactionExpr reac = (ReactionExpr) r;
 			
 			ListExpr left = (ListExpr) reac.left;
 			List<ReactionPair> prey = new ArrayList<ReactionPair>();
-			for(Expression p : left.list) {
+			for (Expression p : left.list) {
 				prey.add((ReactionPair) p);
 			}
 			
 			ListExpr right = (ListExpr) reac.right;
 			List<ReactionPair> predator = new ArrayList<ReactionPair>();
-			for(Expression p : right.list) {
+			for (Expression p : right.list) {
 				predator.add((ReactionPair) p);
 			}
 			
 			reactionSet.add(new stoichoReaction(prey, predator, EvaluateExpression(reac.constant), new StateSet(stateSet)));
 		}	
 		
-		
-		Simulator s;
-		if(alg.simulationNumber != null) {
-			int simulationNumber = (int) EvaluateExpression(alg.simulationNumber);
-			s = new Simulator(simulationNumber, (int) EvaluateExpression(alg.loops), stateSet, reactionSet);
-		}
-		else {
-			s = new Simulator((int) EvaluateExpression(alg.loops), stateSet, reactionSet);
-		}
-		
+		Simulator s = new Simulator((int) EvaluateExpression(alg.loops), stateSet, reactionSet);
 		return s.Simulate();
 	}
 
