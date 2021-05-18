@@ -1,7 +1,6 @@
 package GUI;
 
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -12,20 +11,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JFrame;
-import javax.swing.BoxLayout;
-import java.awt.BorderLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.jfree.chart.ChartUtils;
 
-import javax.swing.JSplitPane;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 public class applicationWindow {

@@ -1,11 +1,6 @@
 package SymbolTable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
-
-import TypeChecker.ErrorTypes;
-import TypeChecker.TypeDescriptor;
 
 public class SymbolTableController implements ISymbolTable{
 	/**
@@ -14,26 +9,8 @@ public class SymbolTableController implements ISymbolTable{
 	 * **/
 	
 	
-	//Singleton pattern to ensure that all calls refer to the same SymbolTableController.
-	private static SymbolTableController instance;
-	
-	public static SymbolTableController GetInstance() {
-		if(instance == null) {
-			instance = new SymbolTableController();
-		}
-		return instance;
-	}
-	
-	
-	//Private constructor
-	private SymbolTableController() {
-		symbolTables = new Stack<SymbolTable>();
-		nameSpace = new ArrayList<String>();
-	}
-	
 	//Class fields
 	private Stack<SymbolTable> symbolTables;	
-	private List<String> nameSpace; 
 	
 	class STSearchResult {
 		public SymbolTable st;
@@ -45,10 +22,21 @@ public class SymbolTableController implements ISymbolTable{
 		}
 	}
 	
+	//Singleton pattern to ensure that all calls refer to the same SymbolTableController.
+	private static SymbolTableController instance;
 	
-	/**
-	 * Interfacing methods for the symbol table. 
-	 * **/
+	public static SymbolTableController GetInstance() {
+		if(instance == null) {
+			instance = new SymbolTableController();
+		}
+		return instance;
+	}
+	
+	//Private constructor
+	private SymbolTableController() {
+		symbolTables = new Stack<SymbolTable>();
+	}
+
 	
 	public void OpenScope() {
 		symbolTables.push(new SymbolTable());
@@ -65,11 +53,9 @@ public class SymbolTableController implements ISymbolTable{
 		STSearchResult result = SearchSymbolTables(id.GetID());
 		
 		if (result == null) {
-			// Declaration
-			symbolTables.peek().EnterSymbol(id);
+			symbolTables.peek().EnterSymbol(id);	// Declaration
 		} else {
-			// Assignment
-			result.st.EnterSymbol(id);
+			result.st.EnterSymbol(id);				// Assignment
 		}
 	}
 
@@ -79,7 +65,6 @@ public class SymbolTableController implements ISymbolTable{
 		if (result != null) {
 			return result.id;
 		}
-		
 		return null;
 	}
 	
@@ -92,27 +77,4 @@ public class SymbolTableController implements ISymbolTable{
 		}
 		return null;
 	}
-
-
-	/*Checks whether a variable is declared within the current innermost scope*/
-	@Override
-	public Boolean DeclaredLocally(Identifier id) {
-		return symbolTables.peek().DeclaredLocally(id);
-	}
-	
-	/*
-	 * Creates a permanent storage for all declared variables.
-	 * Names will always be referenced by the name space. Comparison of names can be done by comparing integers.  
-	 * */
-	private Integer EnterSymbolName(String string) {
-		if (!nameSpace.contains(string)) {
-			nameSpace.add(string);
-			return nameSpace.size()-1;
-		}
-		
-		else {
-			return null;
-		}
-	}
-
 }

@@ -1,6 +1,5 @@
 package SymbolTable;
 
-import TypeChecker.TypeDescriptor;
 import models.expressions.Expression;
 
 enum IDType {

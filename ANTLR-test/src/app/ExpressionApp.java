@@ -8,9 +8,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import GUI.GUIOutput;
 import GUI.GraphData;
-import GillespieSSA.StateSet;
 import antlr.expressionLexer;
 import antlr.expressionParser;
 import models.Program;

@@ -3,8 +3,6 @@ package GUI;
 import java.util.ArrayList;
 import java.util.List;
 
-import GUI.GraphData;
-
 public class RunnerOutput {
 	public List<GraphData> Graphs;
 	public String Output;

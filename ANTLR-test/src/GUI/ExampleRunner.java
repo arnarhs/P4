@@ -1,10 +1,5 @@
 package GUI;
 
-import java.awt.List;
-import java.util.Hashtable;
-
-import org.jfree.data.xy.XYSeries;
-
 public class ExampleRunner implements Runner {
 
 	@Override

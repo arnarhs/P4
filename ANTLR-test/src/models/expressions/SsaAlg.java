@@ -5,7 +5,7 @@ public class SsaAlg extends Expression {
 	public String solution;
 	public String reacList;
 	public Expression loops;
-	public Expression simulationNumber;
+	public Expression repeats;
 	
 	public SsaAlg(String solution, String reacList, Expression loops) {
 		this.solution = solution;
@@ -13,9 +13,9 @@ public class SsaAlg extends Expression {
 		this.loops = loops;	
 	}
 	
-	public SsaAlg(String solution, String reacList, Expression loops, Expression simulationnumber) {
+	public SsaAlg(String solution, String reacList, Expression loops, Expression repeats) {
 		this(solution, reacList, loops);
-		simulationNumber = simulationnumber;
+		this.repeats = repeats;
 	}
 	
 	@Override
