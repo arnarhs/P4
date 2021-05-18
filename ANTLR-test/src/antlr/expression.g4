@@ -9,7 +9,7 @@ prog
     ;
 
 scope
-    :  '{' ( decl | expr )+ '}'                   		# ScopeDecl
+    :  '{' ( decl | expr )* '}'                   		# ScopeDecl
     ;
 
 decl 
