@@ -5,56 +5,44 @@ grammar expression;
 }
 
 prog
-    : ( decl | expr )+ EOF                        	# Program
+    : ( decl | expr )+ EOF                        		# Program
     ;
 
 scope
-    :  '{' ( decl | expr )+ '}'                   	# ScopeDecl
+    :  OPEN_BRAC ( decl | expr )* CLOSE_BRAC                   		# ScopeDecl
     ;
 
 decl 
-    : REACTION ID ( ':' reacExpr )?                   # ReacDecl                                 
-    | LIST ID ( ':'  '{' reacParams '}' )?           # ListDecl         
-    | numDecl                            			 # NumberDecl
-    | BOOLT ID ( ':' pred )?                         # BoolDecl
-    | SOLUTION ID ( ':' '{' declList '}' )?                 # SolutionDeclaration
+    : REACTION ID ( COLON reacExpr )?                  	# ReacDecl                                 
+	  | LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?    # ListDecl         
+    | numDecl                            			 	        # NumberDecl
+    | BOOLT ID ( COLON pred )?                         	# BoolDecl
+	  | SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?   # SolutionDeclaration
     ;
 
 numDecl
-	: NUMT ID ( ':' opExpr )?                       
-	;
+	  : NUMT ID ( COLON opExpr )?                         
+	  ;
 
+declList
+	  : numDecl COMMA declList								# SpeciesDecls
+	  | numDecl											# SpeciesDecl
+	  ;
 
-/*
-formalParams                                   
-    : KEYWORD ID ',' formalParams               //# ParamList
-    | KEYWORD ID                                //# Param
-    ;
-*/
 ssaCall
-	: ID '.' SSA '(' ID ',' value ')'			#SsaAlg
-	;
+	  :  SSA OPEN_PAR ID COMMA ID COMMA value (COMMA value)? CLOSE_PAR			#SsaAlg
+	  ;
 
 reacParams
-    : reacExpr ',' reacParams                   	# ReactionParameters
-    | reacExpr                                  	# ReactionParameter
+    : reacExpr COMMA  reacParams                   		# ReactionParameters
+    | reacExpr                                  		# ReactionParameter
     ;
 
 declList
-	: numDecl ',' declList				# SpeciesDecls
-	| numDecl							# SpeciesDecl
-	;
-
-/*ssaParams
-    : '{' ssaList '}' ',' ID
-    | ID
-    ;
-*/
-/*ssaList
-    : ID ',' ssaList  
-    | ID
-    ;*/
-
+	  : numDecl COMMA declList								# SpeciesDecls
+	  | numDecl											# SpeciesDecl
+	  ;
+  
 expr
     : ssaCall
     | assign
@@ -63,88 +51,92 @@ expr
     | ifStmt
     | whileStmt
     | pred
-    
-     //methExpr                                      
-    //| ID '(' (exprParams | WS*) ')'                     # MethodCall
-    //| SSA '(' ssaParams ')'                             # GillespieCall
     ;
 
 assign
-    : ID ':' reacExpr                   				# ReacAssign
-    | ID ':' opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
-    | ID ':' pred                       				# BoolAssign
-    | ID ':' '{' reacParams '}'         				# ListAssign
+    : ID COLON reacExpr                   				# ReacAssign
+    | ID COLON opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
+    | ID COLON pred                       				# BoolAssign
+    | ID COLON OPEN_BRAC reacParams CLOSE_BRAC    # ListAssign
+    | ID COLON OPEN_BRAC declList CLOSE_BRAC      # SolutionAssign
     ;
 
 reacExpr
-    :   reacPairList '->' reacPairList '(' opExpr ')'   # ReactionExpression
+    : reacPairList RIGHT_ARROW reacPairList OPEN_PAR opExpr CLOSE_PAR   # ReactionExpression
     ;
 
 reacPairList
-	: reacPair '+' reacPairList							# ReactionPairList
+	: reacPair ADD reacPairList							# ReactionPairList
 	| reacPair											# ReactionPairSingle
 	;
 
 reacPair
-	: NUM '*' ID   										# ReactionPairMultiplier
+	: NUM MULT ID   										# ReactionPairMultiplier
 	| ID 												# ReactionPair
 	;
 
 opExpr
-    : '(' opExpr ')'						      		# BracketExpression
-    | opExpr '*' opExpr                         		# MultiplyExpression 
-    | opExpr '/' opExpr   				      			# DivisionExpression
-    | opExpr '-' opExpr                         		# SubtractionExpression
-    | opExpr '+' opExpr                         		# AdditionExpression
+    : OPEN_PAR opExpr CLOSE_PAR						      		# BracketExpression
+    | opExpr MULT opExpr                         		# MultiplyExpression 
+    | opExpr DIV opExpr   				      			# DivisionExpression
+    | opExpr SUB opExpr                         		# SubtractionExpression
+    | opExpr ADD opExpr                         		# AdditionExpression
     | value                                       		# NumOrID // hvor er den?
-    ;    
+    ;   
 
 whileStmt
-	: WHILE '(' pred ')' scope  			#WhileStatement
-	;
+	  : WHILE OPEN_PAR pred CLOSE_PAR scope  						#WhileStatement
+	  ;
 	
 ifStmt
-    : IF '(' pred ')' scope								# IfStatement
-    | IF '(' pred ')' scope ELSE scope        			# IfElseStatement
+    : IF OPEN_PAR pred CLOSE_PAR scope (ELSE scope)?	# IfStatement
     ;
 
 pred
-    : '(' pred ')' 										# PBracketExpression
-    | pred LOGOP pred                                   # LogicalOperator
-    | relExpr                                           # BooleanExpr
-    ;
-
-relExpr
-    : opExpr RELOP opExpr                               # RelationalOperator
-    | BOOL                                              # Boolean
+    : OPEN_PAR pred CLOSE_PAR 										# PBracketExpression
+    | pred LOGOP pred                                   # LogicalExpr
+    | opExpr RELOP opExpr                               # RelationalOperator
+    | BOOL												# Boolean
+    | ID												# BooleanVariable
     ;
 
 value
-    : NUM                                        # Number // fix visitor + klasse
-    | ID                                         # Variable
+    : NUM                                        		# Number
+    | ID                                         		# Variable
     ;
 
 
-
-
-KEYWORD: 'print' ;
 NUMT: 'int' | 'double' | 'species' ;
+LIST: 'list' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;
-WHILE: 'while' ;
 SSA: 'ssa' ;
-LIST: 'list' ;
 
 IF: 'if' ;
 ELSE: 'else' ;
+WHILE: 'while' ;
 
 BOOLT: 'bool' ;
-BOOL: 'true' | 'false' ;
+BOOL: 'true' | 'false' | 'random' ;
 
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
 LOGOP: '||' | '&&' ;
 
+MULT: '*' ;
+DIV: '/' ;
+SUB: '-' ;
+ADD: '+' ;
+
+OPEN_PAR: '(' ;
+CLOSE_PAR: ')' ;
+OPEN_BRAC: '{' ;
+CLOSE_BRAC: '}' ;
+RIGHT_ARROW: '->' ;
+COLON: ':' ;
+COMMA: ',' ;
+DOT: '.' ;
+
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '-'?([0-9]+)('.'[0-9]+)?;
 COMMENT: '//' ~[\r\n]* -> skip ;
-WS: [ \r\t\n]+ -> channel(HIDDEN) ;
+WS: [ \r\t\n]+ -> skip ;

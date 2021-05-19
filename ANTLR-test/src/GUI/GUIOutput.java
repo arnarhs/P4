@@ -1,26 +1,26 @@
 package GUI;
 
-import javax.swing.JFrame;
+import java.util.HashMap;
 import javax.swing.JTextArea;
 
 import app.Output;
 
 public class GUIOutput implements Output{
 	private JTextArea textAreaOutput;
-	private JFrame graphOutput; 
 	
-	public GUIOutput(JTextArea textAreaOutput, JFrame graphOutput) {
+	public GUIOutput(JTextArea textAreaOutput) {
 		this.textAreaOutput = textAreaOutput;
-		this.graphOutput = graphOutput;
 	}
 	
 	@Override
-	public void Send(String output) {
+	public void Log(String output) {
 		String appendedOutput = textAreaOutput.getText() + output + "\n";
 		textAreaOutput.setText(appendedOutput);
 	}
-	
-	public void Send(Hashtable<Double, Double> graphData) {
+
+	@Override
+	public void Result(HashMap<Double, Double> result) {
+		// TODO Auto-generated method stub
 		
 	}
 

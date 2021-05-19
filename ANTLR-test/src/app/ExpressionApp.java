@@ -1,13 +1,14 @@
 package app;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import GUI.GUIOutput;
+import GUI.GraphData;
 import antlr.expressionLexer;
 import antlr.expressionParser;
 import models.Program;
@@ -15,6 +16,7 @@ import models.Program;
 public class ExpressionApp {
 	
 	private static Output output;
+	private static List<GraphData> graphs = null;
 
 	public static void main(String[] args) {
 		if (args.length != 1) {
@@ -33,6 +35,10 @@ public class ExpressionApp {
 		runParser(parser);
 	}
 	
+	public static List<GraphData> getGraphsFromParser() {
+		return graphs;
+	}
+	
 	private static void runParser(expressionParser parser) {
 		ParseTree antlrAST = parser.prog();
 		
@@ -42,14 +48,15 @@ public class ExpressionApp {
 			return;
 		}
 		
-		if(progVisitor.semanticErrors.isEmpty()) {
+		if (progVisitor.semanticErrors.isEmpty()) {
 			ExpressionProcessor ep = new ExpressionProcessor(prog.statements);
-			for(String evaluation: ep.getEvaluationResults()) {
-				output.Send(evaluation);
+	        for (String evaluation : ep.ProcessStatements()) {
+				output.Log(evaluation);
 			}
+			graphs = ep.fetchGraphData();
 		} else {
-			for(String err: progVisitor.semanticErrors) {
-				output.Send(err);
+			for (String err: progVisitor.semanticErrors) {
+				output.Log(err);
 			}
 		}
 	}

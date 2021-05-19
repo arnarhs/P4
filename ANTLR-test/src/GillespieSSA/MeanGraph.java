@@ -17,6 +17,9 @@ public class MeanGraph {
 	public int amountOfPlots = 30; //amount of points we want to create the mean set from
 	public double plotSpace; // space between each point
 	
+	public MeanGraph() {
+	}
+	
 	public MeanGraph(List<StateSet> ss) {
 		//this.ss = ss;
 		this.gd = declareMeanGraphs(ss.get(0));
@@ -33,17 +36,28 @@ public class MeanGraph {
 	
 	
 	public double roundedTime (double d) {
-		double returnVal = 0;
+		//double returnVal = 0;
 		
+		return Math.round(d/this.plotSpace) * this.plotSpace;
+		
+		/*
 		for(int i = 0 ; i < this.amountOfPlots; i++) {
 			if(d > this.plotSpace * i - this.plotSpace/2 && d < this.plotSpace * i + this.plotSpace/2) {
 				returnVal = this.plotSpace*i;
 			}
 		}
 		return returnVal;
+		*/
 	}
 
 	public void addToMean(double amount, double time, int species) {
+		//if later simulations have a higher max time amountOfPlots will be incremented
+		if (time > this.maxTime) {
+            while(this.amountOfPlots * this.plotSpace < time) {
+            	amountOfPlots++;
+            }
+        }
+		
 		time = roundedTime(time);
 		int currentPoints;
 		double currentValue;
@@ -69,7 +83,7 @@ public class MeanGraph {
 				((currentValue * (currentPoints-1)) + amount) / currentPoints);
 		//System.out.println("mean: " + this.gd.get(species).Name + " " + this.gd.get(species).Plots.get(timeD));
 
-System.out.println(this.gd.get(species).Name + " {t= " + time + ", molecules= " + gd.get(species).Plots.get(time) + " }");
+System.out.println(this.gd.get(species).Name + " {t = " + time + ", molecules = " + gd.get(species).Plots.get(time) + " }");
 
 	}
 
@@ -85,16 +99,6 @@ System.out.println(this.gd.get(species).Name + " {t= " + time + ", molecules= " 
 	//public void addToMean()
 	
 	public void createMeanList(List<StateSet> ss) {
-		
-		//if later simulations have a higher max time, 
-		for(StateSet state : ss) {
-			if (state.time > this.maxTime) {
-				
-	                while(this.amountOfPlots * this.plotSpace < state.time) {
-	                	amountOfPlots++;
-	                }
-	            }
-		}
 		
 		for(StateSet elem : ss) {
 			Set<String> keys = elem.species.keySet();

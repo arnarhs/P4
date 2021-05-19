@@ -13,7 +13,9 @@ public class ChemTrailsRunner implements Runner{
 	@Override
 	public RunnerOutput Run(String code) {
 		ExpressionApp.parseString(code);
-		return null;
+		RunnerOutput output = new RunnerOutput();
+		output.Graphs = ExpressionApp.getGraphsFromParser();
+		return output;
 	}
 
 }

@@ -1,9 +1,12 @@
 if (3 < 4) {
 	int a : 1
+	a
 }
 
-if (5 < 4) {
+if (3 < 4 && false) {
 	int b : 2
+	b
 } else {
 	int c : 3
+	c
 }
