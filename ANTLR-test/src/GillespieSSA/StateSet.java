@@ -5,22 +5,23 @@ import java.util.Map;
 
 public class StateSet {
 	public Map<String, Double> species = new HashMap<String, Double>();
-	public double time;
+	public double timeStep;
+	public double globalTime = 0;
 	
 	public StateSet(Map<String, Double> species, double time) {
 		this.species = species;
-		this.time = time;
+		this.timeStep = time;
 		
 	
 	}
 	
 	public StateSet(StateSet other) {
 		this.species = new HashMap<String, Double>(other.species);
-		this.time = other.time;
+		this.timeStep = other.timeStep;
 	}
 	
 	public StateSet(StateSet previousState, double timeIncrement, stoichoReaction reaction) {
-		this.time = previousState.time + timeIncrement;
+		this.timeStep = previousState.timeStep + timeIncrement;
 		this.species = new HashMap<String, Double>(previousState.species);
 		
 		//If a reaction was selected update the state populations.

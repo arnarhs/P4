@@ -11,4 +11,4 @@ list reactions : {
 	d + b -> a + c (0.1)
 }
 
-sol.ssa(reactions, 50)
+print(sol.ssa(reactions, 50))

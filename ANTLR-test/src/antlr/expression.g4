@@ -9,31 +9,29 @@ prog
     ;
 
 scope
-    :  '{' ( decl | expr )+ '}'                   		# ScopeDecl
+    :  OPEN_BRAC ( decl | expr )* CLOSE_BRAC                   		# ScopeDecl
     ;
 
 decl 
     : REACTION ID ( COLON reacExpr )?                  	# ReacDecl                                 
-	| LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?        	  	# ListDecl         
-    | numDecl                            			 	# NumberDecl
+	  | LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?    # ListDecl         
+    | numDecl                            			 	        # NumberDecl
     | BOOLT ID ( COLON pred )?                         	# BoolDecl
-	| SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?                 # SolutionDeclaration
+	  | SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?   # SolutionDeclaration
     ;
 
 numDecl
-	: NUMT ID ( COLON opExpr )?                         
-	;
+	  : NUMT ID ( COLON opExpr )?                         
+	  ;
 
+declList
+	  : numDecl COMMA declList								# SpeciesDecls
+	  | numDecl											# SpeciesDecl
+	  ;
 
-/*
-formalParams                                   
-    : KEYWORD ID ',' formalParams               //# ParamList
-    | KEYWORD ID                                //# Param
-    ;
-*/
 ssaCall
-	: ID DOT SSA OPEN_PAR ID COMMA value CLOSE_PAR					#SsaAlg
-	;
+	  :  SSA OPEN_PAR ID COMMA ID COMMA value (COMMA value)? CLOSE_PAR			#SsaAlg
+	  ;
 
 reacParams
     : reacExpr COMMA  reacParams                   		# ReactionParameters
@@ -41,20 +39,10 @@ reacParams
     ;
 
 declList
-	: numDecl COMMA declList								# SpeciesDecls
-	| numDecl											# SpeciesDecl
-	;
-
-/*ssaParams
-    : '{' ssaList '}' ',' ID
-    | ID
-    ;
-*/
-/*ssaList
-    : ID ',' ssaList  
-    | ID
-    ;*/
-
+	  : numDecl COMMA declList								# SpeciesDecls
+	  | numDecl											# SpeciesDecl
+	  ;
+  
 expr
     : ssaCall
     | assign
@@ -63,21 +51,18 @@ expr
     | ifStmt
     | whileStmt
     | pred
-    
-     //methExpr                                      
-    //| ID '(' (exprParams | WS*) ')'                   # MethodCall
-//| SSA '(' ssaParams ')'                               # GillespieCall
     ;
 
 assign
     : ID COLON reacExpr                   				# ReacAssign
     | ID COLON opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
     | ID COLON pred                       				# BoolAssign
-    | ID COLON OPEN_BRAC reacParams CLOSE_BRAC         				# ListAssign
+    | ID COLON OPEN_BRAC reacParams CLOSE_BRAC    # ListAssign
+    | ID COLON OPEN_BRAC declList CLOSE_BRAC      # SolutionAssign
     ;
 
 reacExpr
-    :   reacPairList RIGHT_ARROW reacPairList OPEN_PAR  opExpr CLOSE_PAR   # ReactionExpression
+    : reacPairList RIGHT_ARROW reacPairList OPEN_PAR opExpr CLOSE_PAR   # ReactionExpression
     ;
 
 reacPairList
@@ -100,12 +85,11 @@ opExpr
     ;   
 
 whileStmt
-	: WHILE OPEN_PAR pred CLOSE_PAR scope  						#WhileStatement
-	;
+	  : WHILE OPEN_PAR pred CLOSE_PAR scope  						#WhileStatement
+	  ;
 	
 ifStmt
-    : IF OPEN_PAR pred CLOSE_PAR scope								# IfStatement
-    | IF OPEN_PAR pred CLOSE_PAR scope ELSE scope        			# IfElseStatement
+    : IF OPEN_PAR pred CLOSE_PAR scope (ELSE scope)?	# IfStatement
     ;
 
 pred
@@ -113,6 +97,7 @@ pred
     | pred LOGOP pred                                   # LogicalExpr
     | opExpr RELOP opExpr                               # RelationalOperator
     | BOOL												# Boolean
+    | ID												# BooleanVariable
     ;
 
 value
@@ -121,21 +106,18 @@ value
     ;
 
 
-
-
-KEYWORD: 'print' ;
 NUMT: 'int' | 'double' | 'species' ;
+LIST: 'list' ;
 REACTION: 'reaction' ; 
 SOLUTION: 'solution' ;
-WHILE: 'while' ;
 SSA: 'ssa' ;
-LIST: 'list' ;
 
 IF: 'if' ;
 ELSE: 'else' ;
+WHILE: 'while' ;
 
 BOOLT: 'bool' ;
-BOOL: 'true' | 'false' ;
+BOOL: 'true' | 'false' | 'random' ;
 
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
 LOGOP: '||' | '&&' ;

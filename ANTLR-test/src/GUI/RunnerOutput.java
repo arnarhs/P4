@@ -1,11 +1,10 @@
 package GUI;
 
 import java.util.ArrayList;
-
-import GUI.GraphData;
+import java.util.List;
 
 public class RunnerOutput {
-	public ArrayList<GraphData> Graphs;
+	public List<GraphData> Graphs;
 	public String Output;
 	public String GraphName;
 	public String HorizontalName;
@@ -16,5 +15,9 @@ public class RunnerOutput {
 		GraphName = "Results";
 		HorizontalName = "Time";
 		VerticalName = "Concentration";
+	}
+	
+	public void AddGraphs(RunnerOutput output) {
+		Graphs.addAll(output.Graphs);
 	}
 }

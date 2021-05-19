@@ -5,25 +5,54 @@ import java.util.List;
 import java.util.Random;
 
 public class Simulator {
-	int turns;
-	List<StateSet> states;
+	double runTime; //running time for the individual simulation
+	int times = 1; //number of simulations
 	List<stoichoReaction> reactionSet;
+	StateSet initialState;
 	
-	public Simulator(int nrturns, StateSet initialState, List<stoichoReaction> reactionset) {
-		turns = nrturns;
-		states = new ArrayList<StateSet>();
-		states.add(initialState);
+	public Simulator(double runTime, StateSet initialState, List<stoichoReaction> reactionset) {
+		this.initialState = initialState;
+		this.runTime = runTime;
 		reactionSet = reactionset;
 	}
 	
-	public List<StateSet> Simulate() {
+	public Simulator(int nrtimes, double runTime, StateSet initialState, List<stoichoReaction> reactionset) {
+		this(runTime, initialState, reactionset);
+		times = nrtimes;
+	}
+
+	public List<SSAResult> Simulate() {
 		Random random = new Random();
-	
-		for(int i = 0; i < turns; i++) {
-			states.add(Step(random, states.get(i)));
+		List<SSAResult> simulationResult = new ArrayList<SSAResult>();
+		
+		for (int n = 0; n < times; n++) {
+			ArrayList<StateSet> statesets = new ArrayList<StateSet>();
+			statesets.add(initialState);
+			SSAResult result = new SSAResult(n+1);
+			int stateNum = 0; 
+			for(double i = 0; i < runTime; ) {
+				StateSet nextState = Step(random, statesets.get(stateNum));
+				if(nextState == null) {
+					nextState = new StateSet(statesets.get(statesets.size()-1).species, runTime);
+					nextState.globalTime = runTime;
+					statesets.add(nextState);
+					i = runTime;
+					break;
+				}
+				i += nextState.timeStep;
+				nextState.globalTime = i;
+				statesets.add(nextState);
+				stateNum++;
+			}
+			
+			result.stateSets = statesets;
+			simulationResult.add(result);
 		}
 		
-		return states;
+		
+		
+		
+		return simulationResult;
 	}
 	
 	private StateSet Step(Random random, StateSet set) {
@@ -31,16 +60,20 @@ public class Simulator {
 		double r1 = random.nextFloat();
 		double r2 = random.nextFloat();
 		
-		//System.out.print("r1: " + r1+". " + "r2: " + r2 + "\n");
-		
 		//Compute propensities for all reactions given the state at time t (current state)
 		reactionSet = ComputePropensities(reactionSet, set);
 		
 		//Compute a0
 		double a0 = ComputeA0(set);
 		
+		
+		
 		//Pick time increment according to (1/a0) * ln[1/r1]
 		double dt = PickTime(r1, set);
+		
+		if(Double.isInfinite(dt)) {
+			return null;
+		}
 		
 		//Pick reaction
 		stoichoReaction reaction = PickReaction(a0, r2, reactionSet);
