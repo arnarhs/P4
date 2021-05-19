@@ -3,7 +3,6 @@ package GillespieSSA;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import GUI.GraphData;
@@ -14,27 +13,23 @@ public class MeanGraph {
 	public List<GraphData> gd;
 	
 	public double maxTime = 0.0; //time when the simulation stops
-	public int amountOfPlots = 30; //amount of points we want to create the mean set from
-	public double plotSpace; // space between each point
+	public int amountOfPlots = 50; //amount of points we want to create the mean set from
+	public double plotSpace = -1; // space between each point
 	
-	public MeanGraph() {
-	}
+	public MeanGraph() {}
 	
 	public MeanGraph(List<StateSet> ss) {
 		//this.ss = ss;
 		this.gd = declareMeanGraphs(ss.get(0));
 		
 		for(StateSet state : ss) {
-			if (state.time > this.maxTime) {
-	                this.maxTime = state.time;
-	            }
+			if (state.timeStep > this.maxTime) {
+                this.maxTime = state.timeStep;
+            }
 		}
 		this.plotSpace = this.maxTime / this.amountOfPlots;
-		
 	}
-	
-	
-	
+		
 	public double roundedTime (double d) {
 		//double returnVal = 0;
 		
@@ -53,7 +48,7 @@ public class MeanGraph {
 	public void addToMean(double amount, double time, int species) {
 		//if later simulations have a higher max time amountOfPlots will be incremented
 		if (time > this.maxTime) {
-            while(this.amountOfPlots * this.plotSpace < time) {
+            while (this.amountOfPlots * this.plotSpace < time) {
             	amountOfPlots++;
             }
         }
@@ -62,15 +57,15 @@ public class MeanGraph {
 		int currentPoints;
 		double currentValue;
 		
-		if(this.gd.get(species).points.get(time) == null) {
+		if (this.gd.get(species).points.get(time) == null) {
 			currentPoints = 0;
-		}else {
+		} else {
 			currentPoints = this.gd.get(species).points.get(time);
 		}
 		
-		if(this.gd.get(species).Plots.get(time) == null) {
+		if (this.gd.get(species).Plots.get(time) == null) {
 			currentValue = 0;
-		}else {
+		} else {
 			currentValue = this.gd.get(species).Plots.get(time);
 		}
 		
@@ -81,10 +76,6 @@ public class MeanGraph {
 		
 		this.gd.get(species).Plots.put(time, 
 				((currentValue * (currentPoints-1)) + amount) / currentPoints);
-		//System.out.println("mean: " + this.gd.get(species).Name + " " + this.gd.get(species).Plots.get(timeD));
-
-System.out.println(this.gd.get(species).Name + " {t = " + time + ", molecules = " + gd.get(species).Plots.get(time) + " }");
-
 	}
 
 	public List<GraphData> declareMeanGraphs(StateSet s) {
@@ -96,23 +87,28 @@ System.out.println(this.gd.get(species).Name + " {t = " + time + ", molecules = 
 		}
 		return gd;
 	}
-	//public void addToMean()
 	
 	public void createMeanList(List<StateSet> ss) {
+		if (this.plotSpace == -1) {
+			this.gd = declareMeanGraphs(ss.get(0));
+			
+			for(StateSet state : ss) {
+				if (state.timeStep > this.maxTime) {
+	                this.maxTime = state.timeStep;
+	            }
+			}
+			this.plotSpace = this.maxTime / this.amountOfPlots;
+		}
 		
-		for(StateSet elem : ss) {
+		for (StateSet elem : ss) {
 			Set<String> keys = elem.species.keySet();
-			double time = elem.time;
-			//System.out.println(elem.species.keySet());
+			double time = elem.timeStep;
 			int species = 0;
+			
 			for(String elems : keys) {
 				addToMean(elem.species.get(elems), time, species);
 				species++;
 			}
 		}
-		
-		
 	}
-	
-
 }

@@ -21,14 +21,12 @@ public class Simulator {
 		times = nrtimes;
 	}
 
-	public List<SSAResult> Simulate() {
+	public List<StateSet> Simulate() {
 		Random random = new Random();
-		List<SSAResult> simulationResult = new ArrayList<SSAResult>();
+		ArrayList<StateSet> statesets = new ArrayList<StateSet>();
 		
 		for (int n = 0; n < times; n++) {
-			ArrayList<StateSet> statesets = new ArrayList<StateSet>();
 			statesets.add(initialState);
-			SSAResult result = new SSAResult(n+1);
 			int stateNum = 0; 
 			for(double i = 0; i < runTime; ) {
 				StateSet nextState = Step(random, statesets.get(stateNum));
@@ -44,15 +42,9 @@ public class Simulator {
 				statesets.add(nextState);
 				stateNum++;
 			}
-			
-			result.stateSets = statesets;
-			simulationResult.add(result);
 		}
 		
-		
-		
-		
-		return simulationResult;
+		return statesets;
 	}
 	
 	private StateSet Step(Random random, StateSet set) {

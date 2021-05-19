@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.Color;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ public class GraphData {
 	public int Iteration;
 	public String Name;
 	public LinkedHashMap<Double, Double> Plots;
+	public HashMap<Double, Integer> points = new HashMap<Double, Integer>();
 	public Color Color;
 	
 	public GraphData(String name) {
@@ -39,5 +41,4 @@ public class GraphData {
 		
 		return result;
 	}
-	
 }

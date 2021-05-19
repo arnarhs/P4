@@ -69,7 +69,6 @@ public class ExpressionProcessor {
 				}	
 				
 				symbolTable.EnterSymbol(new Identifier(decl.id, decl)); 
-
 			}
 			else if (e instanceof ListDeclaration) {
 				ListDeclaration listDecl = (ListDeclaration) e;
@@ -83,6 +82,8 @@ public class ExpressionProcessor {
 					repeats = (int) EvaluateExpression(ssa.repeats);
 				}
 				
+				MeanGraph meanGraph = new MeanGraph();
+				
 				while (repeats > 0) {
 					int count = 1;
 					
@@ -91,15 +92,16 @@ public class ExpressionProcessor {
 					}
 					_ssaMap.put(ssa.solution, count);
 					
-					List<SSAResult> ssaResults = getSsaResults(ssa);
-					HashMap<String, Color> colorScheme = generateColorScheme(ssaResults.get(0).stateSets.get(0).species.keySet());
-					
-					for (SSAResult result : ssaResults) {
-						_graphs.addAll(generateSSAGraphs(result, colorScheme, count));
-					}
+					List<StateSet> ssaResults = getSsaResults(ssa);
+					meanGraph.createMeanList(ssaResults);
+					HashMap<String, Color> colorScheme = generateColorScheme(ssaResults.get(0).species.keySet());
+				
+					_graphs.addAll(generateSSAGraphs(ssaResults, colorScheme, count));
 					
 					repeats--;
 				}
+				
+				_graphs.addAll(meanGraph.gd);
 			}
 			else if (e instanceof IfStatement) {
 				IfStatement ifStmt = (IfStatement) e;
@@ -403,7 +405,7 @@ public class ExpressionProcessor {
 		return false;
 	}
 
-	private List<SSAResult> getSsaResults(SsaAlg alg) {
+	private List<StateSet> getSsaResults(SsaAlg alg) {
 		ListDeclaration sol = (ListDeclaration) symbolTable.RetrieveSymbol(alg.solution).GetExpression();
 		Map<String, Double> species = new HashMap<String,Double>();
 		
@@ -439,13 +441,13 @@ public class ExpressionProcessor {
 		return s.Simulate();
 	}
 
-	private List<GraphData> generateSSAGraphs(SSAResult result, HashMap<String, Color> colorscheme, Integer count) {
+	private List<GraphData> generateSSAGraphs(List<StateSet> result, HashMap<String, Color> colorscheme, Integer count) {
 		List<GraphData> graphData = new ArrayList<GraphData>();
-		for (String species : result.stateSets.get(0).species.keySet()) {
+		for (String species : result.get(0).species.keySet()) {
 			graphData.add(new GraphData(species, count, colorscheme.get(species)));
 		}
 		
-		for (StateSet state : result.stateSets) {
+		for (StateSet state : result) {
 			for (GraphData graph : graphData) {
 				graph.add(state.globalTime, state.species.get(graph.Name));
 			}

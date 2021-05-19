@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StateSet {
+	
 	public Map<String, Double> species = new HashMap<String, Double>();
 	public double timeStep;
 	public double globalTime = 0;
@@ -11,8 +12,6 @@ public class StateSet {
 	public StateSet(Map<String, Double> species, double time) {
 		this.species = species;
 		this.timeStep = time;
-		
-	
 	}
 	
 	public StateSet(StateSet other) {

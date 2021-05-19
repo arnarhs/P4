@@ -9,15 +9,15 @@ prog
     ;
 
 scope
-    :  OPEN_BRAC ( decl | expr )* CLOSE_BRAC                   		# ScopeDecl
+	:  OPEN_BRAC ( decl | expr )* CLOSE_BRAC            # ScopeDecl
     ;
 
 decl 
-    : REACTION ID ( COLON reacExpr )?                  	# ReacDecl                                 
-	  | LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?    # ListDecl         
+    : REACTION ID ( COLON reacExpr )?                  			# ReacDecl                                 
+	  | LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?    	# ListDecl         
     | numDecl                            			 	        # NumberDecl
-    | BOOLT ID ( COLON pred )?                         	# BoolDecl
-	  | SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?   # SolutionDeclaration
+    | BOOLT ID ( COLON pred )?                         			# BoolDecl
+	  | SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?   	# SolutionDeclaration
     ;
 
 numDecl
@@ -25,23 +25,18 @@ numDecl
 	  ;
 
 declList
-	  : numDecl COMMA declList								# SpeciesDecls
-	  | numDecl											# SpeciesDecl
-	  ;
+	: numDecl COMMA declList							# SpeciesDecls
+	| numDecl											# SpeciesDecl
+	;
 
 ssaCall
-	  :  SSA OPEN_PAR ID COMMA ID COMMA value (COMMA value)? CLOSE_PAR			#SsaAlg
-	  ;
+	:  SSA OPEN_PAR ID COMMA ID COMMA value (COMMA value)? CLOSE_PAR	#SsaAlg
+	;
 
 reacParams
     : reacExpr COMMA  reacParams                   		# ReactionParameters
     | reacExpr                                  		# ReactionParameter
     ;
-
-declList
-	  : numDecl COMMA declList								# SpeciesDecls
-	  | numDecl											# SpeciesDecl
-	  ;
   
 expr
     : ssaCall
@@ -57,8 +52,8 @@ assign
     : ID COLON reacExpr                   				# ReacAssign
     | ID COLON opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
     | ID COLON pred                       				# BoolAssign
-    | ID COLON OPEN_BRAC reacParams CLOSE_BRAC    # ListAssign
-    | ID COLON OPEN_BRAC declList CLOSE_BRAC      # SolutionAssign
+    | ID COLON OPEN_BRAC reacParams CLOSE_BRAC    		# ListAssign
+    | ID COLON OPEN_BRAC declList CLOSE_BRAC      		# SolutionAssign
     ;
 
 reacExpr
@@ -71,12 +66,12 @@ reacPairList
 	;
 
 reacPair
-	: NUM MULT ID   										# ReactionPairMultiplier
+	: NUM MULT ID   									# ReactionPairMultiplier
 	| ID 												# ReactionPair
 	;
 
 opExpr
-    : OPEN_PAR opExpr CLOSE_PAR						      		# BracketExpression
+    : OPEN_PAR opExpr CLOSE_PAR						    # BracketExpression
     | opExpr MULT opExpr                         		# MultiplyExpression 
     | opExpr DIV opExpr   				      			# DivisionExpression
     | opExpr SUB opExpr                         		# SubtractionExpression
@@ -85,15 +80,15 @@ opExpr
     ;   
 
 whileStmt
-	  : WHILE OPEN_PAR pred CLOSE_PAR scope  						#WhileStatement
-	  ;
+	: WHILE OPEN_PAR pred CLOSE_PAR scope  				#WhileStatement
+	;
 	
 ifStmt
     : IF OPEN_PAR pred CLOSE_PAR scope (ELSE scope)?	# IfStatement
     ;
 
 pred
-    : OPEN_PAR pred CLOSE_PAR 										# PBracketExpression
+    : OPEN_PAR pred CLOSE_PAR 							# PBracketExpression
     | pred LOGOP pred                                   # LogicalExpr
     | opExpr RELOP opExpr                               # RelationalOperator
     | BOOL												# Boolean
