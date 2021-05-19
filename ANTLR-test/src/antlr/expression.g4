@@ -9,35 +9,40 @@ prog
     ;
 
 scope
-    :  '{' ( decl | expr )* '}'                   		# ScopeDecl
+    :  OPEN_BRAC ( decl | expr )* CLOSE_BRAC                   		# ScopeDecl
     ;
 
 decl 
-    : numDecl                            			 	# NumberDecl
-    | BOOLT ID ( ':' pred )?                         	# BoolDecl
-    | REACTION ID ( ':' reacExpr )?                   	# ReacDecl                                 
-	| LIST ID ( ':'  '{' reacParams '}' )?         	  	# ListDecl   
-	| SOLUTION ID ( ':' '{' declList '}' )?             # SolutionDeclaration      
+    : REACTION ID ( COLON reacExpr )?                  	# ReacDecl                                 
+	  | LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?    # ListDecl         
+    | numDecl                            			 	        # NumberDecl
+    | BOOLT ID ( COLON pred )?                         	# BoolDecl
+	  | SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?   # SolutionDeclaration
     ;
 
 numDecl
-	: NUMT ID ( ':' opExpr )?                       
-	;
+	  : NUMT ID ( COLON opExpr )?                         
+	  ;
 
 declList
-	: numDecl ',' declList								# SpeciesDecls
-	| numDecl											# SpeciesDecl
-	;
+	  : numDecl COMMA declList								# SpeciesDecls
+	  | numDecl											# SpeciesDecl
+	  ;
 
 ssaCall
-	: SSA '(' ID ',' ID ',' value (',' value)? ')'		# SsaAlg
-	;
+	  :  SSA OPEN_PAR ID COMMA ID COMMA value (COMMA value)? CLOSE_PAR			#SsaAlg
+	  ;
 
 reacParams
-    : reacExpr ',' reacParams                   		# ReactionParameters
+    : reacExpr COMMA  reacParams                   		# ReactionParameters
     | reacExpr                                  		# ReactionParameter
     ;
 
+declList
+	  : numDecl COMMA declList								# SpeciesDecls
+	  | numDecl											# SpeciesDecl
+	  ;
+  
 expr
     : ssaCall
     | assign
@@ -49,46 +54,46 @@ expr
     ;
 
 assign
-    : ID ':' reacExpr                   				# ReacAssign
-    | ID ':' opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
-    | ID ':' pred                       				# BoolAssign
-    | ID ':' '{' reacParams '}'         				# ListAssign
-    | ID ':' '{' declList '}'         				    # SolutionAssign
+    : ID COLON reacExpr                   				# ReacAssign
+    | ID COLON opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
+    | ID COLON pred                       				# BoolAssign
+    | ID COLON OPEN_BRAC reacParams CLOSE_BRAC    # ListAssign
+    | ID COLON OPEN_BRAC declList CLOSE_BRAC      # SolutionAssign
     ;
 
 reacExpr
-    : reacPairList '->' reacPairList '(' opExpr ')'     # ReactionExpression
+    : reacPairList RIGHT_ARROW reacPairList OPEN_PAR opExpr CLOSE_PAR   # ReactionExpression
     ;
 
 reacPairList
-	: reacPair '+' reacPairList							# ReactionPairList
+	: reacPair ADD reacPairList							# ReactionPairList
 	| reacPair											# ReactionPairSingle
 	;
 
 reacPair
-	: NUM '*' ID   										# ReactionPairMultiplier
+	: NUM MULT ID   										# ReactionPairMultiplier
 	| ID 												# ReactionPair
 	;
 
 opExpr
-    : '(' opExpr ')'						      		# BracketExpression
-    | opExpr '*' opExpr                         		# MultiplyExpression 
-    | opExpr '/' opExpr   				      			# DivisionExpression
-    | opExpr '-' opExpr                         		# SubtractionExpression
-    | opExpr '+' opExpr                         		# AdditionExpression
-    | value                                       		# NumOrID
-    ;    
+    : OPEN_PAR opExpr CLOSE_PAR						      		# BracketExpression
+    | opExpr MULT opExpr                         		# MultiplyExpression 
+    | opExpr DIV opExpr   				      			# DivisionExpression
+    | opExpr SUB opExpr                         		# SubtractionExpression
+    | opExpr ADD opExpr                         		# AdditionExpression
+    | value                                       		# NumOrID // hvor er den?
+    ;   
 
 whileStmt
-	: WHILE '(' pred ')' scope  						# WhileStatement
-	;
+	  : WHILE OPEN_PAR pred CLOSE_PAR scope  						#WhileStatement
+	  ;
 	
 ifStmt
-    : IF '(' pred ')' scope	(ELSE scope)?				# IfStatement
+    : IF OPEN_PAR pred CLOSE_PAR scope (ELSE scope)?	# IfStatement
     ;
 
 pred
-    : '(' pred ')' 										# PBracketExpression
+    : OPEN_PAR pred CLOSE_PAR 										# PBracketExpression
     | pred LOGOP pred                                   # LogicalExpr
     | opExpr RELOP opExpr                               # RelationalOperator
     | BOOL												# Boolean
@@ -99,8 +104,6 @@ value
     : NUM                                        		# Number
     | ID                                         		# Variable
     ;
-
-
 
 
 NUMT: 'int' | 'double' | 'species' ;
@@ -119,7 +122,21 @@ BOOL: 'true' | 'false' | 'random' ;
 RELOP: '<' | '<=' | '>' | '>=' | '==' | '!=' ;
 LOGOP: '||' | '&&' ;
 
+MULT: '*' ;
+DIV: '/' ;
+SUB: '-' ;
+ADD: '+' ;
+
+OPEN_PAR: '(' ;
+CLOSE_PAR: ')' ;
+OPEN_BRAC: '{' ;
+CLOSE_BRAC: '}' ;
+RIGHT_ARROW: '->' ;
+COLON: ':' ;
+COMMA: ',' ;
+DOT: '.' ;
+
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '-'?([0-9]+)('.'[0-9]+)?;
 COMMENT: '//' ~[\r\n]* -> skip ;
-WS: [ \r\t\n]+ -> channel(HIDDEN) ;
+WS: [ \r\t\n]+ -> skip ;
