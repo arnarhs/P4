@@ -94,9 +94,9 @@ public class ExpressionProcessor {
 					
 					List<StateSet> ssaResults = getSsaResults(ssa);
 					meanGraph.createMeanList(ssaResults);
-					HashMap<String, Color> colorScheme = generateColorScheme(ssaResults.get(0).species.keySet());
+					//HashMap<String, Color> colorScheme = generateColorScheme(ssaResults.get(0).getSpecies().keySet());
 				
-					_graphs.addAll(generateSSAGraphs(ssaResults, colorScheme, count));
+					//_graphs.addAll(generateSSAGraphs(ssaResults, colorScheme, count));
 					
 					repeats--;
 				}
@@ -406,50 +406,50 @@ public class ExpressionProcessor {
 	}
 
 	private List<StateSet> getSsaResults(SsaAlg alg) {
-		ListDeclaration sol = (ListDeclaration) symbolTable.RetrieveSymbol(alg.solution).GetExpression();
-		Map<String, Double> species = new HashMap<String,Double>();
+		ListDeclaration solutionList = (ListDeclaration) symbolTable.RetrieveSymbol(alg.solution).GetExpression();
+		Map<String, Double> solution = new HashMap<String,Double>();
 		
-		for (Expression l : sol.list) {
+		for (Expression l : solutionList.list) {
 			VariableDeclaration num = (VariableDeclaration) l;
 			Double value = EvaluateExpression(num.value);
-			species.put(num.id, value);
+			solution.put(num.id, value);
 		}
-		StateSet stateSet = new StateSet(species, 0);
 		
-		ListDeclaration reactions = (ListDeclaration) symbolTable.RetrieveSymbol(alg.reacList).GetExpression();
-		List<stoichoReaction> reactionSet = new ArrayList<stoichoReaction>();
+		ListDeclaration reactionList = (ListDeclaration) symbolTable.RetrieveSymbol(alg.reacList).GetExpression();
+		List<Reaction> reactions = new ArrayList<Reaction>();
 		
-		for (Expression r : reactions.list) {
-			ReactionExpr reac = (ReactionExpr) r;
+		for (Expression r : reactionList.list) {
+			ReactionExpr reacExpr = (ReactionExpr) r;
 			
-			ListExpr left = (ListExpr) reac.left;
+			ListExpr left = (ListExpr) reacExpr.left;
 			List<ReactionPair> prey = new ArrayList<ReactionPair>();
 			for (Expression p : left.list) {
 				prey.add((ReactionPair) p);
 			}
 			
-			ListExpr right = (ListExpr) reac.right;
+			ListExpr right = (ListExpr) reacExpr.right;
 			List<ReactionPair> predator = new ArrayList<ReactionPair>();
 			for (Expression p : right.list) {
 				predator.add((ReactionPair) p);
 			}
 			
-			reactionSet.add(new stoichoReaction(prey, predator, EvaluateExpression(reac.constant), new StateSet(stateSet)));
+			Reaction reac = new Reaction(prey, predator, EvaluateExpression(reacExpr.constant));
+			reactions.add(reac);
 		}	
 		
-		Simulator s = new Simulator((int) EvaluateExpression(alg.loops), stateSet, reactionSet);
+		Simulator s = new Simulator((int) EvaluateExpression(alg.loops), new StateSet(solution), reactions);
 		return s.Simulate();
 	}
 
 	private List<GraphData> generateSSAGraphs(List<StateSet> result, HashMap<String, Color> colorscheme, Integer count) {
 		List<GraphData> graphData = new ArrayList<GraphData>();
-		for (String species : result.get(0).species.keySet()) {
+		for (String species : result.get(0).getSpecies().keySet()) {
 			graphData.add(new GraphData(species, count, colorscheme.get(species)));
 		}
 		
 		for (StateSet state : result) {
 			for (GraphData graph : graphData) {
-				graph.add(state.globalTime, state.species.get(graph.Name));
+				graph.add(state.getTime(), state.getSpecies().get(graph.Name));
 			}
 		}
 		

@@ -5,114 +5,83 @@ import java.util.List;
 import java.util.Random;
 
 public class Simulator {
-	double runTime; //running time for the individual simulation
-	int times = 1; //number of simulations
-	List<stoichoReaction> reactionSet;
-	StateSet initialState;
 	
-	public Simulator(double runTime, StateSet initialState, List<stoichoReaction> reactionset) {
-		this.initialState = initialState;
+	private double runTime; //running time for the individual simulation
+	private List<Reaction> reactions = new ArrayList<Reaction>();
+	private List<StateSet> states = new ArrayList<StateSet>(); 
+	
+	public Simulator(double runTime, StateSet initialState, List<Reaction> reactions) {
+		states.add(initialState);
 		this.runTime = runTime;
-		reactionSet = reactionset;
-	}
-	
-	public Simulator(int nrtimes, double runTime, StateSet initialState, List<stoichoReaction> reactionset) {
-		this(runTime, initialState, reactionset);
-		times = nrtimes;
+		this.reactions = reactions;
 	}
 
 	public List<StateSet> Simulate() {
-		Random random = new Random();
-		ArrayList<StateSet> statesets = new ArrayList<StateSet>();
+		states.add(states.get(0));
 		
-		for (int n = 0; n < times; n++) {
-			statesets.add(initialState);
-			int stateNum = 0; 
-			for(double i = 0; i < runTime; ) {
-				StateSet nextState = Step(random, statesets.get(stateNum));
-				if(nextState == null) {
-					nextState = new StateSet(statesets.get(statesets.size()-1).species, runTime);
-					nextState.globalTime = runTime;
-					statesets.add(nextState);
-					i = runTime;
-					break;
-				}
-				i += nextState.timeStep;
-				nextState.globalTime = i;
-				statesets.add(nextState);
-				stateNum++;
+		for (double i = 0; i < runTime;) {
+			StateSet nextState = Step(currentState());
+			
+			if (nextState == null) {
+				break;
 			}
+			
+			i += nextState.getTime();
+			nextState.setTime(i);
+			states.add(nextState);
 		}
 		
-		return statesets;
+		return states;
 	}
 	
-	private StateSet Step(Random random, StateSet set) {
-		//Select two random variables, uniformly distributed.
-		double r1 = random.nextFloat();
-		double r2 = random.nextFloat();
+	private StateSet Step(StateSet currentState) {
+		Random r = new Random();	
+		List<Double> propensities = ComputePropensities(new StateSet(currentState));
+		double a0 = ComputeA0(propensities);
+		double dt = PickTime(a0, r.nextFloat());
 		
-		//Compute propensities for all reactions given the state at time t (current state)
-		reactionSet = ComputePropensities(reactionSet, set);
-		
-		//Compute a0
-		double a0 = ComputeA0(set);
-		
-		
-		
-		//Pick time increment according to (1/a0) * ln[1/r1]
-		double dt = PickTime(r1, set);
-		
-		if(Double.isInfinite(dt)) {
+		if (Double.isInfinite(dt)) {
 			return null;
 		}
 		
-		//Pick reaction
-		stoichoReaction reaction = PickReaction(a0, r2, reactionSet);
-		
-		//Update state
-		StateSet state = new StateSet(set, dt, reaction);
-				
-		return state;
+		Reaction reaction = PickReaction(propensities, a0, r.nextFloat());			
+		return new StateSet(currentState.getSpecies(), dt, reaction);
 	}
 	
-	private stoichoReaction PickReaction(double a0, double r2, List<stoichoReaction> reactions) {
-		if(r2 > 0) {
-			int i = 0;
-			double propensity = reactions.get(i).currentPropensity;
-			double currentReaction = propensity/a0;
+	private Reaction PickReaction(List<Double> propensities, double a0, double r2) {
+		double cumulativeProbability = 0.0;
+		
+		for (int i = 0; i < propensities.size(); i++) {
+			cumulativeProbability += (propensities.get(i)/a0);
 			
-			while(r2 > currentReaction && i < reactions.size()-1) {
-				i++;
-				propensity = propensity + reactions.get(i).currentPropensity;
-				currentReaction = propensity/a0;
-			}
-			
-			return reactions.get(i);
+		    if (r2 <= cumulativeProbability) {
+		        return reactions.get(i);
+		    }
 		}
-		else {
-			return null;
-		}
+		return null;
 	}
 	
-	private double PickTime(double r1, StateSet set) {
-			return 1/ComputeA0(set)*Math.log(1/r1);
+	private double PickTime(double a0, double r1) {
+		return (1/a0) * Math.log(1/r1);
 	}
 	
-	private List<stoichoReaction> ComputePropensities(List<stoichoReaction> reactionset, StateSet state) {
-		for(stoichoReaction elem : reactionset) {
-			elem.CalculatePropensity();
+	private List<Double> ComputePropensities(StateSet state) {
+		List<Double> propensities = new ArrayList<Double>();
+		for(Reaction reac : reactions) {
+			propensities.add(reac.CalculatePropensity(state));
 		}
-		return reactionSet;
+		return propensities;
 	}
 	
-	private double ComputeA0(StateSet set) {
-		double val = 0; 
-		
-		for(stoichoReaction elem : reactionSet) {
-			val = val + elem.currentPropensity;
+	private double ComputeA0(List<Double> propensities) {
+		double a0 = 0; 
+		for (double prop : propensities) {
+			a0 += prop;
 		}
-		
-		return val;
+		return a0;
+	}
+	
+	private StateSet currentState() {
+		return states.get(states.size() - 1);
 	}
 }

@@ -23,8 +23,8 @@ public class MeanGraph {
 		this.gd = declareMeanGraphs(ss.get(0));
 		
 		for(StateSet state : ss) {
-			if (state.timeStep > this.maxTime) {
-                this.maxTime = state.timeStep;
+			if (state.getTime() > this.maxTime) {
+                this.maxTime = state.getTime();
             }
 		}
 		this.plotSpace = this.maxTime / this.amountOfPlots;
@@ -79,7 +79,7 @@ public class MeanGraph {
 	}
 
 	public List<GraphData> declareMeanGraphs(StateSet s) {
-		Set<String> species = s.species.keySet();
+		Set<String> species = s.getSpecies().keySet();
 		List<GraphData> gd = new ArrayList<GraphData>();
 		for(String elem : species) {
 			GraphData Mean = new GraphData(elem);
@@ -93,20 +93,20 @@ public class MeanGraph {
 			this.gd = declareMeanGraphs(ss.get(0));
 			
 			for(StateSet state : ss) {
-				if (state.timeStep > this.maxTime) {
-	                this.maxTime = state.timeStep;
+				if (state.getTime() > this.maxTime) {
+	                this.maxTime = state.getTime();
 	            }
 			}
 			this.plotSpace = this.maxTime / this.amountOfPlots;
 		}
 		
 		for (StateSet elem : ss) {
-			Set<String> keys = elem.species.keySet();
-			double time = elem.timeStep;
+			Set<String> keys = elem.getSpecies().keySet();
+			double time = elem.getTime();
 			int species = 0;
 			
 			for(String elems : keys) {
-				addToMean(elem.species.get(elems), time, species);
+				addToMean(elem.getSpecies().get(elems), time, species);
 				species++;
 			}
 		}

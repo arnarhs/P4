@@ -46,14 +46,14 @@ class MeanTest {
 		assertEquals(this.meanTool.amountOfPlots, mean.gd.get(0).Plots.size());
 		
 		//each state has their own plot space. making the set its own mean
-		assertEquals(list.get(0).species.get("a") , mean.gd.get(0).Plots.get(1.0));
-		assertEquals(list.get(2).species.get("a") , mean.gd.get(0).Plots.get(3.0));
-		assertEquals(list.get(5).species.get("a") , mean.gd.get(0).Plots.get(6.0));
-		assertEquals(list.get(20).species.get("a") , mean.gd.get(0).Plots.get(21.0));
-		assertEquals(list.get(0).species.get("c") , mean.gd.get(2).Plots.get(1.0));
-		assertEquals(list.get(2).species.get("c") , mean.gd.get(2).Plots.get(3.0));
-		assertEquals(list.get(5).species.get("c") , mean.gd.get(2).Plots.get(6.0));
-		assertEquals(list.get(20).species.get("c") , mean.gd.get(2).Plots.get(21.0));
+		assertEquals(list.get(0).getSpecies().get("a") , mean.gd.get(0).Plots.get(1.0));
+		assertEquals(list.get(2).getSpecies().get("a") , mean.gd.get(0).Plots.get(3.0));
+		assertEquals(list.get(5).getSpecies().get("a") , mean.gd.get(0).Plots.get(6.0));
+		assertEquals(list.get(20).getSpecies().get("a") , mean.gd.get(0).Plots.get(21.0));
+		assertEquals(list.get(0).getSpecies().get("c") , mean.gd.get(2).Plots.get(1.0));
+		assertEquals(list.get(2).getSpecies().get("c") , mean.gd.get(2).Plots.get(3.0));
+		assertEquals(list.get(5).getSpecies().get("c") , mean.gd.get(2).Plots.get(6.0));
+		assertEquals(list.get(20).getSpecies().get("c") , mean.gd.get(2).Plots.get(21.0));
 	}
 	
 	@Test

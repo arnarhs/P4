@@ -5,34 +5,48 @@ import java.util.Map;
 
 public class StateSet {
 	
-	public Map<String, Double> species = new HashMap<String, Double>();
-	public double timeStep;
-	public double globalTime = 0;
+	private Map<String, Double> species = new HashMap<String, Double>();
+	private double time = 0;
 	
-	public StateSet(Map<String, Double> species, double time) {
+	public Map<String, Double> getSpecies() {
+		return species;
+	}
+
+	public void setSpecies(Map<String, Double> species) {
 		this.species = species;
-		this.timeStep = time;
+	}
+
+	public double getTime() {
+		return time;
+	}
+
+	public void setTime(double time) {
+		this.time = time;
+	}
+
+	public StateSet(Map<String, Double> species) {
+		this.setSpecies(species);
 	}
 	
 	public StateSet(StateSet other) {
-		this.species = new HashMap<String, Double>(other.species);
-		this.timeStep = other.timeStep;
+		this.setSpecies(new HashMap<String, Double>(other.getSpecies()));
+		this.setTime(other.getTime());
 	}
 	
-	public StateSet(StateSet previousState, double timeIncrement, stoichoReaction reaction) {
-		this.timeStep = previousState.timeStep + timeIncrement;
-		this.species = new HashMap<String, Double>(previousState.species);
+	public StateSet(Map<String, Double> species, double time, Reaction reaction) {
+		this.setSpecies(new HashMap<String, Double>(species));
+		this.setTime(time);
 		
 		//If a reaction was selected update the state populations.
-		if(reaction != null) {
-			for(ReactionPair elem : reaction.Prey) {
-				double value = this.species.get(elem.species) - elem.multiplier;
-				this.species.put(elem.species, value);
+		if (reaction != null) {
+			for (ReactionPair elem : reaction.prey) {
+				double value = this.getSpecies().get(elem.species) - elem.multiplier;
+				this.getSpecies().put(elem.species, value);
 			}
 			
-			for(ReactionPair elem : reaction.Predator) {
-				double value = this.species.get(elem.species) + elem.multiplier;
-				this.species.put(elem.species, value);
+			for (ReactionPair elem : reaction.predator) {
+				double value = this.getSpecies().get(elem.species) + elem.multiplier;
+				this.getSpecies().put(elem.species, value);
 			}
 		} 
 	}

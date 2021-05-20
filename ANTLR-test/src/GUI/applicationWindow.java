@@ -60,7 +60,7 @@ public class applicationWindow {
 		JButton btnNewButton = new JButton("Run");
 		
 		JTextArea textAreaInput = new JTextArea();
-		textAreaInput.setText("//example ChemTrails\r\nsolution sol  : {\r\n\tspecies a : 10,\r\n\tspecies b : 0,\r\n\tspecies c : 50,\r\n\tspecies d : 0\r\n}\r\n\r\nlist reactions : {\r\n\tc  ->  d (1),\r\n\ta  ->  b (1)\r\n}\r\n\r\nprint(sol.ssa(reactions, 50))");
+		textAreaInput.setText("//example ChemTrails\r\nsolution sol  : {\r\n\tspecies a : 10,\r\n\tspecies b : 0,\r\n\tspecies c : 50,\r\n\tspecies d : 0\r\n}\r\n\r\nlist reactions : {\r\n\tc  ->  d (0.1),\r\n\ta  ->  b (0.1)\r\n}\r\n\r\nssa(sol, reactions, 50)");
 		textAreaInput.setTabSize(2);
 		textAreaInput.setLineWrap(true);
 		
