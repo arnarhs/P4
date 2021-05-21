@@ -67,7 +67,7 @@ public class Simulator {
 	
 	private List<Double> ComputePropensities(StateSet state) {
 		List<Double> propensities = new ArrayList<Double>();
-		for(Reaction reac : reactions) {
+		for (Reaction reac : reactions) {
 			propensities.add(reac.CalculatePropensity(state));
 		}
 		return propensities;

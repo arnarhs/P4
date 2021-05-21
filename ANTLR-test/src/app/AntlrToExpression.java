@@ -280,8 +280,8 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	@Override
 	public Expression visitSolutionAssign(SolutionAssignContext ctx) {
 		Token idToken = ctx.ID().getSymbol();	
-		ListExpr reacParams = (ListExpr) visit(ctx.declList());		
-		return visitListAssign(idToken, ctx, reacParams.list);
+		ListExpr speciList = (ListExpr) visit(ctx.declList());		
+		return visitListAssign(idToken, ctx, speciList.list);
 	}
 
 

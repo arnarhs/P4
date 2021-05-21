@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import GUI.GraphData;
 import models.Statement;
@@ -71,21 +72,8 @@ public class ExpressionProcessor {
 			} 
 			else if (e instanceof SsaAlg) {
 				SsaAlg ssa = (SsaAlg) e;	
-				int repeats = 1;
-				
-				if (ssa.repeats != null) {
-					repeats = (int) EvaluateExpression(ssa.repeats);
-				}
-				
-				MeanGraph meanGraph = new MeanGraph();
-				
-				while (repeats > 0) {				
-					List<StateSet> ssaResults = getSsaResults(ssa);
-					meanGraph.createMeanList(ssaResults);		
-					repeats--;
-				}
-				
-				UpdateGraphs(meanGraph.gd);
+				List<GraphData> graphs = EvaluateSSA(ssa);
+				UpdateGraphs(graphs);
 			}
 			else if (e instanceof IfStatement) {
 				IfStatement ifStmt = (IfStatement) e;
@@ -257,18 +245,47 @@ public class ExpressionProcessor {
 		
 		return false;
 	}
-
-	private List<StateSet> getSsaResults(SsaAlg alg) {
-		ListDeclaration solutionList = (ListDeclaration) symbolTable.RetrieveSymbol(alg.solution).GetExpression();
-		Map<String, Double> solution = new HashMap<String,Double>();
+	
+	private List<GraphData> EvaluateSSA(SsaAlg ssa) {
+		MeanGraph meanGraph = new MeanGraph();
+		ListDeclaration solutionDecl = (ListDeclaration) symbolTable.RetrieveSymbol(ssa.solution).GetExpression();
+		ListDeclaration reactionList = (ListDeclaration) symbolTable.RetrieveSymbol(ssa.reacList).GetExpression();
 		
-		for (Expression l : solutionList.list) {
+		double runTime = (int) EvaluateExpression(ssa.loops);
+		StateSet initialState = EvaluateSolution(solutionDecl); 
+		List<Reaction> reactions = EvaluateReactions(reactionList);
+		List<StateSet> ssaResults = new ArrayList<StateSet>();
+		
+		int repeats = 1;
+		if (ssa.repeats != null) {
+			repeats = (int) EvaluateExpression(ssa.repeats);
+		}
+		
+		while (repeats > 0) {								
+			Simulator s = new Simulator(runTime, initialState, reactions);
+			ssaResults = s.Simulate();
+			meanGraph.createMeanList(ssaResults);		
+			repeats--;
+		}
+		StateSet finalState = ssaResults.get(ssaResults.size()-1);
+		UpdateSolution(solutionDecl, finalState);
+		
+		return meanGraph.gd;
+	}
+
+	private StateSet EvaluateSolution(ListDeclaration solutionDecl) {
+		Map<String, Double> solution = new HashMap<String,Double>();
+				
+		for (Expression l : solutionDecl.list) {
 			VariableDeclaration num = (VariableDeclaration) l;
 			Double value = EvaluateExpression(num.value);
 			solution.put(num.id, value);
 		}
-		
-		ListDeclaration reactionList = (ListDeclaration) symbolTable.RetrieveSymbol(alg.reacList).GetExpression();
+		return new StateSet(solution);
+	}
+	
+	private List<Reaction> EvaluateReactions(ListDeclaration reactionList) {
+		//ListDeclaration reactionList = (ListDeclaration) symbolTable.RetrieveSymbol(reacList).GetExpression();
 		List<Reaction> reactions = new ArrayList<Reaction>();
 		
 		for (Expression r : reactionList.list) {
@@ -289,8 +306,18 @@ public class ExpressionProcessor {
 			Reaction reac = new Reaction(prey, predator, EvaluateExpression(reacExpr.constant));
 			reactions.add(reac);
 		}	
+		return reactions;
+	}
+	
+	private void UpdateSolution(ListDeclaration solutionDecl, StateSet state) {
+		List<Expression> newSpecies = new ArrayList<Expression>();
 		
-		Simulator s = new Simulator((int) EvaluateExpression(alg.loops), new StateSet(solution), reactions);
-		return s.Simulate();
+		for (Entry<String, Double> entry : state.getSpecies().entrySet()) {
+			Number number = new Number(String.valueOf(entry.getValue()));			
+			VariableDeclaration speciesDecl = new VariableDeclaration(entry.getKey(), "species", number);
+			newSpecies.add(speciesDecl);
+		}  
+		ListDeclaration newSolution = new ListDeclaration(solutionDecl.id, solutionDecl.type, newSpecies);
+		symbolTable.EnterSymbol(new Identifier(newSolution.id, newSolution));
 	}
 }

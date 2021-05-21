@@ -14,15 +14,15 @@ scope
 
 decl 
     : REACTION ID ( COLON reacExpr )?                  			# ReacDecl                                 
-	  | LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?    	# ListDecl         
+	| LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?    	# ListDecl         
     | numDecl                            			 	        # NumberDecl
     | BOOLT ID ( COLON pred )?                         			# BoolDecl
-	  | SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?   	# SolutionDeclaration
+	| SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?   	# SolutionDeclaration
     ;
 
 numDecl
-	  : NUMT ID ( COLON opExpr )?                         
-	  ;
+	: NUMT ID ( COLON opExpr )?                         
+	;
 
 declList
 	: numDecl COMMA declList							# SpeciesDecls
