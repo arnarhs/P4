@@ -1,14 +1,14 @@
 package models.expressions;
 
 public class Number extends Expression {
-    public int num;
+    public String num;
 
-    public Number(int num){
+    public Number(String num){
         this.num = num;
     }
 
     @Override
     public String toString(){
-        return String.valueOf(num);
+        return num;
     }
 }

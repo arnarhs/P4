@@ -1,0 +1,36 @@
+if ( 3 <  4) { 
+
+	//example ChemTrails
+	
+	solution sol  : {
+	
+		species a : 10,
+	
+		species b : 0,
+	
+		species c : 50,
+	
+		species d : 0
+	
+	}
+	
+	
+	
+	list reactions : {
+	
+		c  ->  d (1),
+	
+		a  ->  b (1)
+	
+	}
+	
+	
+	
+	
+	
+	sol.ssa(reactions, 50)
+	sol.ssa(reactions, 50)
+	sol.ssa(reactions, 50)
+	sol.ssa(reactions, 50)
+
+}

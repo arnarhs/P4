@@ -1,9 +1,11 @@
-package models;
+package models.expressions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scope extends Statement{
+import models.Statement;
+
+public class Scope extends Expression{
 	
 	public List<Statement> stmts = new ArrayList<>(); 
 	
@@ -11,7 +13,7 @@ public class Scope extends Statement{
 	{
 		this.stmts = stmts;
 	}
-	
+		
 	@Override
 	public String toString() 
 	{

@@ -1,5 +1,5 @@
-species a : 5
-species b : 10
+int a : 5
+int b : 10
 int r : 200
 
 

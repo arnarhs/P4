@@ -1,0 +1,14 @@
+solution sol  : {
+	species a : 10,
+	species b : 0,
+	species c : 50,
+	species d : 0
+}
+
+list reactions : {
+	c  ->  d (0.1),
+	a  ->  b (0.1),
+	d + b -> a + c (0.1)
+}
+
+print(sol.ssa(reactions, 50))

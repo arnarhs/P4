@@ -1,21 +1,40 @@
 package models.expressions;
 
 public class IfStatement extends Expression {
-	String type;
-	Expression condition;
-	Expression thenExpr;
-	Expression elseExpr = null;
+
+	private Expression _predicate;
+	private Scope _thenScope;
+	private Scope _elseScope = null;
 	
-	public IfStatement(String type, Expression condition, Expression thenExpr, Expression elseExpr) {
-		this.type = type;
-		this.condition = condition;
-		this.thenExpr = thenExpr;
-		this.elseExpr = elseExpr;
+	public void setPredicate(Expression predicate) {
+		predicate = _predicate;
+	}
+	public Expression getPredicate() {
+		return _predicate;
+	}
+	
+	public void setThenScope(Scope thenScope) {
+		_thenScope = thenScope;
+	}
+	public Scope getThenScope() {
+		return _thenScope;
+	}
+	
+	public void setElseScope(Scope elseScope) {
+		_elseScope = elseScope;
+	}
+	public Scope getElseScope() {
+		return _elseScope;
+	}
+	
+	public IfStatement(Expression predicate, Scope thenScope, Scope elseScope) {
+		_predicate = predicate;
+		_thenScope = thenScope;
+		_elseScope = elseScope;
 	}
 	
 	@Override
 	public String toString() {
-		return type.toString() + '(' + condition.toString() + ')' 
-				+ '{' + thenExpr.toString() + '}' + elseExpr.toString();
+		return "If Statement";	
 	}
 }
