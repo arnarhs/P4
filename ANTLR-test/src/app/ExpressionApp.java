@@ -1,6 +1,7 @@
 package app;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.v4.runtime.CharStream;
@@ -16,7 +17,7 @@ import models.Program;
 public class ExpressionApp {
 	
 	private static Output output;
-	private static List<GraphData> graphs = null;
+	private static List<GraphData> graphs;
 
 	public static void main(String[] args) {
 		if (args.length != 1) {
@@ -31,6 +32,9 @@ public class ExpressionApp {
 	}
 	
 	public static void parseString(String string) {
+		graphs = new ArrayList<GraphData>(); 
+		SyntaxErrorListener.Reset();
+		
 		expressionParser parser = getParserFromString(string);
 		runParser(parser);
 	}
@@ -45,6 +49,7 @@ public class ExpressionApp {
 		AntlrToProgram progVisitor = new AntlrToProgram();
 		Program prog = progVisitor.visit(antlrAST);
 		if (SyntaxErrorListener.errorOccured) {
+			output.Log(SyntaxErrorListener.GetErrorMessage());
 			return;
 		}
 		

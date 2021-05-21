@@ -9,6 +9,11 @@ public class SyntaxErrorListener extends BaseErrorListener {
 	private static String errorMsg;
 	public static boolean errorOccured = false;
 	
+	public static void Reset() {
+		errorMsg = "";
+		errorOccured = false;
+	}
+	
 	@Override
 	public void syntaxError(
 			Recognizer<?, ?> recognizer, 
