@@ -21,7 +21,5 @@ public class GUIOutput implements Output{
 	@Override
 	public void Result(HashMap<Double, Double> result) {
 		// TODO Auto-generated method stub
-		
 	}
-
 }

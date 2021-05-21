@@ -28,5 +28,4 @@ public class AntlrToProgram extends expressionBaseVisitor<Program>{
 		
 		return prog;
 	}
-
 }

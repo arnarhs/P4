@@ -17,5 +17,4 @@ public class ChemTrailsRunner implements Runner{
 		output.Graphs = ExpressionApp.getGraphsFromParser();
 		return output;
 	}
-
 }

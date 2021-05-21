@@ -119,9 +119,7 @@ public class applicationWindow {
 			  public void actionPerformed(ActionEvent e) { 
 				  textAreaOutput.setText("");
 				  RunnerOutput output = Runner.Run(textAreaInput.getText());
-				  //chart.Update(output.Coordinates);
 				  chartPanel.UpdateGraph(output);
-				  
 			  } 
 			} );
 		

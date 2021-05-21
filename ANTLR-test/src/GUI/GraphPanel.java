@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -22,9 +23,9 @@ public class GraphPanel extends JPanel {
 	private JFreeChart jfreeChart;
 	
 	public GraphPanel() {
-	  super(new GridLayout());
-	  RunnerOutput seeker = new RunnerOutput();
-	  UpdateGraph(seeker);
+		super(new GridLayout());
+	  	RunnerOutput seeker = new RunnerOutput();
+	  	UpdateGraph(seeker);
 	}
 
 	private XYDataset createDataset(List<GraphData> graphData, XYLineAndShapeRenderer renderer) {
@@ -45,13 +46,13 @@ public class GraphPanel extends JPanel {
 	}
 
 	public void UpdateGraph(RunnerOutput output) {
-		if(chartPanel != null)
-		{
+		if (chartPanel != null) {
 			this.remove(chartPanel);
 			chartPanel = null;
 		}
 		
 		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, false);
+		
 		jfreeChart = ChartFactory.createXYLineChart(output.GraphName, 
 	    		output.HorizontalName,output.VerticalName,
 	    		createDataset(output.Graphs, renderer),
@@ -72,4 +73,3 @@ public class GraphPanel extends JPanel {
 		return jfreeChart;
 	}
 }
-

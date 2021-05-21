@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.Recognizer;
 
 public class SyntaxErrorListener extends BaseErrorListener {
 
+	private static String errorMsg;
 	public static boolean errorOccured = false;
 	
 	@Override
@@ -18,7 +19,11 @@ public class SyntaxErrorListener extends BaseErrorListener {
 			RecognitionException e) {
 		errorOccured = true;
 		
-		System.err.println("Error @ " + line + ":" + (charPositionInLine + 1) 
-						   + " : " + msg);
+		errorMsg = "Error @ " + line + ":" + (charPositionInLine + 1) + " : " + msg;
+		System.out.println(errorMsg);
+	}
+	
+	public static String GetErrorMessage() {
+		return errorMsg;
 	}
 }
