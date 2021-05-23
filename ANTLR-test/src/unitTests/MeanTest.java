@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 class MeanTest {
-	//public List<StateSet> list;
+	
 	public MeanGraph meanTool = new MeanGraph();
 	
 	public List<StateSet> createTestList(int j, int k, int stateSets) {
@@ -26,7 +26,7 @@ class MeanTest {
 			species.put("b", 2.0*i*j); 
 			species.put("c", 3.0*i*j); 
 			species.put("d", 4.0*i*j); 
-			StateSet ss = new StateSet(species, 1.0*i*k);
+			StateSet ss = new StateSet(species);
 			list.add(ss);
 		}
 		return list;

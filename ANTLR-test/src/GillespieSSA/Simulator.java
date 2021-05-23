@@ -61,10 +61,6 @@ public class Simulator {
 		return null;
 	}
 	
-	private double PickTime(double a0, double r1) {
-		return (1/a0) * Math.log(1/r1);
-	}
-	
 	private List<Double> ComputePropensities(StateSet state) {
 		List<Double> propensities = new ArrayList<Double>();
 		for (Reaction reac : reactions) {
@@ -79,6 +75,10 @@ public class Simulator {
 			a0 += prop;
 		}
 		return a0;
+	}
+	
+	private double PickTime(double a0, double r1) {
+		return (1/a0) * Math.log(1/r1);
 	}
 	
 	private StateSet currentState() {

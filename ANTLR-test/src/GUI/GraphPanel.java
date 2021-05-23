@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -17,6 +16,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+@SuppressWarnings("serial")
 public class GraphPanel extends JPanel {
 	
 	private ChartPanel chartPanel;
