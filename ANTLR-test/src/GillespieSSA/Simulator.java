@@ -36,7 +36,7 @@ public class Simulator {
 	
 	private StateSet Step(StateSet currentState) {
 		Random r = new Random();	
-		List<Double> propensities = ComputePropensities(new StateSet(currentState));
+		List<Double> propensities = ComputePropensities(currentState);
 		double a0 = ComputeA0(propensities);
 		double dt = PickTime(a0, r.nextFloat());
 		
@@ -64,7 +64,7 @@ public class Simulator {
 	private List<Double> ComputePropensities(StateSet state) {
 		List<Double> propensities = new ArrayList<Double>();
 		for (Reaction reac : reactions) {
-			propensities.add(reac.CalculatePropensity(state));
+			propensities.add(reac.CalculatePropensity(new StateSet(state)));
 		}
 		return propensities;
 	}
