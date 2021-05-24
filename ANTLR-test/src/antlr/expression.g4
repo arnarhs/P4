@@ -48,7 +48,7 @@ expr
     ;
 
 assign
-    : ID COLON opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
+    : ID COLON opExpr                     				# NumberAssign
     | ID COLON pred                       				# BoolAssign
     | ID COLON OPEN_BRAC reacParams CLOSE_BRAC    		# ListAssign
     | ID COLON OPEN_BRAC declList CLOSE_BRAC      		# SolutionAssign
