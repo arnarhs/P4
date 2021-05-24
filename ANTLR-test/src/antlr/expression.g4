@@ -13,8 +13,7 @@ scope
     ;
 
 decl 
-    : REACTION ID ( COLON reacExpr )?                  			# ReacDecl                                 
-	| LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?    	# ListDecl         
+	: LIST ID ( COLON  OPEN_BRAC reacParams CLOSE_BRAC )?    	# ListDecl         
     | numDecl                            			 	        # NumberDecl
     | BOOLT ID ( COLON pred )?                         			# BoolDecl
 	| SOLUTION ID ( COLON OPEN_BRAC declList CLOSE_BRAC )?   	# SolutionDeclaration
@@ -34,7 +33,7 @@ ssaCall
 	;
 
 reacParams
-    : reacExpr COMMA  reacParams                   		# ReactionParameters
+    : reacExpr COMMA reacParams                   		# ReactionParameters
     | reacExpr                                  		# ReactionParameter
     ;
   
@@ -49,8 +48,7 @@ expr
     ;
 
 assign
-    : ID COLON reacExpr                   				# ReacAssign
-    | ID COLON opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
+    : ID COLON opExpr                     				# NumberAssign  // Kan vi samle den her med float og m?ke bool?
     | ID COLON pred                       				# BoolAssign
     | ID COLON OPEN_BRAC reacParams CLOSE_BRAC    		# ListAssign
     | ID COLON OPEN_BRAC declList CLOSE_BRAC      		# SolutionAssign

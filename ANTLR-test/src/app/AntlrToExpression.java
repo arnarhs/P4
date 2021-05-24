@@ -80,39 +80,6 @@ public class AntlrToExpression extends expressionBaseVisitor<Expression> {
 	/* 
 	 *  REACTIONS
 	 */
-
-
-	@Override
-	public Expression visitReacDecl(ReacDeclContext ctx) {
-		Token idToken = ctx.ID().getSymbol();
-
-		String type = ctx.getChild(0).getText();
-		String id = ctx.getChild(1).getText();
-		Expression value = null; 
-		
-		if (ctx.getChildCount() > 2) {
-			value = visitChildren(ctx); 
-		}
-
-		VariableDeclaration decl = new VariableDeclaration(id, type, value);
-				
-		EnterSymbol(idToken, new Identifier(id, decl));
-		
-		return decl;
-	}
-  
-  @Override
-	public Expression visitReacAssign(ReacAssignContext ctx) {
-		Token idToken = ctx.ID().getSymbol();
-		String id = ctx.getChild(0).getText();
-		
-		VariableDeclaration oldVarDecl = (VariableDeclaration) RetrieveSymbol(idToken, id);
-		VariableDeclaration newVarDecl = new VariableDeclaration(oldVarDecl.id, oldVarDecl.type , visit(ctx.getChild(2)));
-		
-		UpdateSymbol(new Identifier(id, newVarDecl));
-		
-		return newVarDecl;
-	}
 	
 	@Override
 	public Expression visitReactionExpression(ReactionExpressionContext ctx) {
