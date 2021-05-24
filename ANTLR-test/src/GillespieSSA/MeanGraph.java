@@ -16,6 +16,19 @@ public class MeanGraph {
 	public int amountOfPlots = 10; //amount of points we want to create the mean set from
 	public double plotSpace = -1; // space between each point
 	
+	private boolean initialized = false;
+	
+	public boolean IsInitialized() {
+		return initialized;
+	}
+	
+	public void Initialize(List<StateSet> ss) {
+		initialized = true;
+		gd = declareMeanGraphs(ss.get(0));
+		maxTime = ss.get(ss.size() - 1).getTime();
+		plotSpace = maxTime / amountOfPlots;
+	}
+	
 	public MeanGraph() {}
 	
 	public MeanGraph(List<StateSet> ss) {
@@ -30,12 +43,6 @@ public class MeanGraph {
 	}
 		
 	public void createMeanList(List<StateSet> ss) {
-		if (plotSpace == -1) {
-			gd = declareMeanGraphs(ss.get(0));
-			maxTime = ss.get(ss.size()-1).getTime();
-			plotSpace = maxTime / amountOfPlots;
-		}
-		
 		for (StateSet elem : ss) {
 			Set<String> keys = elem.getSpecies().keySet();
 			double time = elem.getTime();
@@ -81,7 +88,6 @@ public class MeanGraph {
 		} else {
 			currentValue = gd.get(species).Plots.get(time);
 		}
-		
 		
 		gd.get(species).points.put(time, currentPoints + 1);
 		

@@ -264,7 +264,11 @@ public class ExpressionProcessor {
 		while (repeats > 0) {								
 			Simulator s = new Simulator(runTime, initialState, reactions);
 			ssaResults = s.Simulate();
-			meanGraph.createMeanList(ssaResults);		
+			
+			if(meanGraph.IsInitialized() == false) {
+				meanGraph.Initialize(ssaResults);
+			} 
+			meanGraph.createMeanList(ssaResults);
 			repeats--;
 		}
 		StateSet finalState = ssaResults.get(ssaResults.size()-1);
