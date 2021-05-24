@@ -127,7 +127,6 @@ CLOSE_BRAC: '}' ;
 RIGHT_ARROW: '->' ;
 COLON: ':' ;
 COMMA: ',' ;
-DOT: '.' ;
 
 ID: [a-z][a-zA-Z0-9_]* ;
 NUM: '-'?([0-9]+)('.'[0-9]+)?;
